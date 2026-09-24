@@ -28,8 +28,16 @@ const PASTA_BASE = new URL('../dados/base/', import.meta.url);
 // Tamanho do duckdb-eh.wasm SEM compressão (ver vendor/duckdb/VERSAO.md).
 // O navegador conta os bytes já descomprimidos, então é contra este número
 // que a barra de progresso anda — o Content-Length do servidor é o tamanho
-// comprimido e não serviria.
+// comprimido e não serviria. Também confere a cópia guardada (ver abaixo).
 const TAMANHO_DO_MOTOR = 34242586;
+
+// O motor fica guardado no armazenamento do próprio site (Cache Storage),
+// para a segunda visita em diante abrir sem baixar os 7,8 MB de novo — sem
+// depender do cache comum do navegador, que pode descartar um arquivo desse
+// tamanho (foi o que o passo 6 mediu). A versão vai no nome: ao atualizar o
+// motor, troque as duas linhas juntas, e a cópia antiga é apagada sozinha.
+const VERSAO_DO_MOTOR = '1.32.0';
+const GAVETA_DO_MOTOR = `meridiano:motor-${VERSAO_DO_MOTOR}`;
 
 // O banco onde o aluno trabalha. Recriado a cada zerarBase().
 const BANCO = 'observatorio';
@@ -115,12 +123,68 @@ async function abrir(aoProgredir) {
 }
 
 /**
- * Baixa o .wasm contando os bytes, e devolve um endereço local (blob) para
- * o motor carregá-lo sem baixar de novo.
+ * Entrega o .wasm como um endereço local (blob), pronto para o motor
+ * carregar: da gaveta, se ele já estiver guardado; senão, baixado — e
+ * guardado para a próxima vez.
  */
 async function baixarMotor(aoProgredir) {
+  const endereco = new URL('duckdb-eh.wasm', PASTA_MOTOR).href;
+
+  const guardado = await tirarDaGaveta(endereco);
+  if (guardado) {
+    medicoes.motorDaGaveta = true;
+    aoProgredir(1);
+    return URL.createObjectURL(guardado);
+  }
+
+  const baixado = await baixarComProgresso(endereco, aoProgredir);
+  medicoes.motorDaGaveta = false;
+  await guardarNaGaveta(endereco, baixado);
+  return URL.createObjectURL(baixado);
+}
+
+/** O motor guardado, se houver uma cópia inteira; senão, null. */
+async function tirarDaGaveta(endereco) {
+  try {
+    if (!('caches' in window)) return null;
+    const gaveta = await caches.open(GAVETA_DO_MOTOR);
+    const resposta = await gaveta.match(endereco);
+    if (!resposta) return null;
+
+    const arquivo = await resposta.blob();
+    // Uma cópia pela metade (download interrompido, disco cheio) não serve.
+    if (arquivo.size !== TAMANHO_DO_MOTOR) {
+      await gaveta.delete(endereco);
+      return null;
+    }
+    return new Blob([arquivo], { type: 'application/wasm' });
+  } catch {
+    // Sem armazenamento (modo privado, bloqueio do navegador): baixa e pronto.
+    return null;
+  }
+}
+
+/** Guarda o motor e apaga as versões antigas. Se não der, segue sem guardar. */
+async function guardarNaGaveta(endereco, arquivo) {
+  try {
+    if (!('caches' in window)) return;
+    for (const nome of await caches.keys()) {
+      if (nome.startsWith('meridiano:motor-') && nome !== GAVETA_DO_MOTOR) await caches.delete(nome);
+    }
+    const gaveta = await caches.open(GAVETA_DO_MOTOR);
+    await gaveta.put(
+      endereco,
+      new Response(arquivo, { headers: { 'Content-Type': 'application/wasm' } })
+    );
+  } catch (erro) {
+    console.warn('[bd] Não foi possível guardar o motor para a próxima visita:', erro);
+  }
+}
+
+/** Baixa o .wasm contando os bytes, para a barra de progresso andar de verdade. */
+async function baixarComProgresso(endereco, aoProgredir) {
   const inicio = performance.now();
-  const resposta = await fetch(new URL('duckdb-eh.wasm', PASTA_MOTOR));
+  const resposta = await fetch(endereco);
   if (!resposta.ok || !resposta.body) throw new Error('Não foi possível baixar o motor SQL.');
 
   const leitor = resposta.body.getReader();
@@ -137,7 +201,7 @@ async function baixarMotor(aoProgredir) {
   medicoes.motorBytes = recebidos;
   medicoes.downloadMotorMs = Math.round(performance.now() - inicio);
   // O tipo application/wasm deixa o navegador compilar o motor em streaming.
-  return URL.createObjectURL(new Blob(pedacos, { type: 'application/wasm' }));
+  return new Blob(pedacos, { type: 'application/wasm' });
 }
 
 /** O nome com que cada CSV fica guardado dentro do motor: "countries.csv". */

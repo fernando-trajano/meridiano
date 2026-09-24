@@ -41,7 +41,8 @@ mas a estrutura de dados já nasce pronta para recebê-los.
 | Git | **Todo pelo Fernando, no GitHub Desktop** | Claude não roda nenhum comando de Git; sugere a mensagem de commit |
 | README | **Dois arquivos**: `README.md` (PT) e `README.en.md` (EN) | Portfólio lido por gente dos dois idiomas |
 | Licença | **MIT**, em nome de Fernando Rodrigo Trajano da Silva | Padrão para projeto público de portfólio |
-| Nome do repositório | **`meridiano`** → `fernando-trajano.github.io/meridiano/` | **A confirmar pelo Fernando** no passo 6 |
+| Nome do repositório | **`meridiano`** → `fernando-trajano.github.io/meridiano/` | Confirmado no passo 6; repositório público |
+| Motor, depois de medido | **Fica o DuckDB-WASM**, com o `.wasm` guardado no Cache Storage | Decisão do Fernando no passo 6, com os números na mesa (ver "Medições no endereço real") |
 
 Ambiente conferido: `python3` 3.9.6. Não há Node nem Homebrew — o que combina com o
 projeto sem etapa de build. Arquivos de terceiros (DuckDB-WASM, fontes) são baixados uma
@@ -344,6 +345,9 @@ Todas com o prefixo `meridiano:`:
 O backup (passo 21) exporta e importa todas elas num JSON com **número de versão**, para
 um backup antigo continuar entrando depois que o formato mudar.
 
+**Fora do localStorage:** o motor SQL fica no Cache Storage, na gaveta
+`meridiano:motor-<versão>` (passo 6). Não é progresso do aluno e não entra no backup.
+
 ---
 
 ## Ordem de construção — os 21 passos
@@ -422,6 +426,68 @@ Claude prepara tudo e guia; **as ações na conta são do Fernando**, pelo GitHu
    (sql.js). A decisão e os números entram neste arquivo.
 
 Quando houver commits novos depois disso, o Fernando envia com *Push origin*.
+
+### Medições no endereço real (24/09/2026)
+
+No ar em **https://fernando-trajano.github.io/meridiano/** (repositório público).
+
+**O que o GitHub Pages entrega** (medido com `curl`):
+
+| Arquivo | Sem compressão | Transferido | Tipo |
+|---|---|---|---|
+| `duckdb-eh.wasm` | 34,2 MB | **7,84 MB** (gzip) | `application/wasm` ✓ |
+| `duckdb-browser-eh.worker.js` | 773 KB | 190 KB | JavaScript |
+| `indicator_values.csv` | 1,85 MB | 348 KB | `text/csv` |
+| `country_year.csv` | 461 KB | 196 KB | `text/csv` |
+| a página inteira, sem o motor | — | **121 KB** | — |
+
+- Tudo que é texto vai comprimido (gzip); as fontes `.woff2` já vêm comprimidas.
+- Cache: `max-age=600` (10 minutos) com `ETag`. Depois dos 10 minutos, o navegador
+  pergunta se mudou, e a resposta "não mudou" (304) tem 0 bytes.
+
+**No navegador** (painel do app, conexão do Mac do Fernando, página visível):
+
+- primeira visita, do clique em "Rodar" ao resultado: **1,2 s** — 8,5 MB transferidos,
+  download do motor em 0,3 s, motor pronto em 0,8 s, base montada em 0,2 s;
+- **nenhuma requisição fora do domínio**; console limpo.
+
+**Estimativa por velocidade de conexão** (8,5 MB + ~0,8 s para compilar e montar):
+
+| Conexão | Primeira visita |
+|---|---|
+| 100 Mbps | ~1,5 s |
+| 25 Mbps | ~3,5 s |
+| 10 Mbps | ~7,5 s |
+| 4G fraco (5 Mbps) | ~15 s |
+
+**Achado:** no painel do app, o `.wasm` foi baixado de novo a cada visita, mesmo dentro
+dos 10 minutos (os CSVs vieram do cache). O GitHub manda os cabeçalhos certos; o mais
+provável é esse navegador não guardar um arquivo desse tamanho no cache HTTP.
+
+**Cuidado ao medir:** com o painel do navegador escondido, o navegador desacelera a aba e
+tudo fica 3 a 5 vezes mais lento — até o zerar da base, que não usa rede. Só vale a
+medição feita com a página à vista (`document.visibilityState === 'visible'`).
+
+### Decisão do Fernando: fica o DuckDB-WASM, com o motor guardado no navegador
+
+O plano B (sql.js) foi descartado: pesaria ~0,5 MB, mas sem `QUALIFY`, `PIVOT` e
+`DECIMAL`, com datas e divisão diferentes — os módulos 7 e 9 teriam de ser refeitos.
+
+Para a segunda visita não depender do cache comum do navegador, o `bd.js` guarda o `.wasm`
+no **Cache Storage** do site, numa gaveta com a versão no nome
+(`meridiano:motor-1.32.0`):
+
+- primeira visita: baixa com progresso e guarda;
+- da segunda em diante: tira da gaveta, **sem nenhum pedido à rede**;
+- cópia com tamanho errado (download interrompido): descartada e baixada de novo;
+- gavetas de versões antigas do motor: apagadas sozinhas;
+- sem armazenamento (modo privado, cota cheia): funciona igual, só baixa toda vez.
+
+Os três casos foram testados no passo 6. Para atualizar o motor: trocar os arquivos de
+`vendor/duckdb/`, e no `bd.js` o `TAMANHO_DO_MOTOR` e a `VERSAO_DO_MOTOR`, juntos.
+
+O Safari apaga o armazenamento de sites que a pessoa não visita há mais de 7 dias; aí o
+motor é baixado de novo, uma vez.
 
 ---
 

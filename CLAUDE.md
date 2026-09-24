@@ -321,6 +321,10 @@ Fernando pedir para testar, o Claude sobe o `servidor.py` e abre o navegador.
     `vendor/arrow/` (passo 5). Não é uma escolha nossa: vem junto com o motor.
   - O navegador mais antigo aceito é o **Safari 16.4** (março de 2023), por causa do
     *import map* que liga o motor ao Arrow.
+  - **Decidido no passo 6, com o site medido no ar:** fica o DuckDB-WASM (7,8 MB
+    comprimido; ~1,2 s na primeira visita numa conexão boa), e o `.wasm` é guardado no
+    Cache Storage do site para a segunda visita não baixar nada. O plano B (sql.js) foi
+    descartado. Números e detalhes no `PLANO.md`.
 - Caminhos **relativos** em todos os `href`/`src`/`import` — o GitHub Pages publica o
   projeto numa subpasta (`usuario.github.io/meridiano/`).
 - O motor SQL **não pode buscar nada na internet**: extensões do DuckDB que tentem se

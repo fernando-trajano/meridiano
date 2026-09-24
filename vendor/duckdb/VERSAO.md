@@ -2,7 +2,8 @@
 
 Cópia intacta de três arquivos do pacote oficial. **Não editar.** Atualizar é uma decisão,
 nunca um acidente: trocar os três arquivos juntos, conferir a integridade, atualizar esta
-página e o `TAMANHO_DO_MOTOR` em `js/bd.js`.
+página e, em `js/bd.js`, o `TAMANHO_DO_MOTOR` e a `VERSAO_DO_MOTOR` — a versão dá nome
+à gaveta onde o navegador guarda o motor, e trocá-la faz todo mundo baixar o novo.
 
 | | |
 |---|---|
