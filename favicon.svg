@@ -1,0 +1,22 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    /* Cor fixa: favicon não herda cor da página. A media query cobre o
+       tema escuro do navegador — sem isso, o traço escuro some na aba
+       escura. O ponto usa a cor de destaque de cada modo, como na marca. */
+    #globo, #meridiano { stroke: #18181B; }
+    #ponto { fill: #1F3A93; }
+    @media (prefers-color-scheme: dark) {
+      #globo, #meridiano { stroke: #E6EBF2; }
+      #ponto { fill: #E9B44C; }
+    }
+  </style>
+
+  <!-- O globo: só o contorno. -->
+  <circle id="globo" cx="50" cy="50" r="40" fill="none" stroke-width="7"/>
+
+  <!-- O meridiano: uma elipse de polo a polo. -->
+  <ellipse id="meridiano" cx="50" cy="50" rx="17" ry="40" fill="none" stroke-width="5"/>
+
+  <!-- O ponto: o mesmo ponto do nome "meridiano." -->
+  <circle id="ponto" cx="67" cy="50" r="9"/>
+</svg>

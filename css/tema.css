@@ -1,0 +1,162 @@
+/* ==========================================================================
+   tema.css — o único arquivo que conhece cores.
+
+   REGRA DO PROJETO: nenhum outro CSS pode escrever uma cor literal (#FFFFFF).
+   Todo o resto do site usa var(--nome-da-variavel). Assim, para mudar a
+   aparência inteira do meridiano., basta mexer aqui.
+
+   O conceito: "de dia, tinta no papel; à noite, estrelas no céu".
+
+   Como funciona o modo claro/escuro (igual ao digita):
+   - :root guarda a paleta CLARA (o padrão).
+   - :root[data-tema="escuro"] regrava só as cores que mudam.
+   - Um script pequeno no <head> do index.html escolhe o tema antes da página
+     aparecer, para não piscar branco em quem usa o modo escuro.
+
+   Contraste: todos os pares foram medidos no passo 2 (ver CLAUDE.md, seção
+   "Contraste da paleta"). Duas cores do briefing foram escurecidas de leve,
+   com aprovação do Fernando, para passar de 4,5:1 também sobre a superfície:
+   o texto discreto (#71717A → #6D6D76) e o GROUP BY (#A0620F → #9D600F).
+   ========================================================================== */
+
+:root {
+  /* Avisa ao navegador qual é o tema, para barras de rolagem e campos de
+     formulário combinarem com a página. */
+  color-scheme: light;
+
+  /* --- Superfícies e texto (modo claro) ------------------------------- */
+  --cor-fundo: #FFFFFF;             /* fundo da página */
+  --cor-superficie: #F4F4F5;        /* editor, áreas destacadas */
+  --cor-borda: #E4E4E7;             /* bordas e linhas finas */
+  --cor-texto: #18181B;             /* texto principal */
+  --cor-texto-secundario: #52525B;  /* texto secundário */
+  --cor-texto-discreto: #6D6D76;    /* legendas e textos discretos */
+
+  /* O destaque tem UMA função só: progresso, item ativo, link e o ponto da
+     marca. Nenhum outro uso, e nenhuma outra cor de destaque. */
+  --cor-destaque: #1F3A93;          /* tinta azul */
+
+  --cor-botao-fundo: #18181B;
+  --cor-botao-texto: #FFFFFF;
+  --cor-botao-secundario-borda: #D4D4D8;
+
+  /* --- Erro ------------------------------------------------------------ */
+  --cor-erro-fundo: #FEE2E2;
+  --cor-erro-texto: #B91C1C;
+
+  /* --- Cor por cláusula ------------------------------------------------
+     SÓ dentro do código (editor, Raio-X, cola, jogos) e SÓ na cor das
+     letras, nunca de fundo. A única exceção é --cor-raiox-passa, abaixo. */
+  --cor-select: #6A4BB5;            /* SELECT */
+  --cor-from: #2563A6;              /* FROM e JOIN */
+  --cor-where: #1F7A6E;             /* WHERE */
+  --cor-group: #9D600F;             /* GROUP BY e HAVING */
+  --cor-order: #A33A5B;             /* ORDER BY e LIMIT */
+  --cor-with: #4D7A1F;              /* WITH e OVER */
+  --cor-codigo-apoio: var(--cor-texto-secundario);   /* funções, textos, números */
+  --cor-codigo-comentario: var(--cor-texto-discreto); /* comentários (em itálico) */
+
+  /* No Raio-X, a linha que passa no WHERE ganha a cor do WHERE a 14% sobre o
+     fundo. Escrita já misturada, e não com transparência, para o contraste
+     medido ser exatamente o que aparece. */
+  --cor-raiox-passa: #E0ECEB;
+
+  /* --- Fontes ---------------------------------------------------------- */
+  /* Títulos e marca na serifada; texto e interface na fonte do sistema;
+     código, resultados e números na mono. As duas baixadas moram em
+     fontes/ (ver css/fontes.css). */
+  --fonte-titulo: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --fonte-texto: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fonte-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --peso-titulo: 600;
+  --espacamento-titulo: -0.015em;
+
+  /* --- Espaçamentos (os mesmos do digita) ----------------------------- */
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 0.75rem;
+  --esp-4: 1rem;
+  --esp-5: 1.5rem;
+  --esp-6: 2rem;
+  --esp-7: 3rem;
+  --esp-8: 4rem;
+
+  /* --- Formas e medidas ------------------------------------------------ */
+  --raio-p: 6px;
+  --raio-m: 10px;
+  --borda: 1px solid var(--cor-borda);
+  --largura-max: 1100px;            /* largura máxima do conteúdo */
+  --largura-historia: 40%;          /* coluna da história, na tela de missão */
+
+  /* --- Movimento ------------------------------------------------------- */
+  --transicao: 150ms ease;
+  --transicao-lenta: 250ms ease;    /* cross-fade das ilustrações */
+}
+
+/* ==========================================================================
+   Modo escuro — só o que muda em relação ao claro.
+   ========================================================================== */
+
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+
+  --cor-fundo: #0E1726;
+  --cor-superficie: #16213A;
+  --cor-borda: #26324D;
+  --cor-texto: #E6EBF2;
+  --cor-texto-secundario: #AAB4C5;
+  --cor-texto-discreto: #7F8AA0;
+
+  --cor-destaque: #E9B44C;          /* âmbar */
+
+  --cor-botao-fundo: #E6EBF2;
+  --cor-botao-texto: #0E1726;
+  --cor-botao-secundario-borda: #7F8AA0;
+
+  --cor-erro-fundo: #5B1F2A;
+  --cor-erro-texto: #F7C1C1;
+
+  --cor-select: #B9A8F0;
+  --cor-from: #8DB6E0;
+  --cor-where: #7FD1C0;
+  --cor-group: #F0997B;
+  --cor-order: #EE9CB6;
+  --cor-with: #B5D98A;
+
+  --cor-raiox-passa: #1E313C;
+}
+
+/* Rede de segurança: se o JavaScript não rodar, quem usa o sistema no escuro
+   ainda recebe o tema escuro. Repete o bloco de cima — CSS não deixa um
+   seletor reaproveitar as variáveis do outro. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema]) {
+    color-scheme: dark;
+
+    --cor-fundo: #0E1726;
+    --cor-superficie: #16213A;
+    --cor-borda: #26324D;
+    --cor-texto: #E6EBF2;
+    --cor-texto-secundario: #AAB4C5;
+    --cor-texto-discreto: #7F8AA0;
+
+    --cor-destaque: #E9B44C;
+
+    --cor-botao-fundo: #E6EBF2;
+    --cor-botao-texto: #0E1726;
+    --cor-botao-secundario-borda: #7F8AA0;
+
+    --cor-erro-fundo: #5B1F2A;
+    --cor-erro-texto: #F7C1C1;
+
+    --cor-select: #B9A8F0;
+    --cor-from: #8DB6E0;
+    --cor-where: #7FD1C0;
+    --cor-group: #F0997B;
+    --cor-order: #EE9CB6;
+    --cor-with: #B5D98A;
+
+    --cor-raiox-passa: #1E313C;
+  }
+}

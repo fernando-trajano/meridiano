@@ -1,0 +1,259 @@
+/* ==========================================================================
+   componentes.css — peças reutilizáveis: seções, botões, seletor PT/EN,
+   memorando, monograma, aviso de erro e o realce de SQL por cláusula.
+   Adaptado do digita. Só usa variáveis do tema.css.
+   ========================================================================== */
+
+/* --- Seção -------------------------------------------------------------
+   O site não usa caixas com borda em volta de cada bloco. As seções são
+   separadas por espaço e, quando o corte precisa ficar claro, por uma linha
+   fina — nada de sombras nem gradientes.
+   ----------------------------------------------------------------------- */
+
+.secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  padding-block: var(--esp-6);
+}
+
+.secao + .secao {
+  border-top: var(--borda);
+}
+
+.subtitulo {
+  color: var(--cor-texto-secundario);
+  font-size: 1.1rem;
+}
+
+.discreto {
+  color: var(--cor-texto-discreto);
+  font-size: 0.875rem;
+}
+
+/* --- Botões ------------------------------------------------------------ */
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+
+  padding: var(--esp-3) var(--esp-5);
+  border: 1px solid var(--cor-botao-secundario-borda);
+  border-radius: var(--raio-p);
+  background-color: transparent;
+  color: var(--cor-texto);
+
+  font-size: 0.95rem;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--transicao), border-color var(--transicao),
+    opacity var(--transicao);
+}
+
+.botao:hover {
+  border-color: var(--cor-texto-secundario);
+}
+
+/* Botão principal: a ação mais importante de cada tela. Só um por tela. */
+.botao--principal {
+  border-color: var(--cor-botao-fundo);
+  background-color: var(--cor-botao-fundo);
+  color: var(--cor-botao-texto);
+}
+
+.botao--principal:hover {
+  /* Sem sombra nem gradiente: o realce vem de uma leve transparência. */
+  border-color: var(--cor-botao-fundo);
+  opacity: 0.88;
+}
+
+.botao:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.grupo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+}
+
+/* --- Botão de ícone (tema, som) ---------------------------------------- */
+
+.botao-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: var(--borda);
+  border-radius: var(--raio-p);
+  background-color: transparent;
+  color: var(--cor-texto-secundario);
+
+  cursor: pointer;
+  transition: color var(--transicao), border-color var(--transicao);
+}
+
+.botao-icone:hover {
+  color: var(--cor-texto);
+  border-color: var(--cor-texto-secundario);
+}
+
+.botao-icone svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* --- Seletor de duas opções (PT / EN) ---------------------------------- */
+
+.seletor {
+  display: inline-flex;
+  border: var(--borda);
+  border-radius: var(--raio-p);
+  overflow: hidden;
+}
+
+.seletor-opcao {
+  padding: var(--esp-2) var(--esp-3);
+  border: 0;
+  background-color: transparent;
+  color: var(--cor-texto-secundario);
+
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background-color var(--transicao), color var(--transicao);
+}
+
+.seletor-opcao + .seletor-opcao {
+  border-left: var(--borda);
+}
+
+.seletor-opcao:hover {
+  color: var(--cor-texto);
+}
+
+/* aria-pressed="true" marca a opção ativa: o estado visual e o estado que o
+   leitor de tela anuncia são a mesma coisa. */
+.seletor-opcao[aria-pressed="true"] {
+  background-color: var(--cor-botao-fundo);
+  color: var(--cor-botao-texto);
+}
+
+/* --- Memorando -----------------------------------------------------------
+   O pedido de cada missão chega como memorando: monograma, nome na
+   serifada, cargo e hora — tudo numa linha, com uma linha fina embaixo.
+   ----------------------------------------------------------------------- */
+
+.memorando-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding-bottom: var(--esp-3);
+  border-bottom: var(--borda);
+}
+
+.memorando-quem {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.memorando-nome {
+  font-family: var(--fonte-titulo);
+  font-size: 1.1rem;
+  font-weight: var(--peso-titulo);
+  letter-spacing: var(--espacamento-titulo);
+}
+
+.memorando-cargo {
+  color: var(--cor-texto-secundario);
+  font-size: 0.875rem;
+}
+
+.memorando-hora {
+  margin-left: auto;
+  color: var(--cor-texto-discreto);
+  font-family: var(--fonte-mono);
+  font-size: 0.8rem;
+}
+
+.memorando-texto {
+  margin-top: var(--esp-3);
+}
+
+/* Os personagens não têm rosto: são monogramas cinza, num círculo de traço. */
+.monograma {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--cor-texto-discreto);
+  border-radius: 50%;
+  color: var(--cor-texto-secundario);
+
+  font-family: var(--fonte-titulo);
+  font-size: 0.85rem;
+  font-weight: var(--peso-titulo);
+}
+
+/* --- Aviso de erro ------------------------------------------------------ */
+
+.aviso-erro {
+  /* Ocupa a largura de quem o contém (o editor, por exemplo), e não a
+     medida de leitura dos parágrafos. */
+  max-width: none;
+  padding: var(--esp-3) var(--esp-4);
+  border-radius: var(--raio-p);
+  background-color: var(--cor-erro-fundo);
+  color: var(--cor-erro-texto);
+  font-size: 0.95rem;
+}
+
+/* --- Bloco de código (leitura) ----------------------------------------- */
+
+/* Código só para ler (exemplos, cola). O editor de verdade é do passo 7. */
+.bloco-codigo {
+  padding: var(--esp-4) var(--esp-5);
+  border-radius: var(--raio-m);
+  background-color: var(--cor-superficie);
+  color: var(--cor-texto);
+
+  font-size: 0.875rem;
+  line-height: 1.7;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* --- Realce de SQL por cláusula -----------------------------------------
+   As classes que o realce.js (passo 7) vai pôr em cada pedaço da consulta.
+   Só a cor das letras muda — nunca o fundo. Palavras que não são cláusula
+   (AS, AND, ON, DESC) e os nomes de tabela e coluna ficam na cor do texto.
+   ----------------------------------------------------------------------- */
+
+.sql-select { color: var(--cor-select); }
+.sql-from { color: var(--cor-from); }
+.sql-where { color: var(--cor-where); }
+.sql-group { color: var(--cor-group); }
+.sql-order { color: var(--cor-order); }
+.sql-with { color: var(--cor-with); }
+
+.sql-funcao,
+.sql-texto,
+.sql-numero {
+  color: var(--cor-codigo-apoio);
+}
+
+.sql-comentario {
+  color: var(--cor-codigo-comentario);
+  font-style: italic;
+}

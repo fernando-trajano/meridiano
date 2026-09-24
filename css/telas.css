@@ -1,0 +1,44 @@
+/* ==========================================================================
+   telas.css — o que é específico de cada tela.
+   Só usa variáveis do tema.css.
+   ========================================================================== */
+
+/* --- Vitrine provisória (passo 2) ----------------------------------------
+   Só existe para conferir a paleta e as fontes. Sai no passo 15, junto com
+   a vitrine do index.html.
+   ----------------------------------------------------------------------- */
+
+.vitrine-abertura {
+  gap: var(--esp-4);
+  padding-top: 0;
+}
+
+.vitrine-abertura .grupo-botoes {
+  margin-top: var(--esp-3);
+}
+
+/* As proporções da tela de missão: história 40%, código 60%. */
+.vitrine-missao {
+  display: grid;
+  grid-template-columns: minmax(0, var(--largura-historia)) minmax(0, 1fr);
+  gap: var(--esp-6);
+  align-items: start;
+}
+
+.vitrine-historia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.vitrine-codigo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+@media (max-width: 52rem) {
+  .vitrine-missao {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -56,6 +56,11 @@ resolvido com SQL de verdade rodando no navegador, sobre dados reais de países.
 
 ## VISUAL
 
+> **Atenção:** duas cores do modo claro foram **ajustadas depois do briefing**, com
+> aprovação do Fernando no passo 2, para passar de 4,5:1 também sobre a superfície: o
+> texto discreto (`#71717A` → **`#6D6D76`**) e o `GROUP BY` (`#A0620F` → **`#9D600F`**).
+> As tabelas abaixo já estão com os valores novos. Ver "Contraste da paleta", na Parte 2.
+
 Conceito: **"de dia, tinta no papel; à noite, estrelas no céu".**
 
 Mantém do digita: `tema.css` como **único arquivo com cores**, sem sombras, sem
@@ -71,7 +76,7 @@ gradientes, sem caixas em volta das seções (espaço e linha fina), largura má
 | Bordas | `#E4E4E7` |
 | Texto | `#18181B` |
 | Texto secundário | `#52525B` |
-| Texto discreto | `#71717A` |
+| Texto discreto | `#6D6D76` *(era `#71717A`)* |
 | **Destaque** (tinta azul) | `#1F3A93` |
 | Botão principal | fundo `#18181B`, texto `#FFFFFF` |
 | Botão secundário | borda `#D4D4D8`, texto `#18181B` |
@@ -103,7 +108,7 @@ das letras, sem fundo**:
 | `SELECT` | `#6A4BB5` | `#B9A8F0` |
 | `FROM` e `JOIN` | `#2563A6` | `#8DB6E0` |
 | `WHERE` | `#1F7A6E` | `#7FD1C0` |
-| `GROUP BY` e `HAVING` | `#A0620F` | `#F0997B` |
+| `GROUP BY` e `HAVING` | `#9D600F` *(era `#A0620F`)* | `#F0997B` |
 | `ORDER BY` e `LIMIT` | `#A33A5B` | `#EE9CB6` |
 | `WITH` e `OVER` | `#4D7A1F` | `#B5D98A` |
 | Funções, textos e números | cor do texto secundário | cor do texto secundário |
@@ -353,6 +358,11 @@ cd /Users/fernando/Documents/ClaudeCode/Meridiano && python3 servidor.py
 Abre em **http://localhost:8030**. A porta é diferente da do digita (8010) para os dois
 projetos poderem rodar ao mesmo tempo sem um tomar o endereço do outro.
 
+No app, o painel de navegador **não consegue iniciar** o servidor sozinho: o macOS não
+deixa o processo dele ler a pasta Documentos. Por isso o `.claude/launch.json` só
+**aponta** para `http://localhost:8030`, e o servidor é iniciado antes pelo terminal do
+Claude (em segundo plano).
+
 Use **sempre o `servidor.py`**, nunca o `python3 -m http.server`: o servidor padrão deixa
 o navegador guardar os módulos JavaScript em cache e mostrar a versão antiga do código. O
 `servidor.py` manda `Cache-Control: no-store` e, além do que o do digita já fazia, fixa os
@@ -394,10 +404,37 @@ laboratório, cola, os três jogos) **+ módulos 0 a 2 escritos** (20 missões).
 
 ## Contraste da paleta
 
-A preencher no passo 2, com a medição de todos os pares (texto × fundo, texto × superfície,
-destaque, erro e as seis cores de cláusula nos dois modos) e as regras de uso que saírem
-dela — como no digita, onde a cor das letras pendentes ficou restrita a fonte de 24px ou
-maior.
+Medido no passo 2 (razão de contraste WCAG 2), todos os pares, sobre o fundo e sobre a
+superfície — o editor e as áreas destacadas ficam na superfície.
+
+- **Modo escuro:** tudo passa, quase tudo em AAA (7:1 ou mais). O menor é o texto
+  discreto sobre a superfície, 4,61:1.
+- **Modo claro:** tudo passa de 4,5:1 depois dos dois ajustes aprovados:
+  - texto discreto `#6D6D76`: 5,12 no fundo, 4,66 na superfície (o `#71717A` do
+    briefing dava 4,40 na superfície);
+  - `GROUP BY` `#9D600F`: 5,10 no fundo, 4,64 na superfície (o `#A0620F` dava 4,497).
+- **Menores do claro que continuam valendo:** `WITH` 4,64 e `WHERE` 4,70 na superfície;
+  erro `#B91C1C` sobre `#FEE2E2`, 5,30.
+- **Borda do botão secundário claro** (`#D4D4D8`): 1,48:1 contra o fundo, como no
+  digita. O botão é reconhecido pelo texto (17,7:1); a borda é só acabamento.
+- **Linhas finas** (`--cor-borda`) são decorativas — nunca a única pista de nada.
+
+Regras que saíram da medição:
+
+- **Fundo do Raio-X:** a linha que passa no `WHERE` usa `--cor-raiox-passa`, a cor do
+  `WHERE` a 14% sobre o fundo, **já misturada** (`#E0ECEB` / `#1E313C`), e não uma
+  transparência — assim o contraste medido é o que aparece (texto em cima: 14,65 / 11,24).
+  É a **única** exceção à regra "cor de cláusula só nas letras".
+- **Comentários do código** na cor discreta, em itálico; palavras que não são cláusula
+  (`AS`, `AND`, `ON`, `DESC`) e nomes de tabela e coluna na cor do texto. Propostas do
+  Claude, aprovadas junto com a paleta.
+
+## Fontes
+
+Aprovadas no passo 2: **Source Serif 4** e **JetBrains Mono**, do Google Fonts, só o
+subconjunto latino, um arquivo variável por fonte (serifada de 400 a 600, mono de 400 a
+500; 82 KB as duas). A serifada é pedida já no `<head>` (`preload`), porque aparece logo de
+cara na marca e no título. Origem, data e licenças: `fontes/LEIA-ME.md`.
 
 ## Outros
 

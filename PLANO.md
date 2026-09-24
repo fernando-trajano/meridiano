@@ -30,7 +30,9 @@ mas a estrutura de dados já nasce pronta para recebê-los.
 | Motor SQL | **DuckDB-WASM**, versão fixada, dentro de `vendor/duckdb/` | SQL moderno completo (`QUALIFY`, `PIVOT`, janelas, `WITH RECURSIVE`) sem servidor e sem CDN |
 | Plano B do motor | **sql.js** (SQLite) | Muito mais leve; só se a medição do passo 6 mostrar que o DuckDB pesa demais |
 | Quando o motor carrega | Só nas telas com SQL (missão, laboratório, jogos) | Quem só lê a trilha ou a cola não paga o peso do motor |
-| Fontes | Source Serif 4 + JetBrains Mono, `.woff2` em `fontes/` | Arquivos no repositório, só os pesos usados |
+| Fontes | Source Serif 4 + JetBrains Mono, `.woff2` em `fontes/` — **aprovadas no passo 2** | Arquivos no repositório, um variável por fonte, só o subconjunto latino (82 KB) |
+| Paleta | A do briefing, com **dois ajustes aprovados no passo 2**: texto discreto claro `#6D6D76` e `GROUP BY` claro `#9D600F` | Os dois ficavam abaixo de 4,5:1 sobre a superfície, onde fica o editor |
+| Marca | Só o nome, na serifada, com o ponto na cor de destaque — sem ícone ao lado | O ponto já é a assinatura; o globo fica no favicon |
 | Idioma da base | CSVs e gabaritos em inglês; nomes de tabela e coluna traduzidos na hora | Uma fonte só, sem duas bases para manter em sincronia |
 | Como testar | Claude inicia `python3 servidor.py` (porta **8030**) e abre no painel de navegador | Módulos ES não funcionam com `file://`, e o servidor padrão serve código velho do cache |
 | Escopo v1 | Fluxo completo + módulos 0 a 2 | Ver o site rodando e publicável cedo |
@@ -90,15 +92,17 @@ Meridiano/
 │   ├── tema.css               # SÓ variáveis: cores claro/escuro, cláusulas, fontes, espaços
 │   ├── fontes.css             # @font-face das fontes de fontes/
 │   ├── base.css               # reset, tipografia, moldura da página, cabeçalho, rodapé
-│   ├── componentes.css        # botões, lista com hover, estrelas, memorando, monogramas
+│   ├── componentes.css        # botões, seletor, memorando, monograma, erro, realce de SQL
+│   │                          # (e depois: lista com hover, estrelas)
 │   ├── editor.css             # editor, realce por cláusula, autocompletar
 │   ├── raio-x.css             # a tabela viva do Raio-X
 │   ├── telas.css              # o que é específico de cada tela
 │   └── jogos.css              # as partidas dos jogos
 │
 ├── fontes/
-│   ├── source-serif-4/        # .woff2 dos pesos usados + OFL.txt
-│   └── jetbrains-mono/        # .woff2 dos pesos usados + OFL.txt
+│   ├── LEIA-ME.md             # origem, data, subconjunto e licença de cada fonte
+│   ├── source-serif-4/        # um .woff2 variável (400–600) + OFL.txt
+│   └── jetbrains-mono/        # um .woff2 variável (400–500) + OFL.txt
 │
 ├── vendor/
 │   └── duckdb/                # DuckDB-WASM, versão fixada: .wasm, worker, módulo,
@@ -462,8 +466,11 @@ no painel de navegador do app e conferir, conforme o passo:
 - [x] **Passo 1** — `CLAUDE.md`, `PLANO.md`, READMEs PT/EN, `LICENSE`, `.gitignore`,
       `.nojekyll` e `servidor.py` (do digita, com `.wasm`/`.mjs` fixados e porta 8030).
       O repositório Git é criado pelo Fernando no GitHub Desktop.
-- [ ] **Passo 2** — `tema.css`, fontes, CSS base, `index.html` e `app.js` · 🛑 paleta e
-      fontes com contraste medido
+- [x] **Passo 2** — `tema.css`, `fontes.css`, `base.css`, `componentes.css`, `telas.css`,
+      `index.html`, `app.js` e `favicon.svg` · ✅ **paleta e fontes aprovadas pelo
+      Fernando**, com o contraste medido (dois ajustes no claro: discreto `#6D6D76`,
+      `GROUP BY` `#9D600F`). O botão de tema alterna, mas a escolha ainda não é salva —
+      isso é o passo 8. A página mostra uma vitrine provisória, que sai no passo 15.
 - [ ] **Passo 3** — `i18n.js` e traduções PT/EN
 - [ ] **Passo 4** — `baixar_dados.py`, `gerar_instituto.py` e `dicionario.js` · 🛑 revisão
       de indicadores, tabelas, nomes em PT e personagens
