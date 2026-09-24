@@ -149,9 +149,9 @@ Meridiano/
 │   │   ├── pt.js              # todos os textos da interface em português
 │   │   └── en.js              # os mesmos, em inglês, com as mesmas chaves
 │   ├── base/
-│   │   ├── mundo/             # CSVs do Banco Mundial + COLETA.md (data e endereço da coleta)
-│   │   ├── instituto/         # CSVs inventados, gerados com semente fixa
-│   │   └── dicionario.js      # tabela e coluna: nome e descrição em PT e EN
+│   │   ├── mundo/             # 5 CSVs do Banco Mundial + COLETA.md (data, códigos, contagens)
+│   │   ├── instituto/         # 6 CSVs inventados, gerados com semente fixa
+│   │   └── dicionario.js      # as 11 tabelas e 70 colunas: nome PT/EN, descrição, chaves
 │   ├── missoes/
 │   │   ├── indice.js          # os 10 módulos: ordem, personagem, quais estão liberados
 │   │   ├── conferencia.js     # as 5 conferências automáticas
@@ -169,7 +169,8 @@ Meridiano/
 │
 └── ferramentas/               # rodam na máquina do Fernando, não no site
     ├── baixar_dados.py        # Python 3.9, só biblioteca padrão
-    └── gerar_instituto.py     # semente fixa
+    ├── gerar_instituto.py     # semente fixa; roda DEPOIS do baixar_dados.py
+    └── cache/                 # respostas brutas da API (fora do Git)
 ```
 
 Os ícones ficam num bloco `<svg>` de símbolos no topo do `index.html`, reusados com
@@ -310,7 +311,17 @@ fixa — rodar de novo dá exatamente os mesmos arquivos.
 4. ao trocar de idioma, recarrega a base com os outros nomes e traduz a consulta que está
    no editor com o `traducao-sql.js`.
 
-**Nomes em português.** Propostos no passo 4, junto com o dicionário, para revisão.
+**Nomes em português.** Aprovados no passo 4; a lista está no `dicionario.js`.
+
+**Refazer a base** (só se um dia for preciso — por exemplo, para trocar um indicador):
+
+```bash
+python3 ferramentas/baixar_dados.py --de-novo
+python3 ferramentas/gerar_instituto.py
+```
+
+O primeiro baixa de novo (a data da coleta muda no `COLETA.md`); o segundo refaz o
+instituto a partir do mundo novo. Com o mesmo mundo, o instituto sai idêntico.
 
 ---
 
@@ -475,8 +486,12 @@ no painel de navegador do app e conferir, conforme o passo:
       cabeçalho, título da aba e `lang` acompanhando; lacunas `{nome}`, `emIdioma()` para
       o conteúdo e conferência das chaves no console; a escolha ainda não é salva — isso
       é o passo 8)
-- [ ] **Passo 4** — `baixar_dados.py`, `gerar_instituto.py` e `dicionario.js` · 🛑 revisão
-      de indicadores, tabelas, nomes em PT e personagens
+- [x] **Passo 4** — `baixar_dados.py`, `gerar_instituto.py` e `dicionario.js` · ✅
+      **indicadores, tabelas, nomes em PT e personagens aprovados pelo Fernando** (17
+      agregados, `indicator_values` só com valores, `missions` → `field_trips`/`viagens`).
+      Coleta em 24/09/2026: 234 países, 5.616 linhas país × ano, 59.454 valores; instituto
+      conferido (nenhuma data incoerente, 20 pagamentos em dobro, 19 projetos em aberto,
+      hierarquia de 4 níveis)
 - [ ] **Passo 5** — DuckDB-WASM, `bd.js` e `traducao-sql.js` · 🛑 Safari
 - [ ] **Passo 6** — publicação no GitHub Pages e medição · 🛑
 - [ ] **Passo 7** — editor, resultado e erros · 🛑 Safari

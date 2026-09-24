@@ -1,0 +1,235 @@
+country_code,country_name,region_code,income_group,capital_city,latitude,longitude
+ABW,Aruba,LCN,High income,Oranjestad,12.5167,-70.0167
+AFG,Afghanistan,MEA,Low income,Kabul,34.5228,69.1761
+AGO,Angola,SSF,Lower middle income,Luanda,-8.81155,13.242
+ALB,Albania,ECS,Upper middle income,Tirane,41.3317,19.8172
+AND,Andorra,ECS,High income,Andorra la Vella,42.5075,1.5218
+ARB,Arab World,,,,,
+ARE,United Arab Emirates,MEA,High income,Abu Dhabi,24.4764,54.3705
+ARG,Argentina,LCN,Upper middle income,Buenos Aires,-34.6118,-58.4173
+ARM,Armenia,ECS,Upper middle income,Yerevan,40.1596,44.509
+ASM,American Samoa,EAS,High income,Pago Pago,-14.2846,-170.691
+ATG,Antigua and Barbuda,LCN,High income,Saint John's,17.1175,-61.8456
+AUS,Australia,EAS,High income,Canberra,-35.282,149.129
+AUT,Austria,ECS,High income,Vienna,48.2201,16.3798
+AZE,Azerbaijan,ECS,Upper middle income,Baku,40.3834,49.8932
+BDI,Burundi,SSF,Low income,Bujumbura,-3.3784,29.3639
+BEL,Belgium,ECS,High income,Brussels,50.8371,4.36761
+BEN,Benin,SSF,Lower middle income,Porto-Novo,6.4779,2.6323
+BFA,Burkina Faso,SSF,Low income,Ouagadougou,12.3605,-1.53395
+BGD,Bangladesh,SAS,Lower middle income,Dhaka,23.7055,90.4113
+BGR,Bulgaria,ECS,High income,Sofia,42.7105,23.3238
+BHR,Bahrain,MEA,High income,Manama,26.1921,50.5354
+BHS,"Bahamas, The",LCN,High income,Nassau,25.0661,-77.339
+BIH,Bosnia and Herzegovina,ECS,Upper middle income,Sarajevo,43.8607,18.4214
+BLR,Belarus,ECS,Upper middle income,Minsk,53.9678,27.5766
+BLZ,Belize,LCN,Upper middle income,Belmopan,17.2534,-88.7713
+BMU,Bermuda,NAC,High income,Hamilton,32.3293,-64.706
+BOL,Bolivia,LCN,Lower middle income,La Paz,-13.9908,-66.1936
+BRA,Brazil,LCN,Upper middle income,Brasilia,-15.7801,-47.9292
+BRB,Barbados,LCN,High income,Bridgetown,13.0935,-59.6105
+BRN,Brunei Darussalam,EAS,High income,Bandar Seri Begawan,4.94199,114.946
+BTN,Bhutan,SAS,Lower middle income,Thimphu,27.5768,89.6177
+BWA,Botswana,SSF,Upper middle income,Gaborone,-24.6544,25.9201
+CAF,Central African Republic,SSF,Low income,Bangui,5.63056,21.6407
+CAN,Canada,NAC,High income,Ottawa,45.4215,-75.6919
+CHE,Switzerland,ECS,High income,Bern,46.948,7.44821
+CHI,Channel Islands,ECS,High income,,,
+CHL,Chile,LCN,High income,Santiago,-33.475,-70.6475
+CHN,China,EAS,Upper middle income,Beijing,40.0495,116.286
+CIV,Cote d'Ivoire,SSF,Lower middle income,Yamoussoukro,5.332,-4.0305
+CMR,Cameroon,SSF,Lower middle income,Yaounde,3.8721,11.5174
+COD,"Congo, Dem. Rep.",SSF,Low income,Kinshasa,-4.325,15.3222
+COG,"Congo, Rep.",SSF,Lower middle income,Brazzaville,-4.2767,15.2662
+COL,Colombia,LCN,Upper middle income,Bogota,4.60987,-74.082
+COM,Comoros,SSF,Lower middle income,Moroni,-11.6986,43.2418
+CPV,Cabo Verde,SSF,Upper middle income,Praia,14.9218,-23.5087
+CRI,Costa Rica,LCN,High income,San Jose,9.63701,-84.0089
+CUB,Cuba,LCN,Upper middle income,Havana,23.1333,-82.3667
+CUW,Curacao,LCN,High income,Willemstad,,
+CYM,Cayman Islands,LCN,High income,George Town,19.3022,-81.3857
+CYP,Cyprus,ECS,High income,Nicosia,35.1676,33.3736
+CZE,Czechia,ECS,High income,Prague,50.0878,14.4205
+DEU,Germany,ECS,High income,Berlin,52.5235,13.4115
+DJI,Djibouti,MEA,Lower middle income,Djibouti,11.5806,43.1425
+DMA,Dominica,LCN,Upper middle income,Roseau,15.2976,-61.39
+DNK,Denmark,ECS,High income,Copenhagen,55.6763,12.5681
+DOM,Dominican Republic,LCN,Upper middle income,Santo Domingo,18.479,-69.8908
+DZA,Algeria,MEA,Upper middle income,Algiers,36.7397,3.05097
+EAS,East Asia & Pacific,,,,,
+ECS,Europe & Central Asia,,,,,
+ECU,Ecuador,LCN,Upper middle income,Quito,-0.229498,-78.5243
+EGY,"Egypt, Arab Rep.",MEA,Lower middle income,Cairo,30.0982,31.2461
+EMU,Euro area,,,,,
+ERI,Eritrea,SSF,Low income,Asmara,15.3315,38.9183
+ESP,Spain,ECS,High income,Madrid,40.4167,-3.70327
+EST,Estonia,ECS,High income,Tallinn,59.4392,24.7586
+ETH,Ethiopia,SSF,Low income,Addis Ababa,9.02274,38.7468
+EUU,European Union,,,,,
+FIN,Finland,ECS,High income,Helsinki,60.1608,24.9525
+FJI,Fiji,EAS,Upper middle income,Suva,-18.1149,178.399
+FRA,France,ECS,High income,Paris,48.8566,2.35097
+FRO,Faroe Islands,ECS,High income,Torshavn,61.8926,-6.91181
+FSM,"Micronesia, Fed. Sts.",EAS,Upper middle income,Palikir,6.91771,158.185
+GAB,Gabon,SSF,Upper middle income,Libreville,0.38832,9.45162
+GBR,United Kingdom,ECS,High income,London,51.5002,-0.126236
+GEO,Georgia,ECS,Upper middle income,Tbilisi,41.71,44.793
+GHA,Ghana,SSF,Lower middle income,Accra,5.57045,-0.20795
+GIB,Gibraltar,ECS,High income,,,
+GIN,Guinea,SSF,Lower middle income,Conakry,9.51667,-13.7
+GMB,"Gambia, The",SSF,Low income,Banjul,13.4495,-16.5885
+GNB,Guinea-Bissau,SSF,Low income,Bissau,11.8037,-15.1804
+GNQ,Equatorial Guinea,SSF,Upper middle income,Malabo,3.7523,8.7741
+GRC,Greece,ECS,High income,Athens,37.9792,23.7166
+GRD,Grenada,LCN,Upper middle income,Saint George's,12.0653,-61.7449
+GRL,Greenland,ECS,High income,Nuuk,64.1836,-51.7214
+GTM,Guatemala,LCN,Upper middle income,Guatemala City,14.6248,-90.5328
+GUM,Guam,EAS,High income,Agana,13.4443,144.794
+GUY,Guyana,LCN,High income,Georgetown,6.80461,-58.1548
+HIC,High income,,,,,
+HKG,"Hong Kong SAR, China",EAS,High income,,22.3964,114.109
+HND,Honduras,LCN,Lower middle income,Tegucigalpa,15.1333,-87.4667
+HRV,Croatia,ECS,High income,Zagreb,45.8069,15.9614
+HTI,Haiti,LCN,Lower middle income,Port-au-Prince,18.5392,-72.3288
+HUN,Hungary,ECS,High income,Budapest,47.4984,19.0408
+IDN,Indonesia,EAS,Upper middle income,Jakarta,-6.19752,106.83
+IMN,Isle of Man,ECS,High income,Douglas,54.1509,-4.47928
+IND,India,SAS,Lower middle income,New Delhi,28.6353,77.225
+IRL,Ireland,ECS,High income,Dublin,53.3441,-6.26749
+IRN,"Iran, Islamic Rep.",MEA,Upper middle income,Tehran,35.6878,51.4447
+IRQ,Iraq,MEA,Upper middle income,Baghdad,33.3302,44.394
+ISL,Iceland,ECS,High income,Reykjavik,64.1353,-21.8952
+ISR,Israel,MEA,High income,,31.7717,35.2035
+ITA,Italy,ECS,High income,Rome,41.8955,12.4823
+JAM,Jamaica,LCN,Upper middle income,Kingston,17.9927,-76.792
+JOR,Jordan,MEA,Upper middle income,Amman,31.9497,35.9263
+JPN,Japan,EAS,High income,Tokyo,35.67,139.77
+KAZ,Kazakhstan,ECS,Upper middle income,Astana,51.1879,71.4382
+KEN,Kenya,SSF,Lower middle income,Nairobi,-1.27975,36.8126
+KGZ,Kyrgyz Republic,ECS,Lower middle income,Bishkek,42.8851,74.6057
+KHM,Cambodia,EAS,Lower middle income,Phnom Penh,11.5556,104.874
+KIR,Kiribati,EAS,Lower middle income,Tarawa,1.32905,172.979
+KNA,St. Kitts and Nevis,LCN,High income,Basseterre,17.3,-62.7309
+KOR,"Korea, Rep.",EAS,High income,Seoul,37.5323,126.957
+KWT,Kuwait,MEA,High income,Kuwait City,29.3721,47.9824
+LAO,Lao PDR,EAS,Lower middle income,Vientiane,18.5826,102.177
+LBN,Lebanon,MEA,Lower middle income,Beirut,33.8872,35.5134
+LBR,Liberia,SSF,Low income,Monrovia,6.30039,-10.7957
+LBY,Libya,MEA,Upper middle income,Tripoli,32.8578,13.1072
+LCA,St. Lucia,LCN,Upper middle income,Castries,14,-60.9832
+LCN,Latin America & Caribbean,,,,,
+LDC,Least developed countries: UN classification,,,,,
+LIC,Low income,,,,,
+LIE,Liechtenstein,ECS,High income,Vaduz,47.1411,9.52148
+LKA,Sri Lanka,SAS,Upper middle income,Colombo,6.92148,79.8528
+LMC,Lower middle income,,,,,
+LSO,Lesotho,SSF,Lower middle income,Maseru,-29.5208,27.7167
+LTU,Lithuania,ECS,High income,Vilnius,54.6896,25.2799
+LUX,Luxembourg,ECS,High income,Luxembourg,49.61,6.1296
+LVA,Latvia,ECS,High income,Riga,56.9465,24.1048
+MAC,"Macao SAR, China",EAS,High income,,22.1667,113.55
+MAF,St. Martin (French part),LCN,High income,Marigot,,
+MAR,Morocco,MEA,Lower middle income,Rabat,33.9905,-6.8704
+MCO,Monaco,ECS,High income,Monaco,43.7325,7.41891
+MDA,Moldova,ECS,Upper middle income,Chisinau,47.0167,28.8497
+MDG,Madagascar,SSF,Low income,Antananarivo,-20.4667,45.7167
+MDV,Maldives,SAS,Upper middle income,Male,4.1742,73.5109
+MEA,"Middle East, North Africa, Afghanistan & Pakistan",,,,,
+MEX,Mexico,LCN,Upper middle income,Mexico City,19.427,-99.1276
+MHL,Marshall Islands,EAS,Upper middle income,Majuro,7.11046,171.135
+MKD,North Macedonia,ECS,Upper middle income,Skopje,42.0024,21.4361
+MLI,Mali,SSF,Low income,Bamako,13.5667,-7.50034
+MLT,Malta,MEA,High income,Valletta,35.9042,14.5189
+MMR,Myanmar,EAS,Lower middle income,Naypyidaw,21.914,95.9562
+MNE,Montenegro,ECS,Upper middle income,Podgorica,42.4602,19.2595
+MNG,Mongolia,EAS,Upper middle income,Ulaanbaatar,47.9129,106.937
+MNP,Northern Mariana Islands,EAS,High income,Saipan,15.1935,145.765
+MOZ,Mozambique,SSF,Low income,Maputo,-25.9664,32.5713
+MRT,Mauritania,SSF,Lower middle income,Nouakchott,18.2367,-15.9824
+MUS,Mauritius,SSF,Upper middle income,Port Louis,-20.1605,57.4977
+MWI,Malawi,SSF,Low income,Lilongwe,-13.9899,33.7703
+MYS,Malaysia,EAS,Upper middle income,Kuala Lumpur,3.12433,101.684
+NAC,North America,,,,,
+NAM,Namibia,SSF,Lower middle income,Windhoek,-22.5648,17.0931
+NCL,New Caledonia,EAS,High income,Noum'ea,-22.2677,166.464
+NER,Niger,SSF,Low income,Niamey,13.514,2.1073
+NGA,Nigeria,SSF,Lower middle income,Abuja,9.05804,7.48906
+NIC,Nicaragua,LCN,Lower middle income,Managua,12.1475,-86.2734
+NLD,Netherlands,ECS,High income,Amsterdam,52.3738,4.89095
+NOR,Norway,ECS,High income,Oslo,59.9138,10.7387
+NPL,Nepal,SAS,Lower middle income,Kathmandu,27.6939,85.3157
+NRU,Naoero,EAS,High income,Yaren District,-0.5477,166.920867
+NZL,New Zealand,EAS,High income,Wellington,-41.2865,174.776
+OED,OECD members,,,,,
+OMN,Oman,MEA,High income,Muscat,23.6105,58.5874
+PAK,Pakistan,MEA,Lower middle income,Islamabad,30.5167,72.8
+PAN,Panama,LCN,High income,Panama City,8.99427,-79.5188
+PER,Peru,LCN,Upper middle income,Lima,-12.0931,-77.0465
+PHL,Philippines,EAS,Upper middle income,Manila,14.5515,121.035
+PLW,Palau,EAS,High income,Koror,7.34194,134.479
+PNG,Papua New Guinea,EAS,Lower middle income,Port Moresby,-9.47357,147.194
+POL,Poland,ECS,High income,Warsaw,52.26,21.02
+PRI,Puerto Rico (US),LCN,High income,San Juan,18.23,-66
+PRK,"Korea, Dem. People's Rep.",EAS,Low income,Pyongyang,39.0319,125.754
+PRT,Portugal,ECS,High income,Lisbon,38.7072,-9.13552
+PRY,Paraguay,LCN,Upper middle income,Asuncion,-25.3005,-57.6362
+PSE,West Bank and Gaza,MEA,Lower middle income,,,
+PYF,French Polynesia,EAS,High income,Papeete,-17.535,-149.57
+QAT,Qatar,MEA,High income,Doha,25.2948,51.5082
+ROU,Romania,ECS,High income,Bucharest,44.4479,26.0979
+RUS,Russian Federation,ECS,High income,Moscow,55.7558,37.6176
+RWA,Rwanda,SSF,Low income,Kigali,-1.95325,30.0587
+SAS,South Asia,,,,,
+SAU,Saudi Arabia,MEA,High income,Riyadh,24.6748,46.6977
+SDN,Sudan,SSF,Low income,Khartoum,15.5932,32.5363
+SEN,Senegal,SSF,Lower middle income,Dakar,14.7247,-17.4734
+SGP,Singapore,EAS,High income,Singapore,1.28941,103.85
+SLB,Solomon Islands,EAS,Lower middle income,Honiara,-9.42676,159.949
+SLE,Sierra Leone,SSF,Low income,Freetown,8.4821,-13.2134
+SLV,El Salvador,LCN,Upper middle income,San Salvador,13.7034,-89.2073
+SMR,San Marino,ECS,High income,San Marino,43.9322,12.4486
+SOM,"Somalia, Fed. Rep.",SSF,Low income,Mogadishu,2.07515,45.3254
+SRB,Serbia,ECS,Upper middle income,Belgrade,44.8024,20.4656
+SSD,South Sudan,SSF,Low income,Juba,4.85,31.6
+SSF,Sub-Saharan Africa,,,,,
+STP,Sao Tome and Principe,SSF,Lower middle income,Sao Tome,0.20618,6.6071
+SUR,Suriname,LCN,Upper middle income,Paramaribo,5.8232,-55.1679
+SVK,Slovak Republic,ECS,High income,Bratislava,48.1484,17.1073
+SVN,Slovenia,ECS,High income,Ljubljana,46.0546,14.5044
+SWE,Sweden,ECS,High income,Stockholm,59.3327,18.0645
+SWZ,Eswatini,SSF,Lower middle income,Mbabane,-26.5225,31.4659
+SXM,Sint Maarten (Dutch part),LCN,High income,Philipsburg,,
+SYC,Seychelles,SSF,High income,Victoria,-4.6309,55.4466
+SYR,Syrian Arab Republic,MEA,Low income,Damascus,33.5146,36.3119
+TCA,Turks and Caicos Islands,LCN,High income,Grand Turk,21.4602778,-71.141389
+TCD,Chad,SSF,Low income,N'Djamena,12.1048,15.0445
+TGO,Togo,SSF,Lower middle income,Lome,6.1228,1.2255
+THA,Thailand,EAS,Upper middle income,Bangkok,13.7308,100.521
+TJK,Tajikistan,ECS,Lower middle income,Dushanbe,38.5878,68.7864
+TKM,Turkmenistan,ECS,Upper middle income,Ashgabat,37.9509,58.3794
+TLS,Timor-Leste,EAS,Lower middle income,Dili,-8.56667,125.567
+TON,Tonga,EAS,Upper middle income,Nuku'alofa,-21.136,-175.216
+TTO,Trinidad and Tobago,LCN,High income,Port-of-Spain,10.6596,-61.4789
+TUN,Tunisia,MEA,Lower middle income,Tunis,36.7899,10.21
+TUR,Turkiye,ECS,Upper middle income,Ankara,39.7153,32.3606
+TUV,Tuvalu,EAS,Upper middle income,Funafuti,-8.6314877,179.089567
+TZA,Tanzania,SSF,Lower middle income,Dodoma,-6.17486,35.7382
+UGA,Uganda,SSF,Low income,Kampala,0.314269,32.5729
+UKR,Ukraine,ECS,Upper middle income,Kiev,50.4536,30.5038
+UMC,Upper middle income,,,,,
+URY,Uruguay,LCN,High income,Montevideo,-34.8941,-56.0675
+USA,United States,NAC,High income,Washington D.C.,38.8895,-77.032
+UZB,Uzbekistan,ECS,Lower middle income,Tashkent,41.3052,69.269
+VCT,St. Vincent and the Grenadines,LCN,Upper middle income,Kingstown,13.2035,-61.2653
+VEN,"Venezuela, RB",LCN,Lower middle income,Caracas,9.08165,-69.8371
+VGB,British Virgin Islands,LCN,High income,Road Town,18.431389,-64.623056
+VIR,Virgin Islands (U.S.),LCN,High income,Charlotte Amalie,18.3358,-64.8963
+VNM,Viet Nam,EAS,Upper middle income,Hanoi,21.0069,105.825
+VUT,Vanuatu,EAS,Lower middle income,Port-Vila,-17.7404,168.321
+WLD,World,,,,,
+WSM,Samoa,EAS,Upper middle income,Apia,-13.8314,-171.752
+XKX,Kosovo,ECS,Upper middle income,Pristina,42.565,20.926
+YEM,"Yemen, Rep.",MEA,Low income,Sana'a,15.352,44.2075
+ZAF,South Africa,SSF,Upper middle income,Pretoria,-25.746,28.1871
+ZMB,Zambia,SSF,Lower middle income,Lusaka,-15.3982,28.2937
+ZWE,Zimbabwe,SSF,Lower middle income,Harare,-17.8312,31.0672

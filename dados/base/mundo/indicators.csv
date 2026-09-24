@@ -1,0 +1,13 @@
+indicator_code,column_name,indicator_name,unit,topic
+SP.POP.TOTL,population,"Population, total",people,society
+NY.GDP.MKTP.CD,gdp_usd,GDP (current US$),current US$,economy
+NY.GDP.PCAP.CD,gdp_per_capita,GDP per capita (current US$),current US$ per person,economy
+SP.DYN.LE00.IN,life_expectancy,"Life expectancy at birth, total (years)",years,health
+EN.GHG.CO2.PC.CE.AR5,co2_per_capita,Carbon dioxide (CO2) emissions excluding LULUCF per capita (t CO2e/capita),tonnes of CO2 per person,climate
+EG.FEC.RNEW.ZS,renewable_pct,Renewable energy consumption (% of total final energy consumption),% of final energy consumption,energy
+IT.NET.USER.ZS,internet_pct,Individuals using the Internet (% of population),% of population,society
+SI.POV.GINI,gini,Gini index,index from 0 to 100,inequality
+SP.URB.TOTL.IN.ZS,urban_pct,Urban population (% of total population),% of population,society
+EG.ELC.ACCS.ZS,electricity_pct,Access to electricity (% of population),% of population,energy
+SH.DYN.MORT,under5_mortality,"Mortality rate, under-5 (per 1,000 live births)","deaths per 1,000 live births",health
+SH.XPD.CHEX.GD.ZS,health_spend_pct,Current health expenditure (% of GDP),% of GDP,health

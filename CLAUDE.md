@@ -188,16 +188,21 @@ Regras:
 
 ## BASE DO OBSERVATÓRIO MERIDIANO
 
+> **Atenção:** esta seção foi **atualizada no passo 4**, depois da consulta à API e da
+> revisão do Fernando. As contagens abaixo são as reais; a tabela `missions` virou
+> **`field_trips` / `viagens`**, para não se confundir com as missões do curso. Detalhes
+> em "A base: decisões do passo 4", na Parte 2.
+
 **MUNDO** — real: Banco Mundial, *World Development Indicators*, **CC BY 4.0**, 2000 a
 2023.
 
 | Tabela | Linhas | O que é |
 |---|---|---|
 | `regions` | 7 | regiões |
-| `countries` | ~260 | países, **incluindo agregados** como *World* e *Euro area* — armadilha de propósito |
+| `countries` | 234 | 217 países, **mais 17 agregados** como *World* e *Euro area* — armadilha de propósito |
 | `indicators` | 12 | os indicadores usados |
-| `country_year` | ~6.300 | país × ano: população, PIB, PIB per capita, expectativa de vida, CO₂ per capita, % renovável, % internet... |
-| `indicator_values` | ~75.000 | os mesmos dados em formato longo |
+| `country_year` | 5.616 | país × ano: população, PIB, PIB per capita, expectativa de vida, CO₂ per capita, % renovável, % internet... |
+| `indicator_values` | 59.454 | os mesmos dados em formato longo, só os valores que existem |
 
 **INSTITUTO** — inventado, com **semente fixa**:
 
@@ -206,7 +211,7 @@ Regras:
 | `staff` | 60 | com gestor |
 | `projects` | 80 | alguns sem data de fim |
 | `disbursements` | 1.500 | com alguns duplicados |
-| `missions` | 400 | |
+| `field_trips` *(era `missions`)* | 400 | |
 | `publications` | 150 | |
 | `authorships` | 300 | muitos-para-muitos |
 
@@ -356,6 +361,38 @@ Três acréscimos em relação ao `i18n.js` do digita (passo 3):
 - **Valores não se traduzem:** `'Brazil'` continua `'Brazil'` nos dois idiomas.
 - **Conferência 2** (ver `PLANO.md`) garante que todo gabarito traduzido devolve o mesmo
   resultado na base em português.
+
+## A base: decisões do passo 4
+
+Aprovadas pelo Fernando depois de uma consulta à API do Banco Mundial:
+
+- **Os 12 indicadores** (código → coluna): `SP.POP.TOTL` population · `NY.GDP.MKTP.CD`
+  gdp_usd · `NY.GDP.PCAP.CD` gdp_per_capita · `SP.DYN.LE00.IN` life_expectancy ·
+  `EN.GHG.CO2.PC.CE.AR5` co2_per_capita (o código antigo de CO₂ foi descontinuado) ·
+  `EG.FEC.RNEW.ZS` renewable_pct (**só até 2021**) · `IT.NET.USER.ZS` internet_pct ·
+  `SI.POV.GINI` gini (**esparso**, bom para `IS NULL` e `COALESCE`) · `SP.URB.TOTL.IN.ZS`
+  urban_pct · `EG.ELC.ACCS.ZS` electricity_pct · `SH.DYN.MORT` under5_mortality ·
+  `SH.XPD.CHEX.GD.ZS` health_spend_pct. Reservas, se um dia precisar trocar: área de
+  florestas, fecundidade, desemprego.
+- **17 agregados**, não os 78 da API: World, as 7 regiões, os 4 grupos de renda, Euro
+  area, European Union, OECD members, Arab World e Least developed countries. Nos
+  agregados, região, grupo de renda, capital e coordenadas ficam vazios.
+- **Regiões de 2024:** Afeganistão e Paquistão estão em "Middle East, North Africa,
+  Afghanistan & Pakistan". A API devolve dois nomes de região com espaço sobrando no fim;
+  o script limpa.
+- **`indicator_values`** só com os valores que existem (formato longo de verdade).
+- **Números:** população e PIB inteiros; o resto com 2 casas, arredondado meio para cima.
+- **Nomes em português** sem acento e sem ç, porque são para digitar. A lista completa
+  está em `dados/base/dicionario.js`, a fonte da verdade dos nomes.
+- **Instituto:** o "hoje" da história é 31/12/2024. Os 7 personagens estão na tabela
+  `staff` (Nadia no topo, sem gestor; os outros seis chefiam um departamento cada), e a
+  hierarquia tem até quatro níveis. As armadilhas de propósito estão listadas no topo do
+  `ferramentas/gerar_instituto.py`.
+- **Personagens, neutralidade:** os textos nunca citam a nacionalidade de ninguém (ela
+  existe só como dado em `staff`), nenhum personagem pergunta sobre "o próprio" país, e o
+  aluno nunca é tratado com gênero ("você entra como analista").
+- **Caracteres:** todo texto dos CSVs cabe no subconjunto latino das fontes (um "ć" que
+  apareceu num sobrenome foi trocado).
 
 ## Como testar
 

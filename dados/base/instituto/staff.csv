@@ -1,0 +1,61 @@
+staff_id,full_name,job_title,department,manager_id,nationality_code,hire_date,salary_chf
+1,Nadia Haddad,Director-General,Director's Office,,LBN,2011-03-01,248000
+2,Ingrid Solberg,Research Coordinator,Research,1,NOR,2012-09-03,186500
+3,Kofi Mensah,Lead Economist,Economics,1,GHA,2013-01-07,182000
+4,Lucía Ferreyra,Climate and Energy Lead,Climate & Energy,1,ARG,2014-05-05,179500
+5,Amélie Laurent,Head of Institutional Relations,Partnerships,1,FRA,2012-02-01,176000
+6,Tomasz Nowak,Head of Cooperation Projects,Cooperation Projects,1,POL,2013-10-01,177500
+7,Hiroshi Tanaka,Lead Data Engineer,Data Engineering,1,JPN,2015-04-01,181000
+8,Henrik Dahl,Chief of Staff,Director's Office,1,SWE,2013-04-13,149000
+9,Sophie Costa,Communications Officer,Director's Office,1,PRT,2020-06-21,108500
+10,Rafael Silva,Executive Assistant,Director's Office,8,MEX,2018-04-24,83000
+11,Aminata Diallo,Senior Research Analyst,Research,2,CIV,2019-04-12,133500
+12,Min-jun Park,Senior Research Analyst,Research,2,VNM,2022-04-21,149500
+13,Rohan Perera,Research Analyst,Research,2,IND,2016-09-28,114500
+14,Liam Walker,Research Analyst,Research,2,GBR,2019-02-19,109000
+15,Salma Khoury,Research Analyst,Research,2,TUR,2018-05-19,116500
+16,Jonas Moreau,Research Analyst,Research,11,ITA,2022-12-09,104500
+17,Thiago Castro,Research Analyst,Research,2,PER,2020-11-05,109500
+18,Min-jun Chen,Research Analyst,Research,11,JPN,2019-11-18,99000
+19,Daniel Mitchell,Research Analyst,Research,11,AUS,2021-12-18,100000
+20,Astrid Haugen,Research Assistant,Research,11,SWE,2023-04-21,77500
+21,Wanjiru Uwase,Research Assistant,Research,11,RWA,2023-01-21,73500
+22,Ioana Popescu,Research Assistant,Research,12,ROU,2023-06-09,78000
+23,Ama Ndiaye,Senior Economist,Economics,3,GHA,2023-04-16,138000
+24,Sigrid Nieminen,Senior Economist,Economics,3,FIN,2014-06-06,141000
+25,Rohan Iyer,Economist,Economics,24,NPL,2024-01-24,97500
+26,Pavel Kovalenko,Economist,Economics,3,UKR,2015-10-13,100500
+27,Kwame Okafor,Economist,Economics,3,GHA,2018-09-16,123500
+28,Hannah Clarke,Economist,Economics,23,NZL,2023-11-22,112000
+29,Erik Dahl,Research Assistant,Economics,24,SWE,2017-02-14,75000
+30,Baraka Otieno,Research Assistant,Economics,24,ETH,2018-02-19,84000
+31,Salma Benali,Research Assistant,Economics,23,LBN,2023-07-11,69500
+32,Pavel Popescu,Senior Climate Analyst,Climate & Energy,4,SRB,2020-03-25,149500
+33,Dewi Reyes,Senior Energy Analyst,Climate & Energy,4,MYS,2016-04-20,136000
+34,Layla Yilmaz,Climate Analyst,Climate & Energy,4,LBN,2022-02-11,115000
+35,Maja Dahl,Climate Analyst,Climate & Energy,4,DNK,2023-04-08,97000
+36,Selam Kamau,Climate Analyst,Climate & Energy,32,UGA,2023-06-27,113500
+37,Rizal Santos,Climate Analyst,Climate & Energy,33,IDN,2022-09-10,120500
+38,Tesfaye Uwase,Energy Analyst,Climate & Energy,4,UGA,2022-03-09,109500
+39,Emre Mansour,Energy Analyst,Climate & Energy,4,JOR,2024-04-12,107000
+40,Claire Fischer,Energy Analyst,Climate & Energy,33,ESP,2017-04-28,106000
+41,Yasmine Mansour,Energy Analyst,Climate & Energy,32,LBN,2021-04-29,109000
+42,Thiago Gómez,Senior Partnerships Officer,Partnerships,5,ARG,2017-01-14,139500
+43,Moussa Owusu,Partnerships Officer,Partnerships,5,SEN,2023-02-13,97000
+44,Tesfaye Mwangi,Partnerships Officer,Partnerships,5,UGA,2022-10-08,104500
+45,Yuki Nguyen,Partnerships Officer,Partnerships,5,JPN,2013-04-10,118000
+46,Ioana Stoica,Events Coordinator,Partnerships,42,UKR,2018-09-05,69000
+47,Farhana Thapa,Events Coordinator,Partnerships,42,BGD,2022-04-02,79000
+48,Siti Wijaya,Senior Project Manager,Cooperation Projects,6,THA,2019-01-24,132500
+49,Arif Wijaya,Senior Project Manager,Cooperation Projects,6,PHL,2018-06-28,148000
+50,Linh Wang,Project Officer,Cooperation Projects,6,VNM,2023-02-26,103000
+51,Mariana Silva,Project Officer,Cooperation Projects,6,MEX,2018-05-24,109500
+52,Jonas Keller,Project Officer,Cooperation Projects,6,BEL,2014-05-01,119000
+53,Camila Pereira,Project Officer,Cooperation Projects,6,MEX,2019-12-14,107000
+54,Wanjiru Mwangi,Project Officer,Cooperation Projects,6,KEN,2021-12-18,107000
+55,Salma Mansour,Project Assistant,Cooperation Projects,48,TUR,2021-08-24,80000
+56,Omar Mansour,Project Assistant,Cooperation Projects,49,TUN,2023-11-18,71500
+57,Seo-yeon Nguyen,Senior Data Engineer,Data Engineering,7,CHN,2018-09-05,143500
+58,Ana Horvat,Data Engineer,Data Engineering,57,ROU,2023-01-10,100500
+59,Matteo Costa,Data Engineer,Data Engineering,57,FRA,2019-10-05,101000
+60,Takumi Chen,Data Analyst,Data Engineering,7,CHN,2020-11-19,114500

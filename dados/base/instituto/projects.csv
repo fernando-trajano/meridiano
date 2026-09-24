@@ -1,0 +1,81 @@
+project_id,title,theme,country_code,lead_id,start_date,end_date,budget_usd
+1,Social protection data review: Guatemala,inequality,GTM,6,2014-03-01,2017-11-30,1080000
+2,Poverty mapping update: Peru,inequality,PER,6,2014-03-01,2018-01-31,560000
+3,"Child health indicators review: Congo, Rep.",health,COG,2,2014-04-01,2018-03-31,260000
+4,Mini-grid performance tracking: Botswana,energy,BWA,6,2014-06-01,2015-12-31,975000
+5,Urban air quality study: Sudan,climate,SDN,6,2014-07-01,2018-02-28,275000
+6,Internet access and public services: Cote d'Ivoire,digital,CIV,2,2014-11-01,2018-07-31,480000
+7,Urban air quality study: Grenada,climate,GRD,52,2015-02-01,2016-10-31,1325000
+8,Connectivity mapping: Mexico,digital,MEX,6,2015-02-01,2017-12-31,575000
+9,Poverty mapping update: Seychelles,inequality,SYC,52,2015-04-01,2018-04-30,565000
+10,Mini-grid performance tracking: Equatorial Guinea,energy,GNQ,6,2015-06-01,2018-07-31,1335000
+11,Open data portal support: Sudan,digital,SDN,2,2015-08-01,2017-04-30,1030000
+12,Health spending tracking: Togo,health,TGO,52,2015-08-01,2017-10-31,1745000
+13,Poverty mapping update: Bolivia,inequality,BOL,3,2015-09-01,2017-03-31,1460000
+14,"Rural electrification monitoring: Congo, Rep.",energy,COG,6,2015-11-01,2018-04-30,1570000
+15,Mini-grid performance tracking: Sao Tome and Principe,energy,STP,6,2015-12-01,2016-12-31,1530000
+16,Connectivity mapping: Zambia,digital,ZMB,6,2015-12-01,2018-11-30,1060000
+17,Health spending tracking: Eswatini,health,SWZ,2,2016-01-01,2017-04-30,285000
+18,"Internet access and public services: Congo, Rep.",digital,COG,2,2016-02-01,2019-10-31,225000
+19,Income distribution analysis: Lesotho,inequality,LSO,26,2016-02-01,2019-06-30,135000
+20,Renewable energy transition planning: Guinea-Bissau,climate,GNB,6,2016-06-01,2020-04-30,1055000
+21,Open data portal support: Bhutan,digital,BTN,7,2016-07-01,2020-05-31,185000
+22,"Household energy access survey: Yemen, Rep.",energy,YEM,33,2016-07-01,2020-01-31,1695000
+23,Open data portal support: Guinea-Bissau,digital,GNB,7,2016-08-01,2018-09-30,325000
+24,Maternal and child health data systems: Haiti,health,HTI,52,2016-11-01,2019-04-30,1945000
+25,Climate data capacity building: United Arab Emirates,climate,ARE,4,2016-12-01,2019-11-30,1365000
+26,Climate data capacity building: Lithuania,climate,LTU,33,2016-12-01,2018-07-31,915000
+27,Urban air quality study: Samoa,climate,WSM,33,2016-12-01,2019-07-31,185000
+28,Maternal and child health data systems: Ghana,health,GHA,13,2017-02-01,2018-09-30,1520000
+29,Income distribution analysis: Panama,inequality,PAN,3,2017-02-01,2020-01-31,535000
+30,Urban air quality study: Marshall Islands,climate,MHL,4,2017-03-01,2019-01-31,425000
+31,"Income distribution analysis: Micronesia, Fed. Sts.",inequality,FSM,26,2017-10-01,2019-01-31,1095000
+32,Internet access and public services: Peru,digital,PER,6,2017-10-01,2018-11-30,570000
+33,Off-grid solar data review: Rwanda,energy,RWA,33,2018-01-01,2021-08-31,2280000
+34,Urban air quality study: Honduras,climate,HND,33,2018-03-01,2019-11-30,230000
+35,Renewable energy transition planning: Palau,climate,PLW,51,2018-06-01,2019-05-31,1740000
+36,Off-grid solar data review: Uganda,energy,UGA,33,2018-06-01,2021-04-30,540000
+37,Emissions inventory support: El Salvador,climate,SLV,52,2018-09-01,2020-01-31,1300000
+38,Health facility survey support: Zambia,health,ZMB,13,2018-10-01,2020-05-31,1445000
+39,Social protection data review: Zambia,inequality,ZMB,24,2018-10-01,2021-04-30,945000
+40,Household income survey support: St. Lucia,inequality,LCA,27,2018-11-01,2020-02-29,1105000
+41,"Child health indicators review: Somalia, Fed. Rep.",health,SOM,52,2018-12-01,2020-09-30,1200000
+42,Rural electrification monitoring: Ghana,energy,GHA,33,2019-01-01,2022-04-30,1120000
+43,Digital skills survey: Philippines,digital,PHL,6,2019-04-01,2022-12-31,1025000
+44,"Household income survey support: Micronesia, Fed. Sts.",inequality,FSM,3,2019-05-01,2022-09-30,1120000
+45,Social protection data review: Kenya,inequality,KEN,51,2019-05-01,2022-12-31,1375000
+46,Maternal and child health data systems: Mali,health,MLI,13,2019-05-01,2022-03-31,840000
+47,Mini-grid performance tracking: Niger,energy,NER,48,2019-05-01,2021-02-28,510000
+48,Maternal and child health data systems: Central African Republic,health,CAF,18,2020-04-01,2023-07-31,745000
+49,Household income survey support: Djibouti,inequality,DJI,51,2020-04-01,2022-05-31,390000
+50,Maternal and child health data systems: Ethiopia,health,ETH,52,2020-10-01,2022-04-30,1890000
+51,Digital skills survey: Mozambique,digital,MOZ,2,2020-10-01,2022-06-30,840000
+52,Renewable energy transition planning: Nepal,climate,NPL,32,2020-11-01,2022-07-31,1595000
+53,Mini-grid performance tracking: Eswatini,energy,SWZ,40,2020-12-01,2022-10-31,780000
+54,Rural electrification monitoring: Ethiopia,energy,ETH,4,2021-02-01,2023-05-31,2365000
+55,Emissions inventory support: Azerbaijan,climate,AZE,51,2021-03-01,,490000
+56,Connectivity mapping: Malawi,digital,MWI,6,2021-05-01,,995000
+57,Internet access and public services: Guinea,digital,GIN,13,2021-10-01,2024-12-31,405000
+58,Mini-grid performance tracking: Eswatini (2021),energy,SWZ,49,2021-10-01,2023-07-31,865000
+59,Open data portal support: Tuvalu,digital,TUV,60,2021-11-01,2024-02-29,260000
+60,Income distribution analysis: Namibia,inequality,NAM,26,2022-03-01,2024-10-31,1310000
+61,Renewable energy transition planning: Oman,climate,OMN,33,2022-08-01,,405000
+62,Mini-grid performance tracking: Chad,energy,TCD,48,2022-08-01,,1765000
+63,Off-grid solar data review: Cambodia,energy,KHM,48,2022-09-01,2024-11-30,325000
+64,Child health indicators review: Chad,health,TCD,13,2022-11-01,,380000
+65,Health spending tracking: Benin,health,BEN,13,2023-01-01,,1415000
+66,Urban air quality study: Mauritania,climate,MRT,53,2023-01-01,2024-01-31,745000
+67,Health facility survey support: Equatorial Guinea,health,GNQ,11,2023-02-01,,875000
+68,Digital skills survey: Nepal,digital,NPL,54,2023-03-01,,495000
+69,"Rural electrification monitoring: Gambia, The",energy,GMB,50,2023-04-01,,2230000
+70,Health facility survey support: Mali,health,MLI,49,2023-06-01,2024-12-31,615000
+71,Social protection data review: Nicaragua,inequality,NIC,50,2023-06-01,,970000
+72,Child health indicators review: Senegal,health,SEN,49,2023-09-01,,1745000
+73,Household energy access survey: Chad,energy,TCD,34,2023-10-01,,920000
+74,Child health indicators review: Papua New Guinea,health,PNG,14,2024-02-01,,550000
+75,Rural electrification monitoring: Solomon Islands,energy,SLB,53,2024-02-01,,1820000
+76,Health spending tracking: Guinea-Bissau,health,GNB,48,2024-03-01,,620000
+77,Connectivity mapping: Angola,digital,AGO,59,2024-04-01,,565000
+78,"Open data portal support: Somalia, Fed. Rep.",digital,SOM,60,2024-05-01,,1185000
+79,Household energy access survey: Djibouti,energy,DJI,4,2024-06-01,,1545000
+80,Health spending tracking: Equatorial Guinea,health,GNQ,19,2024-06-01,,1835000
