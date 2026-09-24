@@ -2,7 +2,7 @@
 
 Real SQL, real-world data.
 
-**▶ fernando-trajano.github.io/meridiano** *(coming soon)*
+**▶ [fernando-trajano.github.io/meridiano](https://fernando-trajano.github.io/meridiano/)**
 
 [Leia em português](README.md)
 
