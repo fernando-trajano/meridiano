@@ -52,13 +52,12 @@
       <a class="marca" href="./">meridiano<span class="marca-ponto">.</span></a>
 
       <nav class="cabecalho-acoes">
-        <!-- O seletor já está no lugar; passa a trocar os textos no passo 3. -->
-        <div class="seletor" role="group" aria-label="Idioma da interface">
+        <div class="seletor" role="group" data-i18n-aria="cabecalho.idioma" aria-label="Idioma da interface">
           <button type="button" class="seletor-opcao" data-idioma="pt" aria-pressed="true">PT</button>
           <button type="button" class="seletor-opcao" data-idioma="en" aria-pressed="false">EN</button>
         </div>
 
-        <button type="button" class="botao-icone" id="botao-tema" aria-label="Alternar entre modo claro e escuro">
+        <button type="button" class="botao-icone" id="botao-tema" data-i18n-aria="cabecalho.alternarTema" aria-label="Alternar entre modo claro e escuro">
           <svg aria-hidden="true"><use href="#icone-lua"></use></svg>
         </button>
       </nav>
@@ -76,16 +75,16 @@
   <main class="conteudo" id="tela">
 
     <section class="secao vitrine-abertura">
-      <h1>Observatório Meridiano</h1>
-      <p class="subtitulo">SQL de verdade, com dados do mundo real</p>
-      <p>
+      <h1 data-i18n="geral.instituto">Observatório Meridiano</h1>
+      <p class="subtitulo" data-i18n="geral.subtitulo">SQL de verdade, com dados do mundo real</p>
+      <p data-i18n="vitrine.texto">
         Você entra como analista de dados de um instituto de pesquisa em
         Genebra. Cada lição é uma missão: o pedido de um pesquisador,
         resolvido com SQL de verdade sobre dados reais de países.
       </p>
       <div class="grupo-botoes">
-        <button type="button" class="botao botao--principal">Começar</button>
-        <button type="button" class="botao">Já sei um pouco de SQL</button>
+        <button type="button" class="botao botao--principal" data-i18n="vitrine.comecar">Começar</button>
+        <button type="button" class="botao" data-i18n="vitrine.jaSei">Já sei um pouco de SQL</button>
       </div>
     </section>
 
@@ -95,20 +94,20 @@
           <span class="monograma" aria-hidden="true">KM</span>
           <span class="memorando-quem">
             <span class="memorando-nome">Kofi Mensah</span>
-            <span class="memorando-cargo">Economista</span>
+            <span class="memorando-cargo" data-i18n="vitrine.cargo">Economista</span>
           </span>
           <span class="memorando-hora">09:14</span>
         </div>
-        <p class="memorando-texto">
+        <p class="memorando-texto" data-i18n="vitrine.pedido">
           Preciso saber, por região, quantos países já tiravam mais da metade
           da energia de fontes renováveis. Só as regiões com pelo menos três
           países.
         </p>
-        <p class="discreto">Missão de exemplo · <a href="#">ver os dados</a></p>
+        <p class="discreto"><span data-i18n="vitrine.exemplo">Missão de exemplo</span> · <a href="#" data-i18n="vitrine.verDados">ver os dados</a></p>
       </div>
 
       <div class="vitrine-codigo">
-<pre class="bloco-codigo"><span class="sql-comentario">-- Regiões com mais países acima de 50%</span>
+<pre class="bloco-codigo"><span class="sql-comentario" data-i18n="vitrine.comentario">-- Regiões com mais países acima de 50%</span>
 <span class="sql-with">WITH</span> recentes AS (
   <span class="sql-select">SELECT</span> country_name, region, renewable_pct
   <span class="sql-from">FROM</span> country_year
@@ -122,7 +121,7 @@
 <span class="sql-group">HAVING</span> <span class="sql-funcao">COUNT</span>(*) &gt;= <span class="sql-numero">3</span>
 <span class="sql-order">ORDER BY</span> total DESC
 <span class="sql-order">LIMIT</span> <span class="sql-numero">5</span>;</pre>
-        <p class="aviso-erro">Faltou fechar um parêntese. Confira o fim da linha 3.</p>
+        <p class="aviso-erro" data-i18n="vitrine.erro">Faltou fechar um parêntese. Confira o fim da linha 3.</p>
       </div>
     </section>
 
@@ -130,8 +129,8 @@
 
   <footer class="rodape">
     <div class="rodape-dentro">
-      <span class="rodape-bloco">Dados: <a href="https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators" target="_blank" rel="noopener">Banco Mundial, World Development Indicators</a> · CC BY 4.0</span>
-      <span class="rodape-bloco">por <a href="https://github.com/fernando-trajano" target="_blank" rel="noopener">Fernando Rodrigo Trajano da Silva</a></span>
+      <span class="rodape-bloco"><span data-i18n="rodape.dados">Dados:</span> <a href="https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators" target="_blank" rel="noopener" data-i18n="rodape.fonteDados">Banco Mundial, World Development Indicators</a> · CC BY 4.0</span>
+      <span class="rodape-bloco"><span data-i18n="rodape.por">por</span> <a href="https://github.com/fernando-trajano" target="_blank" rel="noopener">Fernando Rodrigo Trajano da Silva</a></span>
     </div>
   </footer>
 

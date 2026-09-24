@@ -334,7 +334,18 @@ antes de o JavaScript rodar. Chave faltando não quebra a tela: o site cai no po
 avisa no console.
 
 O conteúdo das missões, do dicionário e dos jogos segue a mesma regra por outro caminho:
-cada texto é um objeto `{ pt, en }` dentro de `dados/`.
+cada texto é um objeto `{ pt, en }` dentro de `dados/`, lido com `emIdioma(objeto)` — com
+a mesma reserva em português e o mesmo aviso no console.
+
+Três acréscimos em relação ao `i18n.js` do digita (passo 3):
+
+- **Lacunas:** `t('chave', { feitas: 29, total: 77 })` preenche `{feitas}` e `{total}`
+  no texto. A ordem das palavras fica no texto de cada idioma, nunca no código.
+- **Conferência das chaves:** ao abrir, `conferirChaves()` compara `pt.js` e `en.js` e
+  avisa no console as chaves que estiverem de um lado só.
+- **Detecção:** português no navegador → PT; inglês → EN; **qualquer outro idioma → EN**
+  (no digita, era PT). O meridiano. é portfólio lido também por quem não fala nenhum dos
+  dois, e o inglês é a aposta mais segura.
 
 ## A base em dois idiomas
 

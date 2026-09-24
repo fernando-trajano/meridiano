@@ -471,7 +471,10 @@ no painel de navegador do app e conferir, conforme o passo:
       Fernando**, com o contraste medido (dois ajustes no claro: discreto `#6D6D76`,
       `GROUP BY` `#9D600F`). O botão de tema alterna, mas a escolha ainda não é salva —
       isso é o passo 8. A página mostra uma vitrine provisória, que sai no passo 15.
-- [ ] **Passo 3** — `i18n.js` e traduções PT/EN
+- [x] **Passo 3** — `i18n.js` e traduções PT/EN (detecção pelo navegador, seletor no
+      cabeçalho, título da aba e `lang` acompanhando; lacunas `{nome}`, `emIdioma()` para
+      o conteúdo e conferência das chaves no console; a escolha ainda não é salva — isso
+      é o passo 8)
 - [ ] **Passo 4** — `baixar_dados.py`, `gerar_instituto.py` e `dicionario.js` · 🛑 revisão
       de indicadores, tabelas, nomes em PT e personagens
 - [ ] **Passo 5** — DuckDB-WASM, `bd.js` e `traducao-sql.js` · 🛑 Safari

@@ -6,6 +6,13 @@
    configuração salva (passo 8), troca de telas e o resto.
    ========================================================================== */
 
+import {
+  detectarIdioma,
+  definirIdioma,
+  ligarSeletorDeIdioma,
+  conferirChaves,
+} from './i18n.js';
+
 const raiz = document.documentElement;
 const botaoTema = document.querySelector('#botao-tema');
 const preferenciaEscura = window.matchMedia('(prefers-color-scheme: dark)');
@@ -44,5 +51,23 @@ preferenciaEscura.addEventListener('change', () => {
   aplicarTema(temaDoSistema());
 });
 
+/* --------------------------------------------------------------------------
+   Idioma
+
+   Por enquanto: o idioma do navegador ao abrir, e os botões PT/EN do
+   cabeçalho. A escolha ainda NÃO é salva — isso é o passo 8.
+   -------------------------------------------------------------------------- */
+
+ligarSeletorDeIdioma();
+
+/* --------------------------------------------------------------------------
+   Partida
+   -------------------------------------------------------------------------- */
+
 // O script do <head> já pôs o tema certo; aqui só acertamos o ícone.
 aplicarTema(raiz.dataset.tema || temaDoSistema());
+
+// pt.js e en.js com as mesmas chaves? Se não, avisa no console.
+conferirChaves();
+
+definirIdioma(detectarIdioma());
