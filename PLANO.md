@@ -489,6 +489,18 @@ Os três casos foram testados no passo 6. Para atualizar o motor: trocar os arqu
 O Safari apaga o armazenamento de sites que a pessoa não visita há mais de 7 dias; aí o
 motor é baixado de novo, uma vez.
 
+**Conferido no ar** depois do push: primeira visita baixou 7,6 MB e guardou o motor
+inteiro; a segunda abriu da gaveta, sem nenhum pedido à rede e sem nada fora do domínio.
+
+### Publicar uma versão nova — o que esperar
+
+- Depois do *Push origin*, o GitHub leva **1 a 2 minutos** para publicar (dá para ver em
+  *Actions → pages build and deployment*).
+- Quem visitou o site há pouco pode continuar vendo a versão anterior por até
+  **10 minutos**: é o tempo que o GitHub deixa o navegador guardar cada arquivo
+  (`max-age=600`). Para conferir na hora, recarregar forçando (Cmd+Shift+R).
+- O motor não entra nessa conta: ele só muda quando a `VERSAO_DO_MOTOR` muda.
+
 ---
 
 ## O motor, como ficou no passo 5
@@ -591,7 +603,11 @@ no painel de navegador do app e conferir, conforme o passo:
       de teste provisória · ✅ **testado no Safari pelo Fernando**: o motor abre, a
       consulta roda nos dois idiomas, o erro aparece, trocar o idioma zera a base e
       Cmd+Enter roda. `projects.theme` virou `projects.topic`
-- [ ] **Passo 6** — publicação no GitHub Pages e medição · 🛑
+- [x] **Passo 6** — publicação no GitHub Pages e medição ✅ **no ar em
+      https://fernando-trajano.github.io/meridiano/** (repositório público). Motor de
+      7,8 MB comprimido, ~1,2 s na primeira visita; nenhuma requisição fora do domínio.
+      **Decisão do Fernando: fica o DuckDB-WASM**, com o motor guardado no Cache Storage
+      — conferido no ar: a segunda visita não baixa nada
 - [ ] **Passo 7** — editor, resultado e erros · 🛑 Safari
 - [ ] **Passo 8** — armazenamento e estado
 - [ ] **Passo 9** — `conferir.js`, formato da missão, `conferencia.js` e `MODELO.md`
