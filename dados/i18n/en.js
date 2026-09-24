@@ -30,6 +30,26 @@ export const en = {
     por: 'by',
   },
 
+  abrindo: {
+    titulo: 'Opening the observatory...',
+    motor: 'Starting the engine',
+    dados: 'Bringing in the data',
+    tabelas: 'Setting up the tables',
+    erroTitulo: 'The observatory didn’t open.',
+    erroTexto: 'Something went wrong while loading the SQL engine. Check your connection and try again.',
+    tentarDeNovo: 'Try again',
+  },
+
+  bancada: {
+    titulo: 'Test bench',
+    explicacao:
+      'Temporary (step 5): a real query, running in your browser. The real editor arrives in step 7.',
+    rotulo: 'SQL query',
+    rodar: 'Run',
+    info: '{linhas} rows · {ms} ms',
+    infoCortada: '{total} rows (showing {linhas}) · {ms} ms',
+  },
+
   vitrine: {
     texto:
       'You join a research institute in Geneva as a data analyst. Every lesson is a mission: a researcher’s request, answered with real SQL on real country data.',

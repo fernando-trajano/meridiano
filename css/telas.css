@@ -42,3 +42,119 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* --- Abrindo o observatório ----------------------------------------------
+   Cobre a área abaixo do cabeçalho enquanto o motor SQL carrega. O "top" é
+   posto pelo JavaScript, na altura exata do fim do cabeçalho.
+   ----------------------------------------------------------------------- */
+
+.abrindo {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-4);
+  padding: var(--esp-5);
+
+  background-color: var(--cor-fundo);
+  text-align: center;
+  transition: opacity var(--transicao-lenta);
+}
+
+.abrindo--saindo {
+  opacity: 0;
+}
+
+.abrindo-globo {
+  width: 7.5rem;
+  height: 7.5rem;
+  color: var(--cor-texto-secundario);
+}
+
+.abrindo-titulo {
+  font-family: var(--fonte-titulo);
+  font-size: 1.35rem;
+  font-weight: var(--peso-titulo);
+  letter-spacing: var(--espacamento-titulo);
+}
+
+/* A linha do progresso: fina, na cor de destaque (progresso é um dos quatro
+   usos do destaque), sobre a cor das bordas. */
+.abrindo-progresso {
+  width: 12rem;
+  height: 2px;
+  background-color: var(--cor-borda);
+}
+
+.abrindo-progresso span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background-color: var(--cor-destaque);
+  transition: width 120ms linear;
+}
+
+.abrindo--erro .abrindo-etapa {
+  color: var(--cor-texto-secundario);
+}
+
+/* --- O globo girando --------------------------------------------------------
+   Cada meridiano é uma elipse que se estreita até virar uma linha e se alarga
+   de novo (scaleX de 1 a -1 e volta). Com os quatro defasados, parece que o
+   globo gira. Oito segundos por volta: devagar, de propósito.
+   ----------------------------------------------------------------------- */
+
+.globo-meridiano {
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+  /* Parado, cada meridiano fica na sua largura (posta no SVG). */
+  transform: scaleX(var(--parado, 1));
+  /* O traço não afina quando a elipse se estreita — senão o meridiano
+     sumiria no meio da volta. */
+  vector-effect: non-scaling-stroke;
+}
+
+.globo--girando .globo-meridiano {
+  animation: meridiano-gira 8s ease-in-out infinite;
+}
+
+/* Com movimento reduzido, o globo fica parado de vez — cada meridiano na sua
+   largura —, em vez de a animação correr uma vez e parar num quadro qualquer. */
+@media (prefers-reduced-motion: reduce) {
+  .globo--girando .globo-meridiano {
+    animation: none;
+  }
+}
+
+@keyframes meridiano-gira {
+  0%   { transform: scaleX(1); }
+  50%  { transform: scaleX(-1); }
+  100% { transform: scaleX(1); }
+}
+
+/* --- Bancada de teste (PROVISÓRIO, passo 5) --------------------------------
+   Sai no passo 7, junto com a bancada do index.html.
+   ----------------------------------------------------------------------- */
+
+.bancada-sql {
+  width: 100%;
+  padding: var(--esp-4);
+  border: 0;
+  border-radius: var(--raio-m);
+  background-color: var(--cor-superficie);
+  color: var(--cor-texto);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  resize: vertical;
+}
+
+.bancada-resultado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  overflow-x: auto;
+}

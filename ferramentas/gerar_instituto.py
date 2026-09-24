@@ -567,7 +567,7 @@ def main():
     )
     gravar_csv(
         "projects.csv",
-        ["project_id", "title", "theme", "country_code", "lead_id", "start_date", "end_date", "budget_usd"],
+        ["project_id", "title", "topic", "country_code", "lead_id", "start_date", "end_date", "budget_usd"],
         [[p["id"], p["titulo"], p["tema"], p["pais"], p["lider"], p["inicio"].isoformat(),
           p["fim"].isoformat() if p["fim"] else "", p["orcamento"]] for p in projetos],
     )

@@ -17,6 +17,13 @@
       window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro';
   </script>
 
+  <!-- Import map: diz ao navegador onde fica o "apache-arrow" que o motor SQL
+       (vendor/duckdb/duckdb-browser.mjs) importa pelo nome. Precisa vir antes
+       de qualquer módulo. Ver vendor/arrow/arrow.mjs. -->
+  <script type="importmap">
+    { "imports": { "apache-arrow": "./vendor/arrow/arrow.mjs" } }
+  </script>
+
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 
   <!-- A serifada aparece logo de cara (marca e título): pedir o arquivo já
@@ -123,6 +130,19 @@
 <span class="sql-order">LIMIT</span> <span class="sql-numero">5</span>;</pre>
         <p class="aviso-erro" data-i18n="vitrine.erro">Faltou fechar um parêntese. Confira o fim da linha 3.</p>
       </div>
+    </section>
+
+    <!-- PROVISÓRIO (passo 5): a bancada de teste do motor SQL. Sai no passo 7,
+         quando chega o editor de verdade. -->
+    <section class="secao bancada" id="bancada">
+      <h2 data-i18n="bancada.titulo">Bancada de teste</h2>
+      <p class="discreto" data-i18n="bancada.explicacao">Provisório (passo 5): uma consulta de verdade, rodando no seu navegador. O editor de verdade chega no passo 7.</p>
+      <label class="apenas-leitor-de-tela" for="bancada-sql" data-i18n="bancada.rotulo">Consulta SQL</label>
+      <textarea class="bancada-sql mono" id="bancada-sql" rows="8" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+      <div class="grupo-botoes">
+        <button type="button" class="botao botao--principal" id="bancada-rodar" data-i18n="bancada.rodar">Rodar</button>
+      </div>
+      <div class="bancada-resultado" id="bancada-resultado" aria-live="polite"></div>
     </section>
 
   </main>

@@ -12,6 +12,8 @@ import {
   ligarSeletorDeIdioma,
   conferirChaves,
 } from './i18n.js';
+import { conferirMapa } from './traducao-sql.js';
+import { ligarBancada } from './telas/bancada.js';
 
 const raiz = document.documentElement;
 const botaoTema = document.querySelector('#botao-tema');
@@ -70,4 +72,10 @@ aplicarTema(raiz.dataset.tema || temaDoSistema());
 // pt.js e en.js com as mesmas chaves? Se não, avisa no console.
 conferirChaves();
 
+// Cada nome de tabela e coluna com um só par no outro idioma? Se não, avisa.
+conferirMapa();
+
 definirIdioma(detectarIdioma());
+
+// PROVISÓRIO (passo 5): a bancada de teste do motor SQL. Sai no passo 7.
+ligarBancada();

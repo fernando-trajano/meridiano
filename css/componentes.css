@@ -257,3 +257,39 @@
   color: var(--cor-codigo-comentario);
   font-style: italic;
 }
+
+/* --- Tabela de resultado ---------------------------------------------------
+   O resultado de uma consulta: mono, linhas finas, números à direita (para
+   as casas decimais se alinharem), NULL discreto. Passa a ser desenhada pelo
+   tabela-resultado.js no passo 7.
+   ----------------------------------------------------------------------- */
+
+.tabela-resultado {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabela-resultado th {
+  padding: var(--esp-2) var(--esp-3);
+  border-bottom: 1px solid var(--cor-texto-discreto);
+  color: var(--cor-texto-secundario);
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tabela-resultado td {
+  padding: var(--esp-2) var(--esp-3);
+  border-bottom: var(--borda);
+  vertical-align: top;
+}
+
+.tabela-resultado .numero {
+  text-align: right;
+}
+
+.tabela-resultado .nulo {
+  color: var(--cor-texto-discreto);
+}

@@ -39,6 +39,27 @@ export const pt = {
     por: 'por',
   },
 
+  abrindo: {
+    titulo: 'Abrindo o observatório...',
+    motor: 'Ligando o motor',
+    dados: 'Trazendo os dados',
+    tabelas: 'Arrumando as tabelas',
+    erroTitulo: 'O observatório não abriu.',
+    erroTexto: 'Algo falhou ao carregar o motor SQL. Confira a conexão e tente de novo.',
+    tentarDeNovo: 'Tentar de novo',
+  },
+
+  // PROVISÓRIO: a bancada de teste do passo 5. Sai no passo 7.
+  bancada: {
+    titulo: 'Bancada de teste',
+    explicacao:
+      'Provisório (passo 5): uma consulta de verdade, rodando no seu navegador. O editor de verdade chega no passo 7.',
+    rotulo: 'Consulta SQL',
+    rodar: 'Rodar',
+    info: '{linhas} linhas · {ms} ms',
+    infoCortada: '{total} linhas (mostrando {linhas}) · {ms} ms',
+  },
+
   // PROVISÓRIO: os textos da vitrine do passo 2. Saem junto com ela, no
   // passo 15.
   vitrine: {

@@ -105,8 +105,10 @@ Meridiano/
 │   └── jetbrains-mono/        # um .woff2 variável (400–500) + OFL.txt
 │
 ├── vendor/
-│   └── duckdb/                # DuckDB-WASM, versão fixada: .wasm, worker, módulo,
-│                              # LICENSE e VERSAO.md (versão, data, de onde veio)
+│   ├── duckdb/                # DuckDB-WASM 1.32.0, versão fixada: módulo, worker e .wasm
+│   │                          # da variante "eh", LICENSE e VERSAO.md
+│   └── arrow/                 # Apache Arrow 17.0.0 (o DuckDB depende dele): o arquivo
+│                              # único do pacote + arrow.mjs, a ponte; licenças e VERSAO.md
 │
 ├── js/
 │   ├── app.js                 # ponto de entrada: liga tudo e mostra a 1ª tela
@@ -423,6 +425,32 @@ Quando houver commits novos depois disso, o Fernando envia com *Push origin*.
 
 ---
 
+## O motor, como ficou no passo 5
+
+- **Versão:** DuckDB-WASM **1.32.0** (a última estável; as mais novas do npm são `-dev`),
+  motor DuckDB v1.4.3. Só a variante **`eh`** (34 MB, ~7,6 MB comprimida): roda em
+  Safari 15.2+, Chrome 95+ e Firefox 100+. Detalhes em `vendor/duckdb/VERSAO.md`.
+- **Apache Arrow:** o `duckdb-browser.mjs` importa `"apache-arrow"` pelo nome. Um *import
+  map* no `index.html` aponta esse nome para `vendor/arrow/arrow.mjs`, uma ponte que
+  carrega o arquivo único do Arrow 17.0.0. Nenhum arquivo baixado foi editado. O import
+  map exige **Safari 16.4+** (março de 2023) — é o navegador mais antigo que o site aceita.
+- **Progresso real:** o `bd.js` baixa o `.wasm` ele mesmo, contando os bytes, e entrega
+  ao motor um endereço local (blob). A barra anda contra o tamanho sem compressão.
+- **Tipos fixos:** cada coluna tem `tipo` no `dicionario.js`, e o `bd.js` lê o CSV com
+  esses tipos — nada é adivinhado. População e PIB são `BIGINT` (8 bilhões não cabem em
+  `INTEGER`); dinheiro do instituto é `DECIMAL`.
+- **Zerar:** cada missão ganha um banco novo em memória (`ATTACH ':memory:' AS
+  observatorio`); o anterior sai inteiro com `DETACH`, junto com o que o aluno criou.
+  Objetos temporários e transações abertas também são limpos. Leva ~170 ms.
+- **Idioma:** trocar o idioma da tela zera a base com os nomes do outro idioma e avisa
+  com o evento `base-recarregada`.
+- **Tradução de SQL:** `traducao-sql.js`. Para ser de mão dupla sem ambiguidade, cada nome
+  precisa de um só par — por isso `projects.theme` virou **`projects.topic`** (em PT
+  continua `tema`, como `indicators.topic`). `conferirMapa()` avisa no console se um dia
+  aparecer um nome ambíguo.
+- **Medições locais** (no Mac, sem rede): abertura completa em ~0,6 s; consulta de
+  exemplo em 17 ms. As medições de verdade são as do passo 6.
+
 ## Pontos de atenção do DuckDB-WASM (para o passo 5)
 
 - **Peso.** O `.wasm` do DuckDB tem dezenas de MB sem compressão. O GitHub recusa arquivo
@@ -492,7 +520,11 @@ no painel de navegador do app e conferir, conforme o passo:
       Coleta em 24/09/2026: 234 países, 5.616 linhas país × ano, 59.454 valores; instituto
       conferido (nenhuma data incoerente, 20 pagamentos em dobro, 19 projetos em aberto,
       hierarquia de 4 níveis)
-- [ ] **Passo 5** — DuckDB-WASM, `bd.js` e `traducao-sql.js` · 🛑 Safari
+- [x] **Passo 5** — DuckDB-WASM 1.32.0 (variante `eh`) + Apache Arrow 17.0.0 em
+      `vendor/`, `bd.js`, `traducao-sql.js`, tela "Abrindo o observatório..." e bancada
+      de teste provisória · ✅ **testado no Safari pelo Fernando**: o motor abre, a
+      consulta roda nos dois idiomas, o erro aparece, trocar o idioma zera a base e
+      Cmd+Enter roda. `projects.theme` virou `projects.topic`
 - [ ] **Passo 6** — publicação no GitHub Pages e medição · 🛑
 - [ ] **Passo 7** — editor, resultado e erros · 🛑 Safari
 - [ ] **Passo 8** — armazenamento e estado

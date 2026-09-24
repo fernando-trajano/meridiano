@@ -317,6 +317,10 @@ Fernando pedir para testar, o Claude sobe o `servidor.py` e abre o navegador.
 - **Dependências:** só o DuckDB-WASM e as duas fontes, todos copiados para dentro do
   repositório (`vendor/duckdb/` e `fontes/`), com versão e licença registradas ao lado.
   Nada de CDN, nada carregado de outro domínio. Zero etapa de build.
+  - O DuckDB-WASM depende do **Apache Arrow**, que por isso também está em
+    `vendor/arrow/` (passo 5). Não é uma escolha nossa: vem junto com o motor.
+  - O navegador mais antigo aceito é o **Safari 16.4** (março de 2023), por causa do
+    *import map* que liga o motor ao Arrow.
 - Caminhos **relativos** em todos os `href`/`src`/`import` — o GitHub Pages publica o
   projeto numa subpasta (`usuario.github.io/meridiano/`).
 - O motor SQL **não pode buscar nada na internet**: extensões do DuckDB que tentem se
@@ -384,6 +388,9 @@ Aprovadas pelo Fernando depois de uma consulta à API do Banco Mundial:
 - **Números:** população e PIB inteiros; o resto com 2 casas, arredondado meio para cima.
 - **Nomes em português** sem acento e sem ç, porque são para digitar. A lista completa
   está em `dados/base/dicionario.js`, a fonte da verdade dos nomes.
+- **Um ajuste no passo 5:** `projects.theme` virou **`projects.topic`**, para cada nome
+  ter um só par no outro idioma (em PT continua `tema`, igual a `indicators.topic`). Sem
+  isso, `tema` não saberia voltar para o inglês.
 - **Instituto:** o "hoje" da história é 31/12/2024. Os 7 personagens estão na tabela
   `staff` (Nadia no topo, sem gestor; os outros seis chefiam um departamento cada), e a
   hierarquia tem até quatro níveis. As armadilhas de propósito estão listadas no topo do

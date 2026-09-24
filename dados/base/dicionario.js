@@ -35,11 +35,13 @@ export const dicionario = {
     colunas: {
       region_code: {
         pt: 'codigo_regiao',
+        tipo: 'VARCHAR',
         chave: 'primaria',
         descricao: { pt: 'Código da região, de 3 letras (ex.: LCN).', en: 'Three-letter region code (e.g. LCN).' },
       },
       region_name: {
         pt: 'nome_regiao',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Nome da região, em inglês.', en: 'Region name.' },
       },
     },
@@ -56,20 +58,24 @@ export const dicionario = {
     colunas: {
       country_code: {
         pt: 'codigo_pais',
+        tipo: 'VARCHAR',
         chave: 'primaria',
         descricao: { pt: 'Código de 3 letras (ex.: BRA, WLD).', en: 'Three-letter code (e.g. BRA, WLD).' },
       },
       country_name: {
         pt: 'nome_pais',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Nome, em inglês, como o Banco Mundial escreve.', en: 'Name, as the World Bank writes it.' },
       },
       region_code: {
         pt: 'codigo_regiao',
+        tipo: 'VARCHAR',
         referencia: 'regions.region_code',
         descricao: { pt: 'Região do país. Vazio (NULL) nos agregados.', en: 'The country’s region. Empty (NULL) for aggregates.' },
       },
       income_group: {
         pt: 'grupo_renda',
+        tipo: 'VARCHAR',
         descricao: {
           pt: 'Grupo de renda na classificação atual do Banco Mundial (Low, Lower middle, Upper middle, High income). Vazio nos agregados.',
           en: 'Income group in the current World Bank classification (Low, Lower middle, Upper middle, High income). Empty for aggregates.',
@@ -77,14 +83,17 @@ export const dicionario = {
       },
       capital_city: {
         pt: 'capital',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Capital. Vazio nos agregados e em alguns territórios.', en: 'Capital city. Empty for aggregates and some territories.' },
       },
       latitude: {
         pt: 'latitude',
+        tipo: 'DOUBLE',
         descricao: { pt: 'Latitude da capital, em graus.', en: 'Latitude of the capital, in degrees.' },
       },
       longitude: {
         pt: 'longitude',
+        tipo: 'DOUBLE',
         descricao: { pt: 'Longitude da capital, em graus.', en: 'Longitude of the capital, in degrees.' },
       },
     },
@@ -101,23 +110,28 @@ export const dicionario = {
     colunas: {
       indicator_code: {
         pt: 'codigo_indicador',
+        tipo: 'VARCHAR',
         chave: 'primaria',
         descricao: { pt: 'Código do indicador no Banco Mundial (ex.: SP.POP.TOTL).', en: 'World Bank indicator code (e.g. SP.POP.TOTL).' },
       },
       column_name: {
         pt: 'nome_coluna',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Nome da coluna em country_year, em inglês.', en: 'Column name in country_year.' },
       },
       indicator_name: {
         pt: 'nome_indicador',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Nome completo do indicador, em inglês.', en: 'Full indicator name.' },
       },
       unit: {
         pt: 'unidade',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Unidade de medida, em inglês.', en: 'Unit of measure.' },
       },
       topic: {
         pt: 'tema',
+        tipo: 'VARCHAR',
         descricao: {
           pt: 'Tema, em inglês: economy, society, health, climate, energy ou inequality.',
           en: 'Topic: economy, society, health, climate, energy or inequality.',
@@ -137,33 +151,40 @@ export const dicionario = {
     colunas: {
       country_code: {
         pt: 'codigo_pais',
+        tipo: 'VARCHAR',
         chave: 'primaria',
         referencia: 'countries.country_code',
         descricao: { pt: 'Código do país.', en: 'Country code.' },
       },
       year: {
         pt: 'ano',
+        tipo: 'INTEGER',
         chave: 'primaria',
         descricao: { pt: 'Ano, de 2000 a 2023.', en: 'Year, 2000 to 2023.' },
       },
       population: {
         pt: 'populacao',
+        tipo: 'BIGINT',
         descricao: { pt: 'População total, em pessoas.', en: 'Total population, in people.' },
       },
       gdp_usd: {
         pt: 'pib_usd',
+        tipo: 'BIGINT',
         descricao: { pt: 'PIB em dólares correntes (do próprio ano).', en: 'GDP in current US dollars (of that year).' },
       },
       gdp_per_capita: {
         pt: 'pib_per_capita',
+        tipo: 'DOUBLE',
         descricao: { pt: 'PIB por pessoa, em dólares correntes.', en: 'GDP per person, in current US dollars.' },
       },
       life_expectancy: {
         pt: 'expectativa_vida',
+        tipo: 'DOUBLE',
         descricao: { pt: 'Expectativa de vida ao nascer, em anos.', en: 'Life expectancy at birth, in years.' },
       },
       co2_per_capita: {
         pt: 'co2_per_capita',
+        tipo: 'DOUBLE',
         descricao: {
           pt: 'Emissões de CO₂ por pessoa, em toneladas (sem uso da terra e florestas).',
           en: 'CO₂ emissions per person, in tonnes (excluding land use and forestry).',
@@ -171,6 +192,7 @@ export const dicionario = {
       },
       renewable_pct: {
         pt: 'renovavel_pct',
+        tipo: 'DOUBLE',
         descricao: {
           pt: 'Parte renovável do consumo final de energia, em %. Os dados param em 2021.',
           en: 'Renewable share of final energy consumption, in %. Data stops in 2021.',
@@ -178,10 +200,12 @@ export const dicionario = {
       },
       internet_pct: {
         pt: 'internet_pct',
+        tipo: 'DOUBLE',
         descricao: { pt: 'Pessoas que usam a internet, em % da população.', en: 'People using the internet, as % of the population.' },
       },
       gini: {
         pt: 'gini',
+        tipo: 'DOUBLE',
         descricao: {
           pt: 'Índice de Gini, de 0 (renda igual para todos) a 100 (desigualdade máxima). Medido só em alguns anos: a maior parte é vazia.',
           en: 'Gini index, from 0 (equal income for all) to 100 (maximum inequality). Only measured in some years: most of it is empty.',
@@ -189,14 +213,17 @@ export const dicionario = {
       },
       urban_pct: {
         pt: 'urbana_pct',
+        tipo: 'DOUBLE',
         descricao: { pt: 'População que vive em cidades, em %.', en: 'Population living in urban areas, in %.' },
       },
       electricity_pct: {
         pt: 'eletricidade_pct',
+        tipo: 'DOUBLE',
         descricao: { pt: 'População com acesso à eletricidade, em %.', en: 'Population with access to electricity, in %.' },
       },
       under5_mortality: {
         pt: 'mortalidade_menores_5',
+        tipo: 'DOUBLE',
         descricao: {
           pt: 'Mortes de crianças antes dos 5 anos, a cada 1.000 nascidas vivas.',
           en: 'Deaths of children before age 5, per 1,000 live births.',
@@ -204,6 +231,7 @@ export const dicionario = {
       },
       health_spend_pct: {
         pt: 'gasto_saude_pct',
+        tipo: 'DOUBLE',
         descricao: { pt: 'Gasto corrente com saúde, em % do PIB.', en: 'Current health expenditure, as % of GDP.' },
       },
     },
@@ -220,23 +248,27 @@ export const dicionario = {
     colunas: {
       country_code: {
         pt: 'codigo_pais',
+        tipo: 'VARCHAR',
         chave: 'primaria',
         referencia: 'countries.country_code',
         descricao: { pt: 'Código do país.', en: 'Country code.' },
       },
       indicator_code: {
         pt: 'codigo_indicador',
+        tipo: 'VARCHAR',
         chave: 'primaria',
         referencia: 'indicators.indicator_code',
         descricao: { pt: 'Código do indicador.', en: 'Indicator code.' },
       },
       year: {
         pt: 'ano',
+        tipo: 'INTEGER',
         chave: 'primaria',
         descricao: { pt: 'Ano, de 2000 a 2023.', en: 'Year, 2000 to 2023.' },
       },
       value: {
         pt: 'valor',
+        tipo: 'DOUBLE',
         descricao: { pt: 'O valor, na unidade do indicador.', en: 'The value, in the indicator’s unit.' },
       },
     },
@@ -257,23 +289,28 @@ export const dicionario = {
     colunas: {
       staff_id: {
         pt: 'id_funcionario',
+        tipo: 'INTEGER',
         chave: 'primaria',
         descricao: { pt: 'Número da pessoa.', en: 'Staff member number.' },
       },
       full_name: {
         pt: 'nome',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Nome completo.', en: 'Full name.' },
       },
       job_title: {
         pt: 'cargo',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Cargo, em inglês.', en: 'Job title.' },
       },
       department: {
         pt: 'departamento',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Departamento, em inglês.', en: 'Department.' },
       },
       manager_id: {
         pt: 'id_gestor',
+        tipo: 'INTEGER',
         referencia: 'staff.staff_id',
         descricao: {
           pt: 'Número de quem é gestor desta pessoa — outra linha desta mesma tabela. Vazio para a diretora-geral.',
@@ -282,15 +319,18 @@ export const dicionario = {
       },
       nationality_code: {
         pt: 'codigo_nacionalidade',
+        tipo: 'VARCHAR',
         referencia: 'countries.country_code',
         descricao: { pt: 'Nacionalidade, com o código de país.', en: 'Nationality, as a country code.' },
       },
       hire_date: {
         pt: 'data_admissao',
+        tipo: 'DATE',
         descricao: { pt: 'Data de entrada no Observatório.', en: 'Date the person joined the Observatory.' },
       },
       salary_chf: {
         pt: 'salario_chf',
+        tipo: 'INTEGER',
         descricao: { pt: 'Salário anual, em francos suíços.', en: 'Annual salary, in Swiss francs.' },
       },
     },
@@ -307,40 +347,48 @@ export const dicionario = {
     colunas: {
       project_id: {
         pt: 'id_projeto',
+        tipo: 'INTEGER',
         chave: 'primaria',
         descricao: { pt: 'Número do projeto.', en: 'Project number.' },
       },
       title: {
         pt: 'titulo',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Título do projeto, em inglês.', en: 'Project title.' },
       },
-      theme: {
+      topic: {
         pt: 'tema',
+        tipo: 'VARCHAR',
         descricao: {
           pt: 'Tema, em inglês: energy, health, climate, inequality ou digital.',
-          en: 'Theme: energy, health, climate, inequality or digital.',
+          en: 'Topic: energy, health, climate, inequality or digital.',
         },
       },
       country_code: {
         pt: 'codigo_pais',
+        tipo: 'VARCHAR',
         referencia: 'countries.country_code',
         descricao: { pt: 'País onde o projeto acontece.', en: 'Country where the project takes place.' },
       },
       lead_id: {
         pt: 'id_responsavel',
+        tipo: 'INTEGER',
         referencia: 'staff.staff_id',
         descricao: { pt: 'Quem lidera o projeto.', en: 'Who leads the project.' },
       },
       start_date: {
         pt: 'data_inicio',
+        tipo: 'DATE',
         descricao: { pt: 'Data de início.', en: 'Start date.' },
       },
       end_date: {
         pt: 'data_fim',
+        tipo: 'DATE',
         descricao: { pt: 'Data de fim. Vazio (NULL) se o projeto ainda está em andamento.', en: 'End date. Empty (NULL) if the project is still running.' },
       },
       budget_usd: {
         pt: 'orcamento_usd',
+        tipo: 'INTEGER',
         descricao: { pt: 'Orçamento total, em dólares.', en: 'Total budget, in US dollars.' },
       },
     },
@@ -357,24 +405,29 @@ export const dicionario = {
     colunas: {
       disbursement_id: {
         pt: 'id_desembolso',
+        tipo: 'INTEGER',
         chave: 'primaria',
         descricao: { pt: 'Número do pagamento.', en: 'Payment number.' },
       },
       project_id: {
         pt: 'id_projeto',
+        tipo: 'INTEGER',
         referencia: 'projects.project_id',
         descricao: { pt: 'Projeto que pagou.', en: 'Project that made the payment.' },
       },
       paid_on: {
         pt: 'data_pagamento',
+        tipo: 'DATE',
         descricao: { pt: 'Data do pagamento.', en: 'Payment date.' },
       },
       amount_usd: {
         pt: 'valor_usd',
+        tipo: 'DECIMAL(12,2)',
         descricao: { pt: 'Valor, em dólares.', en: 'Amount, in US dollars.' },
       },
       category: {
         pt: 'categoria',
+        tipo: 'VARCHAR',
         descricao: {
           pt: 'Categoria, em inglês: personnel, travel, equipment, grants, training ou consultancy.',
           en: 'Category: personnel, travel, equipment, grants, training or consultancy.',
@@ -394,38 +447,46 @@ export const dicionario = {
     colunas: {
       trip_id: {
         pt: 'id_viagem',
+        tipo: 'INTEGER',
         chave: 'primaria',
         descricao: { pt: 'Número da viagem.', en: 'Trip number.' },
       },
       staff_id: {
         pt: 'id_funcionario',
+        tipo: 'INTEGER',
         referencia: 'staff.staff_id',
         descricao: { pt: 'Quem viajou.', en: 'Who travelled.' },
       },
       project_id: {
         pt: 'id_projeto',
+        tipo: 'INTEGER',
         referencia: 'projects.project_id',
         descricao: { pt: 'Projeto da viagem. Vazio (NULL) nas conferências.', en: 'Project of the trip. Empty (NULL) for conferences.' },
       },
       country_code: {
         pt: 'codigo_pais',
+        tipo: 'VARCHAR',
         referencia: 'countries.country_code',
         descricao: { pt: 'País de destino.', en: 'Destination country.' },
       },
       departure_date: {
         pt: 'data_ida',
+        tipo: 'DATE',
         descricao: { pt: 'Data de ida.', en: 'Departure date.' },
       },
       return_date: {
         pt: 'data_volta',
+        tipo: 'DATE',
         descricao: { pt: 'Data de volta.', en: 'Return date.' },
       },
       cost_usd: {
         pt: 'custo_usd',
+        tipo: 'DECIMAL(10,2)',
         descricao: { pt: 'Custo total, em dólares.', en: 'Total cost, in US dollars.' },
       },
       purpose: {
         pt: 'motivo',
+        tipo: 'VARCHAR',
         descricao: {
           pt: 'Motivo, em inglês: field visit, data collection, workshop, partner meeting, monitoring visit ou conference.',
           en: 'Purpose: field visit, data collection, workshop, partner meeting, monitoring visit or conference.',
@@ -445,15 +506,18 @@ export const dicionario = {
     colunas: {
       publication_id: {
         pt: 'id_publicacao',
+        tipo: 'INTEGER',
         chave: 'primaria',
         descricao: { pt: 'Número da publicação.', en: 'Publication number.' },
       },
       title: {
         pt: 'titulo',
+        tipo: 'VARCHAR',
         descricao: { pt: 'Título, em inglês.', en: 'Title.' },
       },
       pub_type: {
         pt: 'tipo',
+        tipo: 'VARCHAR',
         descricao: {
           pt: 'Tipo, em inglês: report, working paper, policy brief, article ou data note.',
           en: 'Type: report, working paper, policy brief, article or data note.',
@@ -461,15 +525,18 @@ export const dicionario = {
       },
       published_on: {
         pt: 'data_publicacao',
+        tipo: 'DATE',
         descricao: { pt: 'Data de publicação.', en: 'Publication date.' },
       },
       project_id: {
         pt: 'id_projeto',
+        tipo: 'INTEGER',
         referencia: 'projects.project_id',
         descricao: { pt: 'Projeto de origem. Vazio (NULL) nas publicações gerais.', en: 'Source project. Empty (NULL) for general publications.' },
       },
       downloads: {
         pt: 'downloads',
+        tipo: 'INTEGER',
         descricao: { pt: 'Quantas vezes foi baixada.', en: 'How many times it was downloaded.' },
       },
     },
@@ -486,18 +553,21 @@ export const dicionario = {
     colunas: {
       publication_id: {
         pt: 'id_publicacao',
+        tipo: 'INTEGER',
         chave: 'primaria',
         referencia: 'publications.publication_id',
         descricao: { pt: 'A publicação.', en: 'The publication.' },
       },
       staff_id: {
         pt: 'id_funcionario',
+        tipo: 'INTEGER',
         chave: 'primaria',
         referencia: 'staff.staff_id',
         descricao: { pt: 'O autor.', en: 'The author.' },
       },
       author_position: {
         pt: 'posicao_autor',
+        tipo: 'INTEGER',
         descricao: { pt: 'Posição na lista de autores (1 = primeiro autor).', en: 'Position in the author list (1 = first author).' },
       },
     },
