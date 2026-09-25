@@ -102,8 +102,12 @@ export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin 
     const alturaDaLinha = parseFloat(estilo.lineHeight);
     const margens = parseFloat(estilo.paddingTop) + parseFloat(estilo.paddingBottom);
     const linhas = Math.min(Math.max(total, linhasMin), linhasMax);
-    // 14px de folga para a barra de rolagem horizontal, quando aparece.
-    area.style.height = `${Math.ceil(linhas * alturaDaLinha + margens + 14)}px`;
+    // 14px de folga para a barra de rolagem horizontal, quando aparece. A
+    // coluna dos números tem a mesma altura: sem isso, numa consulta maior
+    // que a caixa, ela cresceria com o texto em vez de rolar junto com ele.
+    const altura = `${Math.ceil(linhas * alturaDaLinha + margens + 14)}px`;
+    area.style.height = altura;
+    numeros.style.height = altura;
 
     sincronizarRolagem();
   }
@@ -372,8 +376,20 @@ export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin 
   }
   document.addEventListener('idioma-mudou', aoMudarIdioma);
 
-  // A fonte mono chega depois: remedir quando ela carregar.
-  document.fonts?.ready.then(atualizar);
+  // A fonte mono chega depois: remedir quando ela carregar — e conferir que
+  // as duas camadas têm a mesma fonte. Qualquer diferença desalinha o cursor
+  // do texto que se vê (foi o defeito achado depois do passo 8).
+  document.fonts?.ready.then(() => {
+    atualizar();
+    const deTexto = getComputedStyle(texto);
+    const deRealce = getComputedStyle(codigo);
+    for (const propriedade of ['fontSize', 'fontFamily', 'lineHeight', 'letterSpacing']) {
+      if (deTexto[propriedade] !== deRealce[propriedade]) {
+        console.warn(`[editor] As camadas do editor diferem em ${propriedade}: ` +
+          `${deTexto[propriedade]} × ${deRealce[propriedade]}. O cursor vai desalinhar.`);
+      }
+    }
+  });
 
   atualizarDica();
   atualizar();

@@ -569,6 +569,19 @@ inteiro; a segunda abriu da gaveta, sem nenhum pedido à rede e sem nada fora do
 - **Bancada de teste:** continua, agora com as peças de verdade, até a tela de missão
   (passo 12).
 
+**Correções depois do passo 8** (achadas pelo Fernando usando o editor):
+
+- **Cursor desalinhado do texto.** Clicar numa letra punha o cursor uma ou duas letras
+  antes, e apagar levava a letra errada. A causa: a regra geral `code { font-size:
+  0.9em }` do `base.css` deixava a camada colorida em 12,6 px, e o texto de verdade em
+  14 px — a diferença crescia uma letra a cada dez. Corrigido com `.editor-realce code {
+  font: inherit }`; medido depois: 0 letra de diferença até a coluna 151. O editor agora
+  confere, ao abrir, se as duas camadas têm a mesma fonte, tamanho, altura de linha e
+  espaçamento, e avisa no console se não tiverem.
+- **Números das linhas sem rolar.** Numa consulta maior que a caixa (mais de 18 linhas), a
+  coluna dos números crescia em vez de rolar com o texto. Agora ela tem a altura da
+  caixa, e as três camadas rolam juntas até o fim.
+
 ## Pontos de atenção do DuckDB-WASM (para o passo 5)
 
 - **Peso.** O `.wasm` do DuckDB tem dezenas de MB sem compressão. O GitHub recusa arquivo

@@ -85,6 +85,15 @@
   pointer-events: none;
 }
 
+/* O <code> do realce herda TUDO do <pre>. Sem isto, a regra geral de
+   base.css (code { font-size: 0.9em }) deixava a camada colorida 10% menor
+   que o texto de verdade — e o cursor ia se afastando do que se vê, uma
+   letra a cada dez (defeito achado pelo Fernando depois do passo 8). */
+.editor-realce code {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
 .editor-texto {
   width: 100%;
   height: 100%;
