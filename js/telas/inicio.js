@@ -27,12 +27,12 @@ import { carregarModulo } from '../../dados/missoes/indice.js';
 
 /**
  * Os atalhos, na ordem. Sem `endereco` = ainda não existe ("em breve"):
- * o laboratório é o passo 17, a cola o 18 e os jogos os passos 19 e 20.
+ * a cola é o passo 18 e os jogos os passos 19 e 20.
  */
 const ATALHOS = [
   { id: 'trilha', endereco: '#/trilha' },
   { id: 'nivelamento', endereco: '#/nivelamento' },
-  { id: 'laboratorio', endereco: null },
+  { id: 'laboratorio', endereco: '#/laboratorio' },
   { id: 'cola', endereco: null },
   { id: 'jogos', endereco: null },
 ];

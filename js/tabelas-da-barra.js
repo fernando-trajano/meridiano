@@ -8,8 +8,8 @@
    abrir. Nada pisca nem pulsa.
 
    Ao passar o mouse, focar pelo teclado ou tocar num nome, abre um painel
-   flutuante com as colunas da tabela e o link "ver 5 linhas" (quem usa a
-   barra decide onde a prévia aparece). Esc fecha. Com 4 tabelas ou mais,
+   flutuante com as colunas da tabela e o botão "Prévia" (as 5 primeiras
+   linhas; quem usa a barra decide onde elas aparecem). Esc fecha. Com 4 tabelas ou mais,
    aparecem as duas primeiras e "+2", que lista o resto.
 
    O painel mora no <body>, com posição fixa: dentro da bancada ele seria
@@ -30,11 +30,11 @@ let contador = 0;
 /**
  * Monta a lista de tabelas dentro de um elemento da barra.
  * @param {HTMLElement} alvo
- * @param {{tabelas: string[], aoVerLinhas: (tabelaEn: string) => void}} opcoes
+ * @param {{tabelas: string[], aoMostrarPrevia: (tabelaEn: string) => void}} opcoes
  *   tabelas em inglês (como estão nas missões)
  * @returns {{destruir: () => void}}
  */
-export function criarTabelasDaBarra(alvo, { tabelas, aoVerLinhas }) {
+export function criarTabelasDaBarra(alvo, { tabelas, aoMostrarPrevia }) {
   contador += 1;
   const idPainel = `tabelas-flutuante-${contador}`;
 
@@ -84,7 +84,8 @@ export function criarTabelasDaBarra(alvo, { tabelas, aoVerLinhas }) {
               // O " · " fica grudado no nome de antes: a linha nunca começa com ele.
               .map((coluna, i) => `<span>${escapar(coluna)}${i < colunas.length - 1 ? ' ·' : ''}</span>`)
               .join(' ')}</p>
-            <button type="button" class="botao-link tabelas-flutuante-ver" data-tabela="${tabela}">${escapar(t('missao.verLinhas'))}</button>
+            <button type="button" class="botao-link tabelas-flutuante-ver" data-tabela="${tabela}"
+              title="${escapar(t('missao.dicaPrevia'))}">${escapar(t('missao.botaoPrevia'))}</button>
           </div>`;
       })
       .join('');
@@ -201,7 +202,7 @@ export function criarTabelasDaBarra(alvo, { tabelas, aoVerLinhas }) {
     const ancora = aberto;
     fecharAgora();
     ancora?.focus({ preventScroll: true });
-    aoVerLinhas(botao.dataset.tabela);
+    aoMostrarPrevia(botao.dataset.tabela);
   });
 
   function aoTeclar(evento) {

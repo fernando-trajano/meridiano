@@ -10,7 +10,7 @@
 
    Quem usa diz o desafio e o que fazer com o veredito; a bancada cuida do
    resto: rodar, conferir pelo resultado, traduzir o erro, marcar a linha
-   dele no editor, a lista de colunas e a prévia ("ver 5 linhas").
+   dele no editor, a lista de colunas e a "Prévia" (as 5 primeiras linhas).
    ========================================================================== */
 
 import { t, idioma } from './i18n.js';
@@ -78,7 +78,7 @@ export function criarBancadaDeConsulta(alvo, { desafio, inicial = '', principal 
   // As tabelas da tarefa, com a lista de colunas e a prévia.
   const tabelasDaBarra = criarTabelasDaBarra(alvo.querySelector('.bancada-tabelas'), {
     tabelas: desafio.tabelas ?? tabelasDoSQL(desafio.gabarito),
-    aoVerLinhas: mostrarPrevia,
+    aoMostrarPrevia: mostrarPrevia,
   });
 
   let editor = null;
@@ -105,7 +105,7 @@ export function criarBancadaDeConsulta(alvo, { desafio, inicial = '', principal 
     }
   }
 
-  /** A prévia de uma tabela ("ver 5 linhas"), na seção Resultado. */
+  /** A "Prévia" de uma tabela (as 5 primeiras linhas), na seção Resultado. */
   async function mostrarPrevia(tabelaEn) {
     const nome = nomeNoIdioma(tabelaEn, idioma());
     try {

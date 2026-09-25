@@ -411,6 +411,10 @@ export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin 
       atualizar();
     },
     focar: () => texto.focus(),
+    /** Escreve no cursor, como se a pessoa tivesse digitado (entra no desfazer). */
+    inserirTexto(novo) {
+      inserir(novo);
+    },
     formatar,
     /** Roda o que está escrito (o botão Rodar da barra de quem usa o editor). */
     rodar: () => {

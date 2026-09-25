@@ -132,6 +132,8 @@ Meridiano/
 │   ├── tabela-resultado.js    # a tabela do site inteiro (amostra, Passo a passo, resultado)
 │   ├── passo-a-passo.js       # a consulta na ordem do banco, com o efeito na amostra
 │   ├── tabelas-da-barra.js    # as tabelas da tarefa na barra da Consulta + lista de colunas
+│   ├── laboratorio-dados.js   # histórico, favoritas, última consulta; CSV e "copiar como
+│   │                          # tabela"; o nome de um CSV importado
 │   ├── moldura.js             # a moldura de duas colunas (centro + painel) das telas
 │   │                          # com o painel de progresso
 │   ├── painel-progresso.js    # o painel "Seu progresso" (posto pela moldura)
@@ -148,7 +150,7 @@ Meridiano/
 │   │   │                      # chegou antes; a lógica é o passo 14)
 │   │   ├── missao.js          # as 6 etapas da missão, com a bancada — e a entrega:
 │   │   │                      # resposta do personagem, estrelas, números que contam
-│   │   ├── laboratorio.js
+│   │   ├── laboratorio.js     # a base inteira: tabelas, histórico, favoritas, CSV
 │   │   ├── cola.js
 │   │   └── jogos.js           # o menu de jogos
 │   └── jogos/
@@ -374,7 +376,7 @@ Todas com o prefixo `meridiano:`:
 | `meridiano:sequencia` | `{ atual, maior, ultimoDia }` — dias seguidos com missão concluída, no fuso de quem usa; na leitura, vira 0 se passou um dia inteiro sem missão |
 | `meridiano:estatisticas` | `{ conceitos: { DISTINCT: 2, … } }` — quantas vezes cada conceito escapou (dica pedida ou conferência errada, uma vez por desafio); alimenta "conceitos que mais escapam" |
 | `meridiano:nivelamento` | as respostas dos 6 desafios e o que foi liberado |
-| `meridiano:laboratorio` | histórico (50 consultas), favoritas, a última consulta aberta |
+| `meridiano:laboratorio` | `{ versao: 1, historico: [{ sql, em }], favoritas: [{ sql, em }], ultima }` — as 50 últimas consultas, as favoritas e a que estava no editor, **sempre em inglês** (traduzidas na hora de mostrar) |
 | `meridiano:jogos` | o último jogo e nível escolhidos no menu |
 
 O backup (passo 21) exporta e importa todas elas num JSON com **número de versão**, para
@@ -831,7 +833,7 @@ Ajustes finos pedidos pelo Fernando depois do redesenho. Testado no Safari pelo 
       sombras e sem desfoque"), destaque em duas versões (linha/texto), `GROUP BY` coral;
       a linha ativa do Passo a passo acende em vez de escurecer, para manter 4,5:1
 - [x] **Barra da Consulta:** Consulta · tabelas (pontilhado, lista de colunas flutuante,
-      "ver 5 linhas") · ícone Formatar (⇧⌥F) · Rodar (com o atalho no `title`)
+      "Prévia") · ícone Formatar (⇧⌥F) · Rodar (com o atalho no `title`)
 - [x] Conferência com o motor só na trilha (dentro de uma missão dava avisos falsos)
 
 - [x] **Passo 13** — entrega e progresso: `progresso.js` (conclui a missão guardando a
@@ -895,7 +897,25 @@ Ajustes finos pedidos pelo Fernando depois do redesenho. Testado no Safari pelo 
       grade (centro + painel de 14rem, `sticky`), mesmo título (`h1.moldura-titulo`),
       mesmo padding — e nada "pula" ao trocar de tela; `scrollbar-gutter: stable` no
       `html`; as classes do painel no padrão do digita
-- [ ] **Passo 17** — laboratório
+- [x] **Passo 17** — laboratório (`#/laboratorio`, `telas/laboratorio.js` e
+      `laboratorio-dados.js`), na moldura de tela cheia da missão. À esquerda, as abas
+      **Tabelas** (as do motor: as 11 da base, as importadas e as criadas ali, com as
+      colunas; "Usar tabela" e um clique numa coluna escrevem o nome no editor;
+      "Prévia"; "Zerar a base", com
+      confirmação), **Histórico** (50) e **Favoritas**. À direita, a bancada: Consulta
+      (favoritar ★, copiar o link, formatar, Rodar) e Resultado (copiar como tabela —
+      colado numa planilha vira tabela —, baixar CSV, formato **Excel (Brasil)**: `;`,
+      vírgula decimal, BOM UTF-8, ou **Internacional**: `,` e ponto; sem escolha, o do
+      idioma, guardado em `meridiano:config`). **Importar CSV**: vira tabela com o nome do
+      arquivo (sem acento, nunca igual a uma da base), UTF-8 ou Windows-1252, até 50 MB,
+      só nesta visita — e recriada sozinha quando a base volta zerada. A base **não** é
+      zerada ao entrar. **Link com a consulta**: `#/laboratorio?sql=…`, em inglês, abre
+      certo nos dois idiomas; se for de leitura, já roda. Consultas guardadas em inglês,
+      mostradas no idioma da tela. O atalho do início passou a abrir o laboratório.
+      **Ajuste de texto** (antes do passo 18): "escrever o nome" virou **"Usar tabela"**
+      e "ver 5 linhas" virou **"Prévia"**, com a dica "Ver as 5 primeiras linhas da
+      tabela" no `title` (as duas prévias precisam de clique); chaves renomeadas
+      (`laboratorio.usarTabela`, `missao.botaoPrevia`, `missao.dicaPrevia`)
 - [ ] **Passo 18** — cola
 - [ ] **Passo 19** — menu de jogos e Palpite
 - [ ] **Passo 20** — Telegrama e Infiltrado

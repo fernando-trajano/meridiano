@@ -287,6 +287,39 @@ function sqlDeCriacao(nomeEn, tabela, idiomaDaBase) {
   );
 }
 
+/* --------------------------------------------------------------------------
+   CSV do usuário (laboratório, passo 17)
+
+   O arquivo fica registrado no motor, só na memória desta visita, com um
+   nome que não se confunde com os da base ("importado-…"). Zerar a base
+   troca o banco, mas não apaga os arquivos registrados: por isso a tabela
+   pode ser recriada depois de uma troca de idioma ou de uma missão.
+   -------------------------------------------------------------------------- */
+
+const arquivoImportado = (nomeTabela) => `importado-${nomeTabela}.csv`;
+
+/**
+ * Registra o texto de um CSV e cria (ou troca) a tabela com ele.
+ * O DuckDB descobre sozinho o separador, o cabeçalho e os tipos.
+ * @param {string} nomeTabela  já limpo por quem chama
+ * @param {string} texto
+ */
+export async function importarCsv(nomeTabela, texto) {
+  if (!db) await abrirBase();
+  await db.registerFileText(arquivoImportado(nomeTabela), texto);
+  await conexao.query(`CREATE OR REPLACE TABLE "${nomeTabela}" AS SELECT * FROM read_csv_auto('${arquivoImportado(nomeTabela)}')`);
+}
+
+/**
+ * Recria uma tabela importada que a base zerada levou embora (se ela já
+ * existir, não faz nada).
+ * @param {string} nomeTabela
+ */
+export async function recriarImportada(nomeTabela) {
+  if (!conexao) return;
+  await conexao.query(`CREATE TABLE IF NOT EXISTS "${nomeTabela}" AS SELECT * FROM read_csv_auto('${arquivoImportado(nomeTabela)}')`);
+}
+
 /** @returns {'pt'|'en'|null} o idioma dos nomes da base agora. */
 export function idiomaDaBase() {
   return idiomaAtualDaBase;

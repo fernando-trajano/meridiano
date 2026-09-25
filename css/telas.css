@@ -73,16 +73,19 @@
    (à direita, num painel).
    ----------------------------------------------------------------------- */
 
-body[data-tela="missao"] {
+body[data-tela="missao"],
+body[data-tela="laboratorio"] {
   height: 100vh;
   height: 100dvh;
 }
 
-body[data-tela="missao"] .rodape {
+body[data-tela="missao"] .rodape,
+body[data-tela="laboratorio"] .rodape {
   display: none;
 }
 
-body[data-tela="missao"] .conteudo {
+body[data-tela="missao"] .conteudo,
+body[data-tela="laboratorio"] .conteudo {
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -474,11 +477,13 @@ body[data-tela="missao"] .conteudo {
 /* --- Tela estreita: uma coluna, a página rola ------------------------------------ */
 
 @media (max-width: 52rem) {
-  body[data-tela="missao"] {
+  body[data-tela="missao"],
+  body[data-tela="laboratorio"] {
     height: auto;
   }
 
-  body[data-tela="missao"] .conteudo {
+  body[data-tela="missao"] .conteudo,
+  body[data-tela="laboratorio"] .conteudo {
     padding: 12px var(--esp-4) 32px;
   }
 
@@ -996,5 +1001,239 @@ a.cartao:focus-visible {
 @media (max-width: 44rem) {
   .cartoes {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* --- Laboratório --------------------------------------------------------------------
+   A moldura de tela cheia da missão (sem rodapé; quem rola são as partes por
+   dentro). À esquerda, as abas Tabelas / Histórico / Favoritas, no fundo da
+   página; à direita, a bancada: Consulta em cima, Resultado embaixo.
+   ----------------------------------------------------------------------- */
+
+.laboratorio {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.laboratorio-corpo {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 28px;
+  min-height: 0;
+}
+
+.laboratorio-lado {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.laboratorio-abas {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 8px;
+  border-bottom: var(--borda);
+}
+
+.laboratorio-lista {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cor-borda) transparent;
+  font-size: 13px;
+}
+
+.laboratorio-lista p {
+  max-width: none;
+}
+
+.laboratorio-importar {
+  padding: 6px 0 10px;
+}
+
+.laboratorio-tabelas,
+.laboratorio-colunas,
+.laboratorio-consultas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.laboratorio-tabela {
+  border-bottom: var(--borda);
+}
+
+.laboratorio-tabela summary {
+  padding: 7px 0;
+  cursor: pointer;
+}
+
+.laboratorio-tabela-nome {
+  color: var(--cor-texto-secundario);
+  font-family: var(--fonte-mono);
+  font-size: 12.5px;
+}
+
+.laboratorio-tabela details[open] .laboratorio-tabela-nome,
+.laboratorio-tabela summary:hover .laboratorio-tabela-nome {
+  color: var(--cor-texto);
+}
+
+.laboratorio-etiqueta {
+  margin-left: 4px;
+  color: var(--cor-texto-discreto);
+  font-size: 11px;
+}
+
+.laboratorio-tabela-acoes {
+  display: flex;
+  gap: 12px;
+  padding: 0 0 6px 14px;
+}
+
+.laboratorio-colunas {
+  padding: 0 0 8px 14px;
+}
+
+/* Cada coluna é um botão: um clique escreve o nome no editor. */
+.laboratorio-colunas .laboratorio-inserir {
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--cor-texto-discreto);
+  font-family: var(--fonte-mono);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.laboratorio-colunas .laboratorio-inserir:hover {
+  color: var(--cor-texto);
+}
+
+.laboratorio-zerar {
+  padding: 12px 0;
+}
+
+.laboratorio-vazio {
+  padding: 8px 0;
+  color: var(--cor-texto-discreto);
+}
+
+.laboratorio-consultas li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  border-bottom: var(--borda);
+}
+
+.laboratorio-consulta {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 7px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.laboratorio-consulta-sql {
+  overflow: hidden;
+  color: var(--cor-texto-secundario);
+  font-family: var(--fonte-mono);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color var(--transicao);
+}
+
+.laboratorio-consulta:hover .laboratorio-consulta-sql {
+  color: var(--cor-texto);
+}
+
+.laboratorio-consulta-quando {
+  color: var(--cor-texto-discreto);
+  font-size: 11px;
+}
+
+.laboratorio-remover {
+  padding: 7px 2px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* A bancada ocupa a coluna inteira, até a altura da janela. */
+.laboratorio-bancada {
+  max-height: 100%;
+}
+
+.laboratorio-editor {
+  flex: 0 0 auto;
+}
+
+/* A estrela fica cheia quando a consulta está nas favoritas. */
+.laboratorio-favorita svg {
+  fill: none;
+}
+
+.laboratorio-favorita[aria-pressed="true"] {
+  color: var(--cor-destaque);
+}
+
+.laboratorio-favorita[aria-pressed="true"] svg {
+  fill: currentColor;
+}
+
+.laboratorio-recado {
+  color: var(--cor-texto-secundario);
+}
+
+.laboratorio-formato {
+  padding: 2px 4px;
+  border: var(--borda);
+  border-radius: var(--raio-p);
+  background: transparent;
+  color: var(--cor-texto-secundario);
+  font-size: 11.5px;
+}
+
+/* Os botões de texto de uma barra nunca quebram de linha; quem encolhe é a
+   informação ("42 linhas · 26 ms"), com reticências. */
+.painel-barra .botao-link {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.painel-barra .botao-link:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+@media (max-width: 52rem) {
+  .laboratorio-corpo {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+  }
+
+  /* No celular, a bancada primeiro; as tabelas e o histórico, embaixo. */
+  .laboratorio-lado {
+    order: 2;
+    max-height: 60vh;
+  }
+
+  .laboratorio-bancada {
+    max-height: none;
+  }
+
+  .laboratorio-saida {
+    max-height: 24rem;
   }
 }

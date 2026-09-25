@@ -618,7 +618,8 @@ fundo de código com borda.
   dentro.
 - **Barra da Consulta:** à esquerda a aba "Consulta"; à direita, nesta ordem: as
   **tabelas** da tarefa (rótulo discreto + nomes em mono com sublinhado pontilhado, sem
-  fundo nem contorno — hover, foco ou toque abre a lista de colunas com "ver 5 linhas";
+  fundo nem contorno — hover, foco ou toque abre a lista de colunas com o botão "Prévia" (dica no `title`: "Ver as 5 primeiras
+  linhas da tabela");
   Esc fecha; 4+ tabelas viram as duas primeiras e "+2"; nada pisca), o **ícone Formatar**
   (⇧⌥F, só quando pedido) e **Rodar** (o atalho no `title`). A barra nunca quebra de
   linha.
@@ -725,6 +726,18 @@ A tela de quem volta ("#/" para quem já concluiu alguma coisa; a trilha fica em
   (1,34:1 contra o fundo, decorativa) e descrição na discreta `#626D83` (5,21:1); nome em
   `#0E1726` (17,96:1).
 - Em tela estreita: topo, progresso, "Ir para".
+
+### Laboratório (passo 17)
+
+A base inteira, para consultas livres, na moldura de tela cheia da missão: à esquerda,
+Tabelas (as que existem no motor, com as colunas — um clique escreve o nome), Histórico
+(50) e Favoritas; à direita, a bancada (Consulta: favoritar, link, formatar, Rodar;
+Resultado: copiar como tabela, baixar CSV, formato). O CSV sai no **formato do Excel
+brasileiro** (`;`, vírgula decimal, BOM UTF-8) ou no **internacional**; sem escolha, o do
+idioma. Um CSV importado vira tabela com o nome do arquivo, só nesta visita. A base não é
+zerada ao entrar (há "Zerar a base"). O link `#/laboratorio?sql=…` leva a consulta em
+inglês; histórico, favoritas e a última consulta também são guardados em inglês e
+traduzidos na hora de mostrar.
 
 ### As 6 conferências automáticas
 
