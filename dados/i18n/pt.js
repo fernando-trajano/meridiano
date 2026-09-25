@@ -72,6 +72,32 @@ export const pt = {
     original: 'Mensagem original do DuckDB',
   },
 
+  raioX: {
+    titulo: 'Raio-X',
+    anterior: 'Etapa anterior',
+    proxima: 'Próxima etapa',
+    deNovo: 'Do começo',
+    maisLinhas: '… e mais {n} linhas',
+    linhas: '{n} linhas',
+    umaLinha: '1 linha',
+    deAte: 'de {antes} para {depois} linhas',
+    deAteUma: 'de {antes} para 1 linha',
+    // O que acontece em cada etapa (a chave é a etapa sem espaço).
+    explica: {
+      FROM: 'Tudo começa pela tabela inteira.',
+      JOIN: 'Duas tabelas, ligadas pela chave.',
+      WHERE: 'O filtro: só ficam as linhas que cumprem a condição.',
+      GROUPBY: 'As linhas se juntam em blocos, um para cada valor.',
+      HAVING: 'Só ficam os blocos que cumprem a condição.',
+      SELECT: 'Só as colunas pedidas — e as contas, se houver.',
+      DISTINCT: 'As linhas repetidas saem.',
+      QUALIFY: 'O filtro pelo resultado das funções de janela.',
+      ORDERBY: 'As linhas trocam de lugar.',
+      LIMIT: 'Só as primeiras ficam.',
+      WITH: 'Uma consulta com nome, usada pela seguinte.',
+    },
+  },
+
   // A conferência pelo resultado (js/conferir.js). {recurso} chega como código.
   conferir: {
     certo: 'Resultado certo.',
@@ -170,6 +196,8 @@ export const pt = {
     explicacao:
       'Provisório: o editor e o motor de verdade, antes de existir a tela de missão (passo 12). Experimente errar de propósito.',
     desafio: 'Desafio de teste: os 5 países mais populosos de 2023, do maior para o menor, sem os agregados.',
+    raioX: 'Raio-X de teste: escolha uma missão.',
+    missao: 'Missão',
   },
 
   // PROVISÓRIO: os textos da vitrine do passo 2. Saem junto com ela, no

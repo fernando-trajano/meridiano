@@ -17,6 +17,9 @@ import { desenharResultado, desenharErro, MAX_LINHAS } from '../tabela-resultado
 import { traduzirErro } from '../erros-sql.js';
 import { conferirResposta } from '../conferir.js';
 import { mostrarAbrindo } from './abrindo.js';
+import { criarRaioX } from '../raio-x.js';
+import { modulos, carregarModulo } from '../../dados/missoes/indice.js';
+import { emIdioma } from '../i18n.js';
 
 // A consulta de exemplo, escrita uma vez em inglês — como os gabaritos.
 const EXEMPLO = `-- The 5 most populous countries in 2023 (aggregates left out)
@@ -80,4 +83,53 @@ export function ligarBancada() {
       if (traduzido.linha) editor.marcarErro(traduzido.linha);
     }
   }
+}
+
+/* --------------------------------------------------------------------------
+   PROVISÓRIO (passo 11): o Raio-X de cada missão escrita, para ver antes da
+   tela de missão existir. Sai no passo 12.
+   -------------------------------------------------------------------------- */
+
+export async function ligarRaioXDeTeste() {
+  const seletor = document.querySelector('#bancada-missao');
+  const lugar = document.querySelector('#bancada-raiox');
+  if (!seletor || !lugar) return;
+
+  const missoes = [];
+  for (const modulo of modulos) {
+    for (const missao of await carregarModulo(modulo.id)) {
+      if (missao.raioX?.length) missoes.push(missao);
+    }
+  }
+
+  function preencherSeletor() {
+    const escolhida = seletor.value;
+    seletor.innerHTML = '<option value="">—</option>' + missoes
+      .map((m) => `<option value="${m.id}">${m.id} · ${emIdioma(m.titulo)}</option>`)
+      .join('');
+    seletor.value = escolhida;
+  }
+  preencherSeletor();
+  document.addEventListener('idioma-mudou', preencherSeletor);
+
+  let raioX = null;
+  seletor.addEventListener('change', async () => {
+    raioX?.destruir();
+    raioX = null;
+    lugar.innerHTML = '';
+    const missao = missoes.find((m) => m.id === seletor.value);
+    if (!missao) return;
+
+    if (!baseAberta()) {
+      const tela = mostrarAbrindo();
+      try {
+        await abrirBase({ aoProgredir: tela.progredir });
+        tela.fechar();
+      } catch (erro) {
+        tela.falhar(erro);
+        return;
+      }
+    }
+    raioX = await criarRaioX(lugar, { etapas: missao.raioX });
+  });
 }

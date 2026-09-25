@@ -63,6 +63,31 @@ export const en = {
     original: 'Original DuckDB message',
   },
 
+  raioX: {
+    titulo: 'X-ray',
+    anterior: 'Previous step',
+    proxima: 'Next step',
+    deNovo: 'From the start',
+    maisLinhas: '… and {n} more rows',
+    linhas: '{n} rows',
+    umaLinha: '1 row',
+    deAte: 'from {antes} to {depois} rows',
+    deAteUma: 'from {antes} to 1 row',
+    explica: {
+      FROM: 'Everything starts with the whole table.',
+      JOIN: 'Two tables, linked by the key.',
+      WHERE: 'The filter: only rows meeting the condition stay.',
+      GROUPBY: 'Rows gather into blocks, one per value.',
+      HAVING: 'Only blocks meeting the condition stay.',
+      SELECT: 'Only the requested columns — and the arithmetic, if any.',
+      DISTINCT: 'Repeated rows leave.',
+      QUALIFY: 'The filter on the result of window functions.',
+      ORDERBY: 'Rows change places.',
+      LIMIT: 'Only the first ones stay.',
+      WITH: 'A named query, used by the next one.',
+    },
+  },
+
   conferir: {
     certo: 'Correct result.',
     colunasAMais: 'Your result has {aluno}; the request asks for {esperado}. There is an extra column in the SELECT.',
@@ -156,6 +181,8 @@ export const en = {
     explicacao:
       'Temporary: the real editor and engine, before the mission screen exists (step 12). Try making mistakes on purpose.',
     desafio: 'Test challenge: the 5 most populous countries in 2023, largest first, aggregates left out.',
+    raioX: 'Test X-ray: pick a mission.',
+    missao: 'Mission',
   },
 
   vitrine: {

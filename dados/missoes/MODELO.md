@@ -40,6 +40,12 @@ export const missoes = [
 
     // O exemplo mínimo do conceito — em inglês; traduzido na hora.
     exemplo: 'SELECT DISTINCT income_group FROM countries',
+    // Com apelido ou comentário, que o tradutor não traduz, escreva os dois
+    // idiomas à mão, cada um com os seus nomes (vale também para raioX[].sql):
+    //   exemplo: {
+    //     pt: 'SELECT titulo, orcamento_usd / 1000000 AS orcamento_milhoes FROM projetos',
+    //     en: 'SELECT title, budget_usd / 1000000 AS budget_millions FROM projects',
+    //   },
 
     // O Raio-X: o mesmo exemplo, etapa por etapa, na ordem LÓGICA
     // (FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT).
@@ -91,6 +97,19 @@ export const missoes = [
   },
 ];
 ```
+
+## O Raio-X
+
+- Na ordem **lógica** de execução: `FROM → WHERE → GROUP BY → HAVING → SELECT → DISTINCT
+  → ORDER BY → LIMIT`.
+- **Cada etapa muda uma coisa só** em relação à anterior.
+- `WHERE`, `DISTINCT`, `ORDER BY` e `LIMIT` mantêm **as mesmas colunas** da etapa de
+  antes (por isso a etapa `WHERE` é um `SELECT * … WHERE …`): é o que deixa o
+  `raio-x.js` casar as linhas e animar quem sai e quem fica.
+- `GROUP BY`: a etapa ordena pela chave do grupo e põe a chave na **primeira coluna** —
+  uma linha separa um bloco do outro.
+- Tabelas grandes aparecem com 12 linhas; antes de um filtro, o Raio-X mistura linhas
+  que passam e que não passam, para o filtro se ver acontecendo.
 
 ## Os tipos
 

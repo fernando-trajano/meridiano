@@ -214,7 +214,8 @@ e a data da coleta.
 As 7 etapas, na ordem: **pedido → olhe os dados → conceito + Raio-X → palpite → tente
 você → variação sem ajuda → entrega**.
 
-**Raio-X.** A consulta de exemplo é mostrada na ordem **lógica** de execução
+**Raio-X** (`js/raio-x.js`, passo 11; regras de escrita no `MODELO.md`). A consulta de
+exemplo é mostrada na ordem **lógica** de execução
 (`FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT`), uma etapa por vez, sobre
 uma tabela pequena:
 
@@ -719,7 +720,15 @@ no painel de navegador do app e conferir, conforme o passo:
       conferido na base; os 39 gabaritos dão o mesmo resultado em PT e EN. No caminho:
       corrigidos os grupos de renda vazios no `baixar_dados.py`, o `=` virou recurso
       próprio (separado das outras comparações) e as dicas passaram a aceitar SQL
-- [ ] **Passo 11** — `raio-x.js`
+- [x] **Passo 11** — `raio-x.js` e `raio-x.css`: cada etapa é o resultado real do
+      motor; animações de filtro (apagam / ganham a cor do WHERE), colunas (SELECT),
+      fusão (DISTINCT), deslize (ORDER BY), corte (LIMIT) e blocos (GROUP BY), numa
+      mecânica só (FLIP); 12 linhas na tela, com mistura de "passa / não passa" antes de
+      um filtro; sem animação com movimento reduzido; troca de idioma refaz a etapa no
+      lugar. Exemplos e etapas com apelido ou comentário agora podem vir como `{ pt, en }`
+      (m1-01, m1-03 e m1-05 reescritos). A linha ligando as chaves do JOIN fica para
+      quando o módulo 5 for escrito. A bancada ganhou um seletor com o Raio-X das 15
+      missões que o têm
 - [ ] **Passo 12** — tela de missão · 🛑 Safari
 - [ ] **Passo 13** — entrega e progresso
 - [ ] **Passo 14** — trilha

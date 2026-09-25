@@ -30,10 +30,21 @@ export const missoes = [
       pt: 'AS dá um apelido a uma coluna do resultado: o dado continua o mesmo, só muda o nome no cabeçalho. SELECT nome_indicador AS indicador FROM indicadores. Um apelido com espaço vai entre aspas duplas: AS "nome do indicador".',
       en: 'AS gives a result column a nickname: the data stays the same, only the header changes. SELECT indicator_name AS indicator FROM indicators. A nickname with spaces goes in double quotes: AS "indicator name".',
     },
-    exemplo: 'SELECT indicator_name AS indicator, unit AS measured_in FROM indicators',
+    // Com apelidos, o exemplo vem escrito nos dois idiomas (o tradutor não
+    // traduz apelidos).
+    exemplo: {
+      pt: 'SELECT nome_indicador AS indicador, unidade AS medido_em FROM indicadores',
+      en: 'SELECT indicator_name AS indicator, unit AS measured_in FROM indicators',
+    },
     raioX: [
       { etapa: 'FROM', sql: 'SELECT * FROM indicators' },
-      { etapa: 'SELECT', sql: 'SELECT indicator_name AS indicator, unit AS measured_in FROM indicators' },
+      {
+        etapa: 'SELECT',
+        sql: {
+          pt: 'SELECT nome_indicador AS indicador, unidade AS medido_em FROM indicadores',
+          en: 'SELECT indicator_name AS indicator, unit AS measured_in FROM indicators',
+        },
+      },
     ],
     palpite: {
       pergunta: { pt: 'O que o AS muda no resultado do exemplo?', en: 'What does AS change in the example’s result?' },
@@ -152,10 +163,19 @@ export const missoes = [
       pt: 'Colunas de números aceitam contas: + soma, - subtrai, * multiplica e / divide. A conta é feita linha por linha, e o resultado vira uma coluna nova — com AS, ela ganha um nome legível. SELECT titulo, orcamento_usd / 1000000 AS milhoes FROM projetos.',
       en: 'Number columns accept arithmetic: + adds, - subtracts, * multiplies and / divides. The calculation runs row by row, and the result becomes a new column — with AS, it gets a readable name. SELECT title, budget_usd / 1000000 AS millions FROM projects.',
     },
-    exemplo: 'SELECT title, budget_usd / 1000000 AS budget_millions FROM projects',
+    exemplo: {
+      pt: 'SELECT titulo, orcamento_usd / 1000000 AS orcamento_milhoes FROM projetos',
+      en: 'SELECT title, budget_usd / 1000000 AS budget_millions FROM projects',
+    },
     raioX: [
       { etapa: 'FROM', sql: 'SELECT * FROM projects' },
-      { etapa: 'SELECT', sql: 'SELECT title, budget_usd / 1000000 AS budget_millions FROM projects' },
+      {
+        etapa: 'SELECT',
+        sql: {
+          pt: 'SELECT titulo, orcamento_usd / 1000000 AS orcamento_milhoes FROM projetos',
+          en: 'SELECT title, budget_usd / 1000000 AS budget_millions FROM projects',
+        },
+      },
     ],
     palpite: {
       pergunta: { pt: 'No exemplo, um projeto de 1.080.000 dólares aparece como…', en: 'In the example, a project of 1,080,000 dollars shows up as…' },
@@ -272,12 +292,15 @@ export const missoes = [
       pt: 'Tudo o que vem depois de dois hífens (--), até o fim da linha, é comentário: o DuckDB ignora. Serve para explicar a consulta a quem for ler depois — inclusive você, daqui a um mês. Também serve para desligar uma linha sem apagá-la.',
       en: 'Everything after two hyphens (--), up to the end of the line, is a comment: DuckDB ignores it. It explains the query to whoever reads it later — including you, a month from now. It also switches a line off without deleting it.',
     },
-    // O comentário do exemplo está nos dois idiomas: o tradutor não mexe em
-    // comentários, e o exemplo é o mesmo para todo mundo.
-    exemplo: '-- All regions · Todas as regiões\nSELECT * FROM regions',
+    // Com comentário, o exemplo vem escrito nos dois idiomas (o tradutor não
+    // traduz comentários).
+    exemplo: {
+      pt: '-- Todas as regiões\nSELECT * FROM regioes',
+      en: '-- All regions\nSELECT * FROM regions',
+    },
     raioX: [
       { etapa: 'FROM', sql: 'SELECT * FROM regions' },
-      { etapa: 'SELECT', sql: '-- All regions · Todas as regiões\nSELECT * FROM regions' },
+      { etapa: 'SELECT', sql: { pt: '-- Todas as regiões\nSELECT * FROM regioes', en: '-- All regions\nSELECT * FROM regions' } },
     ],
     palpite: {
       pergunta: { pt: 'O que o DuckDB faz com a linha que começa com --?', en: 'What does DuckDB do with the line that starts with --?' },

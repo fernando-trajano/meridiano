@@ -77,6 +77,7 @@
   <link rel="stylesheet" href="./css/base.css">
   <link rel="stylesheet" href="./css/componentes.css">
   <link rel="stylesheet" href="./css/editor.css">
+  <link rel="stylesheet" href="./css/raio-x.css">
   <link rel="stylesheet" href="./css/telas.css">
 </head>
 <body>
@@ -183,6 +184,16 @@
       <p data-i18n="bancada.desafio">Desafio de teste: os 5 países mais populosos de 2023, do maior para o menor, sem os agregados.</p>
       <div id="bancada-editor"></div>
       <div class="bancada-resultado" id="bancada-resultado" aria-live="polite"></div>
+
+      <!-- PROVISÓRIO (passo 11): o Raio-X de cada missão, para ver antes da
+           tela de missão existir. -->
+      <div class="bancada-raiox">
+        <label class="bancada-rotulo">
+          <span data-i18n="bancada.raioX">Raio-X de teste: escolha uma missão.</span>
+          <select id="bancada-missao"></select>
+        </label>
+        <div id="bancada-raiox"></div>
+      </div>
     </section>
 
   </main>

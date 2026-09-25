@@ -25,7 +25,7 @@ import { modulos, carregarModulo } from './indice.js';
 import { personagens } from '../personagens.js';
 import { dicionario } from '../base/dicionario.js';
 import { recursosUsados, normalizarRecurso, compararResultados } from '../../js/conferir.js';
-import { separar, traduzirSQL } from '../../js/traducao-sql.js';
+import { separar, traduzirSQL, sqlEmIngles } from '../../js/traducao-sql.js';
 
 const TIPOS = ['missao', 'revisao', 'desafio', 'projeto'];
 const LIMITE_DE_PALAVRAS = 80;
@@ -107,7 +107,7 @@ export function conferirSemMotor(lista) {
 
       // A amostra ("Olhe os dados") fica de fora: quem a mostra é o sistema,
       // e ela sempre usa LIMIT 5, ensinado ou não.
-      for (const { rotulo, sql } of consultasDaMissao(missao).filter((c) => c.rotulo !== 'a amostra')) {
+      for (const { rotulo, sql } of consultasDaMissao(missao).filter((c) => !c.rotulo.startsWith('a amostra'))) {
         for (const recurso of recursosUsados(sql)) {
           if (!ensinados.has(recurso)) {
             avisos.push(`${onde(missao)}: [3] ${rotulo} usa ${recurso}, que ainda não foi ensinado.`);
@@ -165,7 +165,7 @@ function conferirEstrutura(missao) {
     exigir(Array.isArray(missao.conceitosNovos) && missao.conceitosNovos.length > 0, 'uma missão ensina pelo menos um conceito novo.');
     exigir(Array.isArray(missao.tabelas) && missao.tabelas.length > 0, 'faltam as tabelas.');
     exigir(temTexto(missao.conceito), 'falta o conceito.');
-    exigir(typeof missao.exemplo === 'string' && missao.exemplo.trim(), 'falta o exemplo.');
+    exigir(sqlEmIngles(missao.exemplo).trim(), 'falta o exemplo.');
     exigir(Array.isArray(missao.raioX) && missao.raioX.length > 0, 'falta o Raio-X.');
     exigir(missao.palpite, 'falta o palpite.');
   }
@@ -178,7 +178,7 @@ function conferirEstrutura(missao) {
   }
 
   for (const [i, etapa] of (missao.raioX ?? []).entries()) {
-    exigir(etapa.etapa && typeof etapa.sql === 'string', `raioX[${i}] precisa de etapa e sql.`);
+    exigir(etapa.etapa && sqlEmIngles(etapa.sql).trim(), `raioX[${i}] precisa de etapa e sql.`);
   }
 
   for (const [i, desafio] of (missao.desafios ?? []).entries()) {
@@ -201,12 +201,23 @@ function conferirEstrutura(missao) {
 
 /** Todas as consultas de uma missão, com um rótulo para o aviso. */
 function consultasDaMissao(missao) {
+  // Campos de SQL podem vir como texto (inglês) ou { pt, en }: as
+  // conferências olham sempre a versão em inglês.
   const consultas = [];
-  if (missao.amostra) consultas.push({ rotulo: 'a amostra', sql: missao.amostra });
-  if (missao.exemplo) consultas.push({ rotulo: 'o exemplo', sql: missao.exemplo });
-  for (const [i, etapa] of (missao.raioX ?? []).entries()) consultas.push({ rotulo: `raioX[${i}]`, sql: etapa.sql });
+  // As versões em português escritas à mão também são conferidas: traduzidas
+  // de volta para o inglês, um nome digitado errado aparece na [5].
+  const versaoPt = (rotulo, valor) => {
+    if (valor && typeof valor === 'object' && valor.pt) {
+      consultas.push({ rotulo: `${rotulo} (pt)`, sql: traduzirSQL(valor.pt, 'pt', 'en') });
+    }
+  };
+  versaoPt('o exemplo', missao.exemplo);
+  for (const [i, etapa] of (missao.raioX ?? []).entries()) versaoPt(`raioX[${i}]`, etapa.sql);
+  if (missao.amostra) consultas.push({ rotulo: 'a amostra', sql: sqlEmIngles(missao.amostra) });
+  if (missao.exemplo) consultas.push({ rotulo: 'o exemplo', sql: sqlEmIngles(missao.exemplo) });
+  for (const [i, etapa] of (missao.raioX ?? []).entries()) consultas.push({ rotulo: `raioX[${i}]`, sql: sqlEmIngles(etapa.sql) });
   for (const [i, desafio] of (missao.desafios ?? []).entries()) {
-    if (desafio.inicial) consultas.push({ rotulo: `desafios[${i}].inicial`, sql: desafio.inicial });
+    if (desafio.inicial) consultas.push({ rotulo: `desafios[${i}].inicial`, sql: sqlEmIngles(desafio.inicial) });
     consultas.push({ rotulo: `desafios[${i}].gabarito`, sql: desafio.gabarito ?? '' });
     // Esqueleto e resposta escritos como SQL em inglês também são conferidos.
     for (const [j, dica] of (desafio.dicas ?? []).entries()) {
@@ -317,9 +328,9 @@ export async function conferirComMotor(lista, { abrirBase, zerarBase, consultar,
         if (alteraDados(desafio.gabarito)) await zerarBase('en');
       }
       const outras = [
-        { rotulo: 'a amostra', sql: missao.amostra },
-        { rotulo: 'o exemplo', sql: missao.exemplo },
-        ...(missao.raioX ?? []).map((e, i) => ({ rotulo: `raioX[${i}]`, sql: e.sql })),
+        { rotulo: 'a amostra', sql: sqlEmIngles(missao.amostra) },
+        { rotulo: 'o exemplo', sql: sqlEmIngles(missao.exemplo) },
+        ...(missao.raioX ?? []).map((e, i) => ({ rotulo: `raioX[${i}]`, sql: sqlEmIngles(e.sql) })),
       ];
       for (const { rotulo, sql } of outras) {
         if (!sql) continue;
@@ -335,6 +346,19 @@ export async function conferirComMotor(lista, { abrirBase, zerarBase, consultar,
   await zerarBase('pt');
   for (const { missoes } of lista) {
     for (const missao of missoes) {
+      // [1] As versões em português escritas à mão rodam na base em português.
+      const escritasEmPt = [
+        { rotulo: 'o exemplo (pt)', valor: missao.exemplo },
+        ...(missao.raioX ?? []).map((e, i) => ({ rotulo: `raioX[${i}] (pt)`, valor: e.sql })),
+      ].filter(({ valor }) => valor && typeof valor === 'object' && valor.pt);
+      for (const { rotulo, valor } of escritasEmPt) {
+        try {
+          await consultar(valor.pt);
+        } catch (erro) {
+          avisos.push(`${missao.id}: [1] ${rotulo} dá erro: ${erro.message.split('\n')[0]}`);
+        }
+      }
+
       for (const [i, desafio] of (missao.desafios ?? []).entries()) {
         const onde = `${missao.id} desafios[${i}]`;
         const original = emIngles.get(onde);

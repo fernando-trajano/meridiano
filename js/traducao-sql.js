@@ -219,6 +219,27 @@ export function separar(sql) {
   return pedacos;
 }
 
+/**
+ * O SQL de um campo de missão (exemplo, etapa do Raio-X, amostra…) no idioma
+ * pedido. O campo pode vir de dois jeitos:
+ *   - texto: SQL escrito UMA vez, em inglês — traduzido aqui;
+ *   - { pt, en }: cada idioma escrito à mão, com os seus nomes — para quando
+ *     há apelidos ou comentários, que o tradutor não traduz (AS milhoes /
+ *     AS millions; -- Todas as regiões / -- All regions).
+ * @param {string|{pt: string, en: string}} valor
+ * @param {'pt'|'en'} idiomaAlvo
+ * @returns {string}
+ */
+export function sqlNoIdioma(valor, idiomaAlvo) {
+  if (valor && typeof valor === 'object') return valor[idiomaAlvo] ?? valor.en ?? '';
+  return traduzirSQL(valor ?? '', 'en', idiomaAlvo);
+}
+
+/** A versão em inglês de um campo de SQL de missão (para as conferências). */
+export function sqlEmIngles(valor) {
+  return valor && typeof valor === 'object' ? valor.en ?? '' : valor ?? '';
+}
+
 /* --------------------------------------------------------------------------
    Nomes, para quem precisar (bd.js, autocompletar, cola)
    -------------------------------------------------------------------------- */

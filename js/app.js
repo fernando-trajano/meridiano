@@ -14,7 +14,7 @@ import {
 } from './i18n.js';
 import { config, definirConfig, aoMudarConfig } from './estado.js';
 import { conferirMapa } from './traducao-sql.js';
-import { ligarBancada } from './telas/bancada.js';
+import { ligarBancada, ligarRaioXDeTeste } from './telas/bancada.js';
 import { conferirConteudo } from '../dados/missoes/conferencia.js';
 import * as bd from './bd.js';
 
@@ -136,6 +136,7 @@ definirIdioma(config().idioma ?? detectarIdioma());
 
 // PROVISÓRIO: a bancada de teste do motor SQL. Sai no passo 12.
 ligarBancada();
+ligarRaioXDeTeste();
 
 // As conferências do conteúdo das missões (ver dados/missoes/conferencia.js).
 // Sem o motor, sempre — são leves. Com o motor (gabaritos rodando nas duas

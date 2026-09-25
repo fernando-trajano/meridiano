@@ -145,3 +145,26 @@
   flex-direction: column;
   gap: var(--esp-2);
 }
+
+.bancada-raiox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  margin-top: var(--esp-6);
+  padding-top: var(--esp-6);
+  border-top: var(--borda);
+}
+
+.bancada-rotulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-3);
+}
+
+.bancada-rotulo select {
+  padding: var(--esp-2) var(--esp-3);
+  border: 1px solid var(--cor-botao-secundario-borda);
+  border-radius: var(--raio-p);
+  background-color: var(--cor-fundo);
+}
