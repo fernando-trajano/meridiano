@@ -15,6 +15,7 @@ import { traduzirSQL } from '../traducao-sql.js';
 import { criarEditor } from '../editor.js';
 import { desenharResultado, desenharErro, MAX_LINHAS } from '../tabela-resultado.js';
 import { traduzirErro } from '../erros-sql.js';
+import { conferirResposta } from '../conferir.js';
 import { mostrarAbrindo } from './abrindo.js';
 
 // A consulta de exemplo, escrita uma vez em inglês — como os gabaritos.
@@ -25,6 +26,20 @@ JOIN country_year ON country_year.country_code = countries.country_code
 WHERE year = 2023 AND region_code IS NOT NULL
 ORDER BY population DESC
 LIMIT 5;`;
+
+// PROVISÓRIO (passo 9): um desafio de teste, para ver a conferência pelo
+// resultado funcionando. O mesmo pedido da consulta de exemplo — então a
+// consulta que já vem no editor está certa; é só mexer nela para errar.
+const DESAFIO_DE_TESTE = {
+  gabarito: `SELECT country_name, population
+FROM countries
+JOIN country_year ON country_year.country_code = countries.country_code
+WHERE year = 2023 AND region_code IS NOT NULL
+ORDER BY population DESC
+LIMIT 5`,
+  conferir: { ordem: true },
+  exige: ['ORDER BY'],
+};
 
 export function ligarBancada() {
   const lugarDoEditor = document.querySelector('#bancada-editor');
@@ -52,6 +67,13 @@ export function ligarBancada() {
     try {
       const resultado = await consultar(sql, { maxLinhas: MAX_LINHAS });
       desenharResultado(saida, resultado);
+
+      // A conferência do desafio de teste, logo abaixo do resultado.
+      const veredito = await conferirResposta(resultado, sql, DESAFIO_DE_TESTE);
+      const linha = document.createElement('p');
+      linha.className = veredito.certo ? 'conferencia-certa' : 'conferencia-errada';
+      linha.innerHTML = veredito.mensagem;
+      saida.prepend(linha);
     } catch (erro) {
       const traduzido = traduzirErro(erro.message, { sql, idiomaDaBase: idiomaDaBase() });
       desenharErro(saida, traduzido);

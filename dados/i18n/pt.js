@@ -72,6 +72,26 @@ export const pt = {
     original: 'Mensagem original do DuckDB',
   },
 
+  // A conferência pelo resultado (js/conferir.js). {recurso} chega como código.
+  conferir: {
+    certo: 'Resultado certo.',
+    colunasAMais: 'Seu resultado tem {aluno}; o pedido pede {esperado}. Sobrou coluna no SELECT.',
+    colunasAMenos: 'Seu resultado tem {aluno}; o pedido pede {esperado}. Faltou coluna no SELECT.',
+    linhasAMais: 'Seu resultado tem {aluno}; o pedido tem {esperado}. Faltou algum filtro?',
+    linhasFaltando: 'Seu resultado tem {aluno}; o pedido tem {esperado}. O filtro não ficou apertado demais?',
+    linhasVazio: 'Seu resultado veio vazio; o pedido tem {esperado}. O filtro não ficou apertado demais?',
+    colunaDiferente: 'O número de linhas bate, mas os valores da coluna {posicao} não são os esperados. Confira essa coluna do SELECT — e o filtro.',
+    linhasDiferentes: 'O número de linhas bate, mas {quantas} delas não são as esperadas. Confira o filtro.',
+    linhasDiferentesUma: 'O número de linhas bate, mas uma delas não é a esperada. Confira o filtro.',
+    ordem: 'As linhas estão certas, mas na ordem errada. Confira o ORDER BY.',
+    faltaRecurso: 'O resultado está certo, mas esta missão pede que você use {recurso}.',
+    // Singular e plural das contagens acima.
+    umaColuna: '1 coluna',
+    nColunas: '{n} colunas',
+    umaLinha: '1 linha',
+    nLinhas: '{n} linhas',
+  },
+
   // Os erros do DuckDB traduzidos (js/erros-sql.js). {nome}, {trecho} etc.
   // chegam já formatados como código.
   erros: {
@@ -149,6 +169,7 @@ export const pt = {
     titulo: 'Bancada de teste',
     explicacao:
       'Provisório: o editor e o motor de verdade, antes de existir a tela de missão (passo 12). Experimente errar de propósito.',
+    desafio: 'Desafio de teste: os 5 países mais populosos de 2023, do maior para o menor, sem os agregados.',
   },
 
   // PROVISÓRIO: os textos da vitrine do passo 2. Saem junto com ela, no

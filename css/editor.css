@@ -231,3 +231,20 @@
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+/* --- O veredito da conferência -------------------------------------------------
+   Certo: texto comum, com um traço fino na cor do destaque (progresso). Errado:
+   no tom de erro. A frase diz como errou — ver conferir.js. */
+
+.conferencia-certa,
+.conferencia-errada {
+  max-width: none;
+  padding: var(--esp-2) var(--esp-4);
+  border-left: 2px solid var(--cor-destaque);
+}
+
+.conferencia-errada {
+  border-left-color: var(--cor-erro-texto);
+  background-color: var(--cor-erro-fundo);
+  color: var(--cor-erro-texto);
+}

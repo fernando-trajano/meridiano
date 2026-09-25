@@ -15,6 +15,8 @@ import {
 import { config, definirConfig, aoMudarConfig } from './estado.js';
 import { conferirMapa } from './traducao-sql.js';
 import { ligarBancada } from './telas/bancada.js';
+import { conferirConteudo } from '../dados/missoes/conferencia.js';
+import * as bd from './bd.js';
 
 const raiz = document.documentElement;
 const botaoTema = document.querySelector('#botao-tema');
@@ -134,3 +136,11 @@ definirIdioma(config().idioma ?? detectarIdioma());
 
 // PROVISÓRIO: a bancada de teste do motor SQL. Sai no passo 12.
 ligarBancada();
+
+// As conferências do conteúdo das missões (ver dados/missoes/conferencia.js).
+// Sem o motor, sempre — são leves. Com o motor (gabaritos rodando nas duas
+// bases), só com ?conferencia no endereço: quem escreve missões abre assim.
+conferirConteudo({
+  comMotor: new URLSearchParams(location.search).has('conferencia'),
+  bd,
+});

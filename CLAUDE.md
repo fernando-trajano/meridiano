@@ -414,6 +414,9 @@ Aprovadas pelo Fernando depois de uma consulta à API do Banco Mundial:
   como separador decimal —, porque é assim que o aluno vai escrevê-los num `WHERE`.
 - **Erros:** nunca a mensagem crua do DuckDB sozinha. Sempre uma frase simples com
   pista, no idioma da tela, e a original guardada para quem quiser ver.
+- **Conferência:** pelo resultado, com as regras do briefing e uma decisão do passo 9 —
+  a **ordem das colunas também não conta** (o dado é o mesmo). Números arredondados
+  exatamente como o `ROUND` do DuckDB. Detalhes no `PLANO.md`, "A missão por dentro".
 
 ## Como testar
 

@@ -63,6 +63,24 @@ export const en = {
     original: 'Original DuckDB message',
   },
 
+  conferir: {
+    certo: 'Correct result.',
+    colunasAMais: 'Your result has {aluno}; the request asks for {esperado}. There is an extra column in the SELECT.',
+    colunasAMenos: 'Your result has {aluno}; the request asks for {esperado}. A column is missing from the SELECT.',
+    linhasAMais: 'Your result has {aluno}; the request has {esperado}. Is a filter missing?',
+    linhasFaltando: 'Your result has {aluno}; the request has {esperado}. Is the filter too tight?',
+    linhasVazio: 'Your result came back empty; the request has {esperado}. Is the filter too tight?',
+    colunaDiferente: 'The number of rows matches, but the values in column {posicao} aren’t the expected ones. Check that column in the SELECT — and the filter.',
+    linhasDiferentes: 'The number of rows matches, but {quantas} of them aren’t the expected ones. Check the filter.',
+    linhasDiferentesUma: 'The number of rows matches, but one of them isn’t the expected one. Check the filter.',
+    ordem: 'The rows are right, but in the wrong order. Check the ORDER BY.',
+    faltaRecurso: 'The result is right, but this mission asks you to use {recurso}.',
+    umaColuna: '1 column',
+    nColunas: '{n} columns',
+    umaLinha: '1 row',
+    nLinhas: '{n} rows',
+  },
+
   erros: {
     ou: ' or ',
     generico: 'DuckDB couldn’t run the query.',
@@ -137,6 +155,7 @@ export const en = {
     titulo: 'Test bench',
     explicacao:
       'Temporary: the real editor and engine, before the mission screen exists (step 12). Try making mistakes on purpose.',
+    desafio: 'Test challenge: the 5 most populous countries in 2023, largest first, aggregates left out.',
   },
 
   vitrine: {

@@ -164,6 +164,7 @@ Meridiano/
 │   │   ├── escolher-colunas.js    # módulo 1 (v1)
 │   │   ├── filtrar-linhas.js      # módulo 2 (v1)
 │   │   └── …                  # módulos 3 a 9, depois da v1
+│   ├── personagens.js         # os 7 personagens: nome, monograma, cargo PT/EN, id na base
 │   ├── nivelamento.js         # os 6 desafios do nivelamento
 │   ├── cola.js                # sintaxe, funções, outros bancos, glossário
 │   └── jogos/
@@ -230,23 +231,37 @@ mostrada é sempre o resultado real, nunca um desenho à mão.
 **Dicas e estrelas.** Três degraus de dica (pista → esqueleto → resposta). 3 estrelas sem
 dica; 2 sem ver a resposta; 1 com a resposta.
 
-**Conferência pelo resultado** (`js/conferir.js`). Roda a consulta do aluno e o gabarito
-na mesma base zerada e compara os **resultados**:
+**Conferência pelo resultado** (`js/conferir.js`, passo 9). Roda o gabarito (traduzido
+para o idioma da base) e compara os **resultados**:
 
+- nomes de coluna **não** contam;
+- a **ordem das colunas também não**: se as colunas do aluno são as mesmas, em outra
+  ordem, vale — o `conferir.js` casa cada coluna esperada com uma coluna do aluno de
+  mesmo conteúdo (decisão do passo 9, além do briefing);
 - ordem das linhas só conta quando `conferir.ordem` é verdadeiro (o pedido fala em
   ordenar);
-- nomes de coluna **não** contam — só a quantidade, a ordem das colunas e os valores;
-- números comparados com `conferir.casas` casas (padrão 2);
-- `exige: ['ORDER BY']` obriga um recurso (conferido na consulta, não só no resultado);
-- ao errar, diz **como**: linhas a mais, linhas faltando, coluna diferente, ordem
-  diferente.
+- números com `conferir.casas` casas (padrão 2), arredondados **exatamente como o
+  `ROUND` do DuckDB** (conferido com 3.013 números: zero divergência) — assim quem usou
+  `ROUND` e um gabarito que não usou comparam igual; 3 e 3.0 são iguais; o número 3 e o
+  texto `'3'`, não;
+- `exige: ['ORDER BY']` obriga um recurso, conferido na consulta (fora de textos e
+  comentários): o resultado certo sem ele ouve "está certo, mas use…";
+- ao errar, diz **como**, nesta ordem: colunas a mais ou a menos → linhas a mais,
+  faltando ou vazio → qual coluna não bate → quantas linhas não são as esperadas →
+  ordem. Singular e plural certos nos dois idiomas.
+
+Para os módulos de SELECT (0 a 7 e 9), o gabarito roda na mesma base do aluno. O módulo 8,
+que altera dados, vai precisar de uma conferência pelo estado da base depois do comando —
+decisão para quando ele for escrito.
 
 ---
 
 ## Formato de uma missão (`dados/missoes/`)
 
 Contrato entre conteúdo e código. Um arquivo por módulo; missões novas são criadas
-copiando este molde (detalhado no `MODELO.md`, passo 9):
+copiando este molde. **O detalhe completo — campos, tipos, nomes canônicos dos recursos
+e regras de conteúdo — está em `dados/missoes/MODELO.md`** (passo 9); aqui fica o
+resumo:
 
 ```js
 {
@@ -282,7 +297,11 @@ seguinte.
 
 ### As cinco conferências automáticas (`dados/missoes/conferencia.js`)
 
-Rodam sobre todas as missões escritas e **avisam no console** (nunca quebram a tela):
+Rodam sobre todas as missões escritas e **avisam no console** (nunca quebram a tela). As
+3, 4 e 5 (e a estrutura) rodam sempre que o site abre; as 1 e 2 precisam do motor e só
+rodam com **`?conferencia`** no endereço (`http://localhost:8030/?conferencia`) — quem
+escreve missões abre assim. Testadas no passo 9 com um módulo de mentira cheio de erros
+plantados: cada conferência pegou os seus.
 
 1. **Todo gabarito roda** e devolve pelo menos uma linha.
 2. **O gabarito traduzido dá o mesmo resultado** na base em português.
@@ -670,7 +689,10 @@ no painel de navegador do app e conferir, conforme o passo:
       sobrevivem ao recarregar, com a regra do tema do digita (a última mudança vale, o
       sistema é a referência); gaveta corrompida é descartada sem quebrar a tela.
       `meridiano:config` já nasce com `mudo` e `formatoCsv`, para os passos 17 e 21
-- [ ] **Passo 9** — `conferir.js`, formato da missão, `conferencia.js` e `MODELO.md`
+- [x] **Passo 9** — `conferir.js` (conferência pelo resultado, dizendo como errou),
+      `dados/missoes/indice.js` (os 10 módulos), `dados/personagens.js`,
+      `conferencia.js` (as 5 conferências) e `MODELO.md`. A bancada ganhou um desafio de
+      teste com o veredito embaixo do resultado
 - [ ] **Passo 10** — conteúdo dos módulos 0 a 2 · 🛑 revisão antes de escrever
 - [ ] **Passo 11** — `raio-x.js`
 - [ ] **Passo 12** — tela de missão · 🛑 Safari
