@@ -30,9 +30,9 @@ mas a estrutura de dados já nasce pronta para recebê-los.
 | Motor SQL | **DuckDB-WASM**, versão fixada, dentro de `vendor/duckdb/` | SQL moderno completo (`QUALIFY`, `PIVOT`, janelas, `WITH RECURSIVE`) sem servidor e sem CDN |
 | Plano B do motor | **sql.js** (SQLite) | Muito mais leve; só se a medição do passo 6 mostrar que o DuckDB pesa demais |
 | Quando o motor carrega | Só nas telas com SQL (missão, laboratório, jogos) | Quem só lê a trilha ou a cola não paga o peso do motor |
-| Fontes | Source Serif 4 + JetBrains Mono, `.woff2` em `fontes/` — **aprovadas no passo 2** | Arquivos no repositório, um variável por fonte, só o subconjunto latino (82 KB) |
-| Paleta | A do briefing, com **dois ajustes aprovados no passo 2**: texto discreto claro `#6D6D76` e `GROUP BY` claro `#9D600F` | Os dois ficavam abaixo de 4,5:1 sobre a superfície, onde fica o editor |
-| Marca | Só o nome, na serifada, com o ponto na cor de destaque — sem ícone ao lado | O ponto já é a assinatura; o globo fica no favicon |
+| Fontes | **Fonte do sistema** para títulos, marca e texto; **JetBrains Mono** (`fontes/`) só para código, números, códigos e NULL | A Source Serif 4, aprovada no passo 2, saiu no redesenho depois do passo 12 |
+| Paleta | **Refeita em duas rodadas depois do passo 12** (ver `CLAUDE.md`, "Paleta"): escuro é o padrão, com brancos quentes; claro é branco com a bancada em vidro | Contraste medido em cada rodada |
+| Marca | Só o nome, na fonte do sistema (peso 600), com o ponto na cor de destaque — sem ícone ao lado | O ponto já é a assinatura; o globo fica no favicon |
 | Idioma da base | CSVs e gabaritos em inglês; nomes de tabela e coluna traduzidos na hora | Uma fonte só, sem duas bases para manter em sincronia |
 | Como testar | Claude inicia `python3 servidor.py` (porta **8030**) e abre no painel de navegador | Módulos ES não funcionam com `file://`, e o servidor padrão serve código velho do cache |
 | Escopo v1 | Fluxo completo + módulos 0 a 2 | Ver o site rodando e publicável cedo |
@@ -93,16 +93,15 @@ Meridiano/
 │   ├── tema.css               # SÓ variáveis: cores claro/escuro, cláusulas, fontes, espaços
 │   ├── fontes.css             # @font-face das fontes de fontes/
 │   ├── base.css               # reset, tipografia, moldura da página, cabeçalho, rodapé
-│   ├── componentes.css        # botões, seletor, memorando, monograma, erro, realce de SQL
-│   │                          # (e depois: lista com hover, estrelas)
-│   ├── editor.css             # editor, realce por cláusula, autocompletar
-│   ├── raio-x.css             # a tabela viva do Raio-X
+│   ├── componentes.css        # botões, painel (bancada), barra da Consulta, flutuante,
+│   │                          # tabela, selo, erro, realce de SQL
+│   ├── editor.css             # editor, autocompletar, erro e veredito
+│   ├── passo-a-passo.css      # a consulta na ordem em que o banco lê
 │   ├── telas.css              # o que é específico de cada tela
 │   └── jogos.css              # as partidas dos jogos
 │
 ├── fontes/
 │   ├── LEIA-ME.md             # origem, data, subconjunto e licença de cada fonte
-│   ├── source-serif-4/        # um .woff2 variável (400–600) + OFL.txt
 │   └── jetbrains-mono/        # um .woff2 variável (400–500) + OFL.txt
 │
 ├── vendor/
@@ -113,7 +112,8 @@ Meridiano/
 │
 ├── js/
 │   ├── app.js                 # ponto de entrada: liga tudo e mostra a 1ª tela
-│   ├── roteador.js            # troca de telas (#/inicio, #/missao/m1-03…) + View Transitions
+│   ├── roteador.js            # troca de telas (#/trilha, #/missao/m1-03…) + View Transitions
+│   ├── cabecalho.js           # o que cada tela põe no cabeçalho (contexto, "Sair")
 │   ├── armazenamento.js       # ler/gravar localStorage com prefixo "meridiano:" (do digita)
 │   ├── estado.js              # config + progresso em memória, avisa quem depende (do digita)
 │   ├── i18n.js                # idioma: detectar, trocar, traduzir a tela (do digita)
@@ -125,19 +125,22 @@ Meridiano/
 │   ├── traducao-sql.js        # troca nomes de tabela/coluna EN↔PT, nunca o que está entre aspas
 │   ├── erros-sql.js           # erro do DuckDB → frase simples com pista, PT e EN
 │   ├── conferir.js            # compara o resultado do aluno com o do gabarito e diz COMO errou
-│   ├── realce.js              # colore SQL por cláusula (editor, Raio-X, cola, jogos)
+│   ├── realce.js              # colore SQL por cláusula (editor, Passo a passo, cola, jogos)
+│   │                          # e transforma `código` do texto em selos
 │   ├── formatar-sql.js        # o botão "Formatar": só espaços, quebras e maiúsculas
 │   ├── editor.js              # editor: realce, autocompletar, atalhos, formatar
-│   ├── tabela-resultado.js    # desenha o resultado de uma consulta
-│   ├── raio-x.js              # a animação etapa por etapa
+│   ├── tabela-resultado.js    # a tabela do site inteiro (amostra, Passo a passo, resultado)
+│   ├── passo-a-passo.js       # a consulta na ordem do banco, com o efeito na amostra
+│   ├── tabelas-da-barra.js    # as tabelas da tarefa na barra da Consulta + lista de colunas
 │   ├── progresso.js           # concluir missão, estrelas, desbloqueio, sequência de dias
 │   ├── telas/
 │   │   ├── abrindo.js         # "Abrindo o observatório..." com o globo girando
 │   │   ├── entrada.js
 │   │   ├── nivelamento.js     # os 6 desafios
 │   │   ├── inicio.js          # continuar, atalhos, exportar/importar
-│   │   ├── trilha.js          # acordeão dos 10 módulos + linha do meridiano
-│   │   ├── missao.js          # as 7 etapas da missão
+│   │   ├── trilha.js          # acordeão dos 10 módulos + linha do meridiano (o visual
+│   │   │                      # chegou antes; a lógica é o passo 14)
+│   │   ├── missao.js          # as 6 etapas da missão, com a bancada
 │   │   ├── entrega.js         # resposta do personagem, estrelas, números que contam
 │   │   ├── laboratorio.js
 │   │   ├── cola.js
@@ -158,7 +161,7 @@ Meridiano/
 │   │   └── dicionario.js      # as 11 tabelas e 70 colunas: nome PT/EN, descrição, chaves
 │   ├── missoes/
 │   │   ├── indice.js          # os 10 módulos: ordem, personagem, quais estão liberados
-│   │   ├── conferencia.js     # as 5 conferências automáticas
+│   │   ├── conferencia.js     # as 6 conferências automáticas
 │   │   ├── MODELO.md          # esquema de uma missão, para escrever as próximas
 │   │   ├── primeiro-dia.js    # módulo 0 (v1)
 │   │   ├── escolher-colunas.js    # módulo 1 (v1)
@@ -190,13 +193,14 @@ o motor SQL é carregado **uma vez** e continua vivo entre uma missão e outra.
 ## Layout das telas
 
 Regras do site inteiro (as mesmas do digita): sem caixas com borda em volta das seções,
-separar por espaço e linha fina; sem sombras e sem gradientes; conteúdo centralizado até
+separar por espaço e linha fina; sem sombras e sem gradientes (a única exceção é o vidro
+da bancada no tema claro — ver `CLAUDE.md`); conteúdo centralizado até
 **1100px** (`--largura-max`); laterais vazias.
 
 | Tela | Colunas em tela larga |
 |---|---|
 | **Início** e **Trilha** | Duas: conteúdo no centro · painel de progresso à direita (sequência de dias, missões de 77, conceitos que mais escapam). Sem menu lateral, como no digita. Na trilha, a linha do meridiano corre ao lado do acordeão. |
-| **Missão** | Duas: história à esquerda (**40%**) · editor em cima e resultado embaixo à direita (**60%**) |
+| **Missão** | Em cima, a linha do meridiano com as 6 etapas. Embaixo, duas: texto à esquerda (210–260px, no fundo da página) · **bancada** à direita, num painel (seções com barra e aba). Cabe em 1280×800 sem rolar a página; a bancada rola por dentro |
 | **Laboratório** | Editor e resultado ocupando a largura; tabelas e histórico acessíveis sem sair da tela |
 | **Cola** | Uma coluna de leitura, com índice das seções |
 | **Entrada**, **Nivelamento**, **Jogos** | Uma coluna centralizada, laterais vazias |
@@ -211,23 +215,21 @@ e a data da coleta.
 
 ## A missão por dentro
 
-As 7 etapas, na ordem: **pedido → olhe os dados → conceito + Raio-X → palpite → tente
-você → variação sem ajuda → entrega**.
+As 6 etapas, na ordem (desde o redesenho depois do passo 12): **pedido → conceito →
+palpite → tente você → sem ajuda → entrega**. A antiga "olhe os dados" virou a amostra da
+tabela, na bancada do Pedido. Revisão e desafio final pulam conceito e palpite.
 
-**Raio-X** (`js/raio-x.js`, passo 11; regras de escrita no `MODELO.md`). A consulta de
-exemplo é mostrada na ordem **lógica** de execução
-(`FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT`), uma etapa por vez, sobre
-uma tabela pequena:
-
-- `WHERE`: as linhas que não passam **apagam**; as que passam ganham **fundo translúcido
-  da cor do `WHERE`** (a única exceção à regra "cor de cláusula só nas letras", porque
-  aqui a cor marca linhas de dados, não texto);
-- `GROUP BY`: as linhas se **juntam em blocos**;
-- `JOIN`: uma **linha fina liga as chaves** das duas tabelas;
-- com `prefers-reduced-motion`, as etapas trocam sem animação.
-
-Cada etapa é um SQL de verdade (`raioX: [{ etapa, sql }]`) rodado no motor — a tabela
-mostrada é sempre o resultado real, nunca um desenho à mão.
+**Passo a passo** (`js/passo-a-passo.js`; substituiu o Raio-X no redesenho). O código do
+exemplo aparece na ordem **normal**; o destaque segue a ordem em que o banco lê
+(`FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT`, só as cláusulas
+que existem). A linha ativa fica inteira, com um véu de fundo e uma borda de 2px na cor da
+cláusula; as outras, a 40%. Embaixo, a frase da missão para aquela cláusula
+(`passoAPasso: { FROM: {pt, en}, … }`) e, no 1º passo, a nota "o banco começa por aqui".
+A tabela é uma amostra de 5 a 8 linhas da tabela do `FROM`, com o efeito calculado sobre
+os dados reais: no `WHERE` as linhas descartadas ficam a 18%; no `SELECT`, as colunas não
+pedidas (e, com `DISTINCT`, as linhas repetidas); o `ORDER BY` reordena; o `LIMIT` apaga
+o que passa do limite. Transição de 0,45 s. Com `JOIN`, por enquanto, só destaque e frase
+(volta quando o módulo 5 for escrito).
 
 **Dicas e estrelas.** Três degraus de dica (pista → esqueleto → resposta). 3 estrelas sem
 dica; 2 sem ver a resposta; 1 com a resposta.
@@ -270,18 +272,20 @@ resumo:
   tipo: 'missao',                    // missao | revisao | desafio | projeto
   titulo: { pt: '…', en: '…' },
   personagem: 'kofi',
-  pedido: { pt: '…', en: '…' },      // o memorando
+  pedido: { pt: '…', en: '…' },      // o pedido do personagem
+  resumo: { pt: '…', en: '…' },      // uma linha que lembra o pedido, no conceito
   conceitosNovos: ['DISTINCT'],
-  tabelas: ['countries'],            // sempre em inglês
-  conceito: { pt: '…', en: '…' },    // no máximo 80 palavras
+  tabelas: ['countries'],            // sempre em inglês (a amostra do Pedido)
+  conceito: { pt: '…', en: '…' },    // no máximo 80 palavras; "no exemplo ao lado" + peças
   exemplo: 'SELECT DISTINCT …',      // em inglês; traduzido na hora
-  raioX: [{ etapa: 'FROM', sql: '…' }, { etapa: 'SELECT', sql: '…' }],
+  passoAPasso: { FROM: { pt, en }, SELECT: { pt, en } },  // uma frase por cláusula
   palpite: { pergunta: { pt, en }, opcoes: [ … ], correta: 1 },
   desafios: [
     {
       enunciado: { pt: '…', en: '…' },
       inicial: 'SELECT …',           // o começo já escrito (vazio na variação sem ajuda)
       gabarito: 'SELECT …',          // UMA vez, em inglês
+      tabelas: ['countries'],        // as tabelas do gabarito (aparecem na barra da Consulta)
       conferir: { ordem: false, casas: 2 },
       exige: [],
       dicas: [{ pt, en }, { pt, en }, { pt, en }]   // pista, esqueleto, resposta
@@ -296,12 +300,13 @@ Os 10 módulos ficam declarados em `indice.js` com a contagem final (3 · 8 · 9
 segue o ritmo **missões → revisão misturada → desafio final**, e o desafio libera o módulo
 seguinte.
 
-### As cinco conferências automáticas (`dados/missoes/conferencia.js`)
+### As seis conferências automáticas (`dados/missoes/conferencia.js`)
 
 Rodam sobre todas as missões escritas e **avisam no console** (nunca quebram a tela). As
-3, 4 e 5 (e a estrutura) rodam sempre que o site abre; as 1 e 2 precisam do motor e só
-rodam com **`?conferencia`** no endereço (`http://localhost:8030/?conferencia`) — quem
-escreve missões abre assim. Testadas no passo 9 com um módulo de mentira cheio de erros
+3 a 6 (e a estrutura) rodam sempre que o site abre; as 1 e 2 precisam do motor e só
+rodam com **`?conferencia`** no endereço, **na trilha** (`http://localhost:8030/?conferencia`)
+— quem escreve missões abre assim. Dentro de uma missão elas não rodam: a missão zera a
+base no meio das consultas. Testadas no passo 9 com um módulo de mentira cheio de erros
 plantados: cada conferência pegou os seus.
 
 1. **Todo gabarito roda** e devolve pelo menos uma linha.
@@ -310,7 +315,10 @@ plantados: cada conferência pegou os seus.
    dela somados aos de todas as missões anteriores.
 4. **Nenhum conceito passa de 80 palavras** (nos dois idiomas).
 5. **Todo texto tem `pt` e `en`**, e **toda tabela e coluna** usada está no
-   `dicionario.js`.
+   `dicionario.js` — inclusive dentro dos selos (`` `nome_pais` ``) dos textos, no idioma
+   certo (apelidos depois do `AS` ficam de fora).
+6. **As tabelas de cada desafio** (`desafios[].tabelas`) são exatamente as que o gabarito
+   usa (ajustes de design, rodada 2).
 
 É a rede de segurança para quando as outras 57 missões forem escritas.
 
@@ -392,12 +400,12 @@ o Fernando.
 | 6 | Publicar no GitHub Pages e medir | O site no endereço real, com peso e tempo de carga do motor medidos · **🛑 Claude guia, Fernando publica; decidir se fica o DuckDB ou vai o plano B** |
 | 7 | Editor, resultado e erros (`realce.js`, `editor.js`, `tabela-resultado.js`, `erros-sql.js`) | Escrever, rodar com Cmd/Ctrl+Enter, ver o resultado e o erro traduzido · **🛑 teste no Safari** |
 | 8 | `armazenamento.js` + `estado.js` | Idioma e tema sobrevivem ao recarregar |
-| 9 | `conferir.js` + formato da missão + `conferencia.js` + `MODELO.md` | Conferência pelo resultado dizendo como errou; as 5 conferências no console |
+| 9 | `conferir.js` + formato da missão + `conferencia.js` + `MODELO.md` | Conferência pelo resultado dizendo como errou; as conferências no console (5 no passo 9; 6 desde a rodada 2 de design) |
 | 10 | Conteúdo dos módulos 0 a 2 | 20 missões escritas · **🛑 revisão dos pedidos e gabaritos ANTES de escrever** |
-| 11 | `raio-x.js` | A tabela viva, etapa por etapa |
-| 12 | Tela de **missão** | As 7 etapas, dicas, 40/60 · **🛑 teste no Safari** |
+| 11 | `raio-x.js` (virou `passo-a-passo.js` no redesenho) | A tabela viva, etapa por etapa |
+| 12 | Tela de **missão** | As 7 etapas (6 desde o redesenho), dicas · **🛑 teste no Safari** |
 | 13 | **Entrega** e `progresso.js` | Estrelas, números que contam, ponto da marca pulsando, desbloqueio |
-| 14 | Tela de **trilha** | Acordeão dos 10 módulos, 7 "em breve", linha do meridiano |
+| 14 | Tela de **trilha** | O visual já chegou no redesenho; falta a lógica: desbloqueio, progresso e sequência de verdade |
 | 15 | **Entrada** e **nivelamento** | Os 6 desafios que liberam o que o aluno já sabe |
 | 16 | Tela de **início** | Continuar, atalhos com hover e ilustração, painel à direita |
 | 17 | **Laboratório** | Base inteira, importar/exportar CSV, histórico, favoritas, link com a consulta |
@@ -573,6 +581,36 @@ inteiro; a segunda abriu da gaveta, sem nenhum pedido à rede e sem nada fora do
 - **Medições locais** (no Mac, sem rede): abertura completa em ~0,6 s; consulta de
   exemplo em 17 ms. As medições de verdade são as do passo 6.
 
+## A tela de missão, como ficou no passo 12
+
+> **Atenção:** o layout abaixo foi **substituído** no "Redesenho depois do passo 12" e nos
+> "Ajustes de design — rodada 2" (seções no fim deste arquivo). Continuam valendo: o
+> roteador, as dicas, as estrelas, a troca de idioma no meio e a base zerada.
+
+- **Endereço:** `#/missao/m1-03`. O roteador (`roteador.js`) troca as telas pelo `#`: o
+  botão Voltar funciona, dá para mandar o link de uma missão, e o foco vai para o título
+  da tela nova. Uma missão que não existe mostra um aviso; um endereço qualquer cai no
+  início.
+- **Duas colunas:** história à esquerda (40%) — o memorando sempre no topo, a etapa de
+  agora embaixo —; bancada à direita — tabelas, dados, Raio-X, editor e resultado. Em
+  tela estreita, uma coluna só e um aviso discreto recomendando o computador.
+- **As etapas** aparecem numa barra no topo, a de agora marcada na cor de destaque
+  (item ativo); dá para voltar a uma etapa já vista, mas não pular para a frente — um
+  desafio só libera a etapa seguinte quando a conferência diz "certo".
+- **Tipos:** `missao` tem as 7 etapas; `revisao` e `desafio` vão do pedido direto aos
+  desafios (Desafio 1, 2, 3).
+- **Palpite:** a escolhida errada fica riscada, a certa marcada, e o exemplo roda de
+  verdade ao lado.
+- **Dicas:** pista → esqueleto → resposta, com confirmação antes da resposta ("vale 1
+  estrela") e um botão para levá-la ao editor.
+- **Estrelas:** o maior degrau de dica usado em qualquer desafio da missão — nenhum = 3,
+  pista ou esqueleto = 2, resposta = 1. Salvar, animar e desbloquear é o passo 13.
+- **Idioma no meio da missão:** os textos trocam no lugar; o editor traduz a consulta
+  sozinho; cada consulta guardada lembra em que idioma está e é traduzida ao voltar a
+  ela; o resultado roda de novo.
+- **Base zerada** ao entrar em cada missão.
+- A bancada provisória saiu; o `index.html` voltou a ter só a reserva da abertura.
+
 ## O editor, o resultado e os erros, como ficaram no passo 7
 
 - **Editor** (`editor.js`): um `<textarea>` de verdade, com o texto transparente, por
@@ -659,7 +697,7 @@ no painel de navegador do app e conferir, conforme o passo:
 4. **Base zerada** — um `DELETE` numa missão não aparece na missão seguinte.
 5. **Conferência** — uma resposta certa escrita de outro jeito passa; uma errada diz
    como errou.
-6. **Conferências de conteúdo** — as 5 passam no console.
+6. **Conferências de conteúdo** — as 6 passam no console (abrir `?conferencia` na trilha).
 7. **Salvamento** — concluir uma missão, recarregar e o progresso continuar lá; exportar
    e importar o backup.
 8. **Movimento** — com "reduzir movimento" ligado no sistema, nada anima.
@@ -729,7 +767,67 @@ no painel de navegador do app e conferir, conforme o passo:
       (m1-01, m1-03 e m1-05 reescritos). A linha ligando as chaves do JOIN fica para
       quando o módulo 5 for escrito. A bancada ganhou um seletor com o Raio-X das 15
       missões que o têm
-- [ ] **Passo 12** — tela de missão · 🛑 Safari
+- [x] **Passo 12** — tela de missão (`telas/missao.js`), roteador (`roteador.js`) e
+      início provisório com a lista das missões; a bancada de teste saiu · ✅ **testado
+      no Safari pelo Fernando**: as 7 etapas, palpite, desafio certo e errado, as 3 dicas
+      com confirmação, entrega com estrelas, troca de idioma no meio e o botão Voltar
+
+### Redesenho depois do passo 12
+
+O layout do passo 12 ficou desproporcional. Antes do passo 13, a missão, o Raio-X e a
+trilha foram redesenhados a partir de três modelos em HTML (aprovados e depois apagados de
+`rascunhos/referencial/`). Testado no Safari pelo Fernando.
+
+- [x] **Tipografia e tema** — sai a Source Serif 4 (arquivos, `@font-face`, preload); tudo
+      na fonte do sistema, títulos a 600 com `-0.02em`; mono só em código, números,
+      códigos e NULL. O site abre no **escuro**; o claro vale só por escolha, salva em
+      `meridiano:config`. Tokens novos: `--cor-painel` e `--cor-codigo`
+- [x] **Cabeçalho numa linha** — marca · contexto discreto ("Módulo 0 · Missão 2 de 3") ·
+      PT · EN · tema · Sair (`js/cabecalho.js`)
+- [x] **Missão em 6 etapas** — pedido · conceito · palpite · tente você · sem ajuda ·
+      entrega, na linha do meridiano horizontal (só as visitadas clicáveis); texto à
+      esquerda (no máximo 3 coisas por etapa, um só botão principal), bancada à direita
+      num painel; o personagem aparece só no Pedido; saíram "Do começo" e "Etapa
+      anterior"; cabe em 1280×800 sem rolar a página. Campo novo `resumo` nas 15 missões
+      do tipo `missao`
+- [x] **Passo a passo** no lugar do Raio-X (renomeado em todo lugar; `raioX` →
+      `passoAPasso`, com uma frase por cláusula): código na ordem normal, destaque na
+      ordem do banco, efeito calculado numa amostra de 5 a 8 linhas
+- [x] **Tabelas** — fonte do sistema a 13px, mono só em número/código/NULL, números à
+      direita, uma linha por registro com "…" e `title`, layout fixo, sem listras,
+      rolagem lateral só quando não cabe
+- [x] **Trilha** (o visual do passo 14) — título, Continuar com a próxima missão, linha do
+      meridiano vertical com um traço por módulo, acordeão (o módulo atual aberto; "em
+      breve" apagado), pontos por missão, painel à direita. O início provisório saiu: o
+      início leva à trilha
+- [x] **Módulo 4:** sai do plano a missão separada sobre "a ordem em que o banco lê" — o
+      Passo a passo mostra isso em toda missão. Fica só uma explicação curta de por que um
+      apelido do `SELECT` não funciona no `WHERE`
+- [x] Corrigido: trocar o idioma e abrir outra missão ao mesmo tempo misturava as
+      recargas da base — agora elas entram numa fila (`bd.js`)
+
+### Ajustes de design — rodada 2
+
+Ajustes finos pedidos pelo Fernando depois do redesenho. Testado no Safari pelo Fernando.
+
+- [x] **Globo** da tela de carregamento refeito: elipses sempre centradas, giro pela
+      largura (`rx = 80 × |cos(θ + defasagem)|`) em `requestAnimationFrame`, tudo recortado
+      pelo círculo; parado com movimento reduzido
+- [x] **Foco:** sem anel no título que recebe foco pelo código (`[tabindex="-1"]`); abas
+      da bancada sem seleção de texto
+- [x] **Tabelas visíveis:** cada desafio declara `tabelas`; 6ª conferência automática;
+      cabeçalho nunca cortado (cada coluna com pelo menos a largura do nome; número,
+      código e data com a largura do maior valor); esqueleto e resposta formatados
+- [x] **Selos:** código no texto corrido entre crases vira selo; textos das 20 missões e
+      do i18n marcados; os 15 conceitos reescritos ("no exemplo ao lado" + peças)
+- [x] **Escuro:** só os brancos esquentaram
+- [x] **Claro refeito:** branco, bancada e flutuantes em vidro (única exceção a "sem
+      sombras e sem desfoque"), destaque em duas versões (linha/texto), `GROUP BY` coral;
+      a linha ativa do Passo a passo acende em vez de escurecer, para manter 4,5:1
+- [x] **Barra da Consulta:** Consulta · tabelas (pontilhado, lista de colunas flutuante,
+      "ver 5 linhas") · ícone Formatar (⇧⌥F) · Rodar (com o atalho no `title`)
+- [x] Conferência com o motor só na trilha (dentro de uma missão dava avisos falsos)
+
 - [ ] **Passo 13** — entrega e progresso
 - [ ] **Passo 14** — trilha
 - [ ] **Passo 15** — entrada e nivelamento

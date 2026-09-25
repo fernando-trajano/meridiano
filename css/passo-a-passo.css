@@ -1,0 +1,56 @@
+/* ==========================================================================
+   passo-a-passo.css — a consulta na ordem em que o banco a lê.
+   Só usa variáveis do tema.css. (Substituiu o raio-x.css no redesenho
+   depois do passo 12.)
+
+   A linha ativa: inteira, com um véu de fundo (--cor-linha-ativa) e uma
+   borda de 2px na cor da cláusula. As outras: a 40%. Na tabela, o que o
+   passo descartou fica a 18% (ver .apagada, em componentes.css).
+   ========================================================================== */
+
+.passo {
+  /* O painel inteiro é o Passo a passo. */
+  min-height: 0;
+}
+
+.passo-codigo {
+  padding: 10px 4px;
+  line-height: 1.7;
+}
+
+.passo-linha {
+  display: block;
+  padding: 1px 10px;
+  border-left: 2px solid transparent;
+  opacity: 0.4;
+  transition: opacity 300ms ease, background-color 300ms ease, border-color 300ms ease;
+}
+
+.passo-linha--ativa {
+  border-left-color: var(--cor-linha, var(--cor-texto-discreto));
+  background-color: var(--cor-linha-ativa);
+  opacity: 1;
+}
+
+.passo-legenda {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  border-top: var(--borda);
+  border-bottom: var(--borda);
+}
+
+.passo-frase {
+  max-width: none;
+  font-size: 14px;
+}
+
+.passo-nota {
+  max-width: none;
+  margin-top: 2px;
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+.passo-quadro {
+  flex: 0 1 auto;
+}

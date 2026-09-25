@@ -3,46 +3,6 @@
    Só usa variáveis do tema.css.
    ========================================================================== */
 
-/* --- Vitrine provisória (passo 2) ----------------------------------------
-   Só existe para conferir a paleta e as fontes. Sai no passo 15, junto com
-   a vitrine do index.html.
-   ----------------------------------------------------------------------- */
-
-.vitrine-abertura {
-  gap: var(--esp-4);
-  padding-top: 0;
-}
-
-.vitrine-abertura .grupo-botoes {
-  margin-top: var(--esp-3);
-}
-
-/* As proporções da tela de missão: história 40%, código 60%. */
-.vitrine-missao {
-  display: grid;
-  grid-template-columns: minmax(0, var(--largura-historia)) minmax(0, 1fr);
-  gap: var(--esp-6);
-  align-items: start;
-}
-
-.vitrine-historia {
-  display: flex;
-  flex-direction: column;
-  gap: var(--esp-3);
-}
-
-.vitrine-codigo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--esp-3);
-}
-
-@media (max-width: 52rem) {
-  .vitrine-missao {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
 /* --- Abrindo o observatório ----------------------------------------------
    Cobre a área abaixo do cabeçalho enquanto o motor SQL carrega. O "top" é
    posto pelo JavaScript, na altura exata do fim do cabeçalho.
@@ -69,9 +29,13 @@
   opacity: 0;
 }
 
+/* O globo: centrado, alinhado com o texto de baixo. O giro é do
+   ilustracoes.js (animarGlobo). */
 .abrindo-globo {
+  display: block;
   width: 7.5rem;
   height: 7.5rem;
+  margin: 0 auto;
   color: var(--cor-texto-secundario);
 }
 
@@ -102,69 +66,684 @@
   color: var(--cor-texto-secundario);
 }
 
-/* --- O globo girando --------------------------------------------------------
-   Cada meridiano é uma elipse que se estreita até virar uma linha e se alarga
-   de novo (scaleX de 1 a -1 e volta). Com os quatro defasados, parece que o
-   globo gira. Oito segundos por volta: devagar, de propósito.
+/* --- Missão -------------------------------------------------------------------
+   Redesenho depois do passo 12. A tela ocupa a janela inteira (sem rodapé)
+   e não rola: quem rola é a bancada, por dentro. Em cima, a linha do
+   meridiano; embaixo, o texto (à esquerda, no fundo da página) e a bancada
+   (à direita, num painel).
    ----------------------------------------------------------------------- */
 
-.globo-meridiano {
-  transform-box: view-box;
-  transform-origin: 60px 60px;
-  /* Parado, cada meridiano fica na sua largura (posta no SVG). */
-  transform: scaleX(var(--parado, 1));
-  /* O traço não afina quando a elipse se estreita — senão o meridiano
-     sumiria no meio da volta. */
-  vector-effect: non-scaling-stroke;
+body[data-tela="missao"] {
+  height: 100vh;
+  height: 100dvh;
 }
 
-.globo--girando .globo-meridiano {
-  animation: meridiano-gira 8s ease-in-out infinite;
+body[data-tela="missao"] .rodape {
+  display: none;
 }
 
-/* Com movimento reduzido, o globo fica parado de vez — cada meridiano na sua
-   largura —, em vez de a animação correr uma vez e parar num quadro qualquer. */
-@media (prefers-reduced-motion: reduce) {
-  .globo--girando .globo-meridiano {
-    animation: none;
+body[data-tela="missao"] .conteudo {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 12px var(--esp-5) 20px;
+}
+
+.missao {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 0;
+}
+
+/* Só em tela estreita: um aviso discreto, sem bloquear nada. */
+.missao-aviso-celular {
+  display: none;
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+/* --- A linha do meridiano ------------------------------------------------ */
+
+.meridiano {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.meridiano-linha {
+  --passo: 35px;          /* a distância entre dois pontos */
+  position: relative;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* O trilho, na cor das bordas, e o trecho percorrido, no destaque. */
+.meridiano-linha::before,
+.meridiano-linha::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 11px;
+  height: 1.5px;
+  transform: translateY(-50%);
+}
+
+.meridiano-linha::before {
+  right: 11px;
+  background-color: var(--cor-borda);
+}
+
+.meridiano-linha::after {
+  width: calc(var(--progresso, 0) * var(--passo));
+  background-color: var(--cor-destaque);
+  transition: width var(--transicao-lenta);
+}
+
+.meridiano-linha li + li {
+  margin-left: calc(var(--passo) - 22px);
+}
+
+.meridiano-ponto {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+
+.meridiano-ponto::before {
+  content: '';
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--cor-destaque);
+  transition: transform var(--transicao);
+}
+
+.meridiano-ponto--feita:hover::before {
+  transform: scale(1.3);
+}
+
+/* A de agora: um anel, com o fundo da página por dentro. */
+.meridiano-ponto--atual {
+  cursor: default;
+}
+
+.meridiano-ponto--atual::before {
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid var(--cor-destaque);
+  background-color: var(--cor-fundo);
+}
+
+.meridiano-ponto--futura::before {
+  width: 6px;
+  height: 6px;
+  background-color: var(--cor-borda);
+}
+
+.meridiano-ponto:disabled {
+  cursor: default;
+}
+
+.meridiano-rotulo {
+  color: var(--cor-texto-secundario);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.meridiano-de {
+  color: var(--cor-texto-discreto);
+}
+
+/* --- O corpo: texto e bancada ---------------------------------------------- */
+
+.missao-corpo {
+  display: grid;
+  flex: 1;
+  grid-template-columns: var(--largura-historia) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  min-height: 0;
+}
+
+.missao-texto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-height: 100%;
+  padding-top: 6px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cor-borda) transparent;
+}
+
+.missao-texto p {
+  max-width: none;
+}
+
+/* O que abre cada etapa: pequeno. "Sua tarefa" e "Seu palpite" no destaque. */
+.missao-quem,
+.missao-lembrete {
+  margin-bottom: 8px;
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+.missao-lembrete {
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.missao-rotulo {
+  margin-bottom: 6px;
+  color: var(--cor-destaque-texto);
+  font-size: 12px;
+}
+
+.missao-titulo {
+  margin-bottom: 12px;
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+.missao-pedido,
+.missao-conceito {
+  margin-bottom: 20px;
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+
+.missao-tarefa,
+.missao-pergunta {
+  margin-bottom: 18px;
+  font-size: 16.5px;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+}
+
+.missao-tarefa:focus {
+  outline: none;
+}
+
+.missao-resolvido {
+  margin: 18px 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* A bancada: o painel ocupa a coluna direita, até a altura da janela. */
+.missao-bancada {
+  max-height: 100%;
+}
+
+.missao-editor {
+  flex: 0 0 auto;
+}
+
+.missao-saida {
+  min-height: 3rem;
+}
+
+.missao-saida > .tabela-rolagem,
+.missao-amostra > .tabela-rolagem,
+.passo-quadro > .tabela {
+  overflow: visible;
+}
+
+.painel-abas {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.painel-abas .painel-aba + .painel-aba {
+  margin-left: 0;
+}
+
+/* --- O palpite ---------------------------------------------------------------- */
+
+.palpite-opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+}
+
+.palpite-opcao {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-p);
+  background: transparent;
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--transicao);
+}
+
+.palpite-opcao:hover:not(:disabled) {
+  border-color: var(--cor-texto-discreto);
+}
+
+.palpite-opcao:disabled {
+  cursor: default;
+}
+
+/* A certa: borda forte e um ✓; a escolhida errada: no tom de erro. */
+.palpite-certa {
+  border-color: var(--cor-texto);
+}
+
+.palpite-certa::before {
+  content: '✓ ';
+}
+
+.palpite-errada {
+  border-color: var(--cor-erro-texto);
+  color: var(--cor-erro-texto);
+  text-decoration: line-through;
+}
+
+/* --- As dicas ------------------------------------------------------------------ */
+
+.dicas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.dica {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.dica-rotulo {
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+/* --- A entrega --------------------------------------------------------------------- */
+
+.entrega {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.estrelas {
+  font-size: 2.25rem;
+  letter-spacing: 0.2em;
+  line-height: 1;
+}
+
+.estrela-cheia {
+  color: var(--cor-destaque);
+}
+
+.estrela-vazia {
+  color: var(--cor-borda);
+}
+
+.entrega-frase {
+  color: var(--cor-texto-secundario);
+  font-size: 14px;
+}
+
+/* --- Tela estreita: uma coluna, a página rola ------------------------------------ */
+
+@media (max-width: 52rem) {
+  body[data-tela="missao"] {
+    height: auto;
+  }
+
+  body[data-tela="missao"] .conteudo {
+    padding: 12px var(--esp-4) 32px;
+  }
+
+  .missao-aviso-celular {
+    display: block;
+  }
+
+  .missao-corpo {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    align-content: start;
+    gap: 24px;
+  }
+
+  .missao-texto,
+  .missao-bancada {
+    max-height: none;
+  }
+
+  .missao-saida,
+  .missao-amostra,
+  .passo-quadro {
+    max-height: 24rem;
   }
 }
 
-@keyframes meridiano-gira {
-  0%   { transform: scaleX(1); }
-  50%  { transform: scaleX(-1); }
-  100% { transform: scaleX(1); }
-}
-
-/* --- Bancada de teste (PROVISÓRIO) -----------------------------------------
-   Sai no passo 12, junto com a bancada do index.html.
+/* --- Trilha ------------------------------------------------------------------------
+   Os módulos em acordeão, com a linha do meridiano à esquerda e o painel do
+   progresso à direita. O destaque só nas marcas de progresso — nunca nos
+   títulos.
    ----------------------------------------------------------------------- */
 
-.bancada-resultado {
-  display: flex;
-  flex-direction: column;
-  gap: var(--esp-2);
+.trilha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  gap: 48px;
+  max-width: 820px;
+  margin-inline: auto;
 }
 
-.bancada-raiox {
-  display: flex;
-  flex-direction: column;
-  gap: var(--esp-4);
-  margin-top: var(--esp-6);
-  padding-top: var(--esp-6);
-  border-top: var(--borda);
+body:has(.trilha) .conteudo {
+  padding-top: 32px;
 }
 
-.bancada-rotulo {
+.trilha-titulo {
+  margin-bottom: 4px;
+  font-size: 22px;
+}
+
+.trilha-subtitulo {
+  margin-bottom: 16px;
+  color: var(--cor-texto-discreto);
+  font-size: 13px;
+}
+
+.trilha-continuar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--esp-3);
+  gap: 8px 14px;
+  margin-bottom: 22px;
 }
 
-.bancada-rotulo select {
-  padding: var(--esp-2) var(--esp-3);
-  border: 1px solid var(--cor-botao-secundario-borda);
-  border-radius: var(--raio-p);
-  background-color: var(--cor-fundo);
+.trilha-botao {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.trilha-proxima {
+  color: var(--cor-texto-secundario);
+  font-size: 13px;
+}
+
+.trilha-proxima-modulo {
+  color: var(--cor-texto-discreto);
+}
+
+.trilha-lista {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 12px;
+}
+
+/* A linha do meridiano: o trilho, o trecho cheio e um traço por módulo
+   (posto pelo trilha.js, na altura de cada um). */
+.trilha-meridiano {
+  position: relative;
+}
+
+.trilha-meridiano::before,
+.trilha-meridiano-cheio {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 7px;
+  width: 2px;
+}
+
+.trilha-meridiano::before {
+  bottom: 0;
+  background-color: var(--cor-borda);
+}
+
+.trilha-meridiano-cheio {
+  display: block;
+  background-color: var(--cor-destaque);
+  transition: height var(--transicao-lenta);
+}
+
+.trilha-traco {
+  position: absolute;
+  left: 3px;
+  width: 10px;
+  height: 1px;
+  background-color: var(--cor-borda);
+}
+
+.trilha-traco--cheio {
+  background-color: var(--cor-destaque);
+}
+
+.trilha-modulos {
+  margin: 0;
+  padding: 0;
+  border-top: var(--borda);
+  list-style: none;
+}
+
+.trilha-modulo {
+  border-bottom: var(--borda);
+}
+
+.trilha-modulo-cabeca {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  background: none;
+  font-size: 14px;
+  line-height: 1.55;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trilha-modulo-cabeca:disabled {
+  cursor: default;
+}
+
+.trilha-modulo-numero {
+  flex: 0 0 14px;
+  color: var(--cor-texto-discreto);
+  font-family: var(--fonte-mono);
+  font-size: 12px;
+}
+
+.trilha-modulo-nome {
+  flex: 1;
+  min-width: 0;
+  color: var(--cor-texto-secundario);
+  font-weight: 500;
+  transition: transform 200ms ease, color 200ms ease;
+}
+
+/* O hover do digita: o texto escurece e anda 4px. */
+.trilha-modulo-cabeca:not(:disabled):hover .trilha-modulo-nome,
+.trilha-modulo--aberto .trilha-modulo-nome {
+  color: var(--cor-texto);
+}
+
+.trilha-modulo-cabeca:not(:disabled):hover .trilha-modulo-nome {
+  transform: translateX(4px);
+}
+
+.trilha-modulo--breve .trilha-modulo-nome {
+  color: var(--cor-texto-discreto);
+}
+
+.trilha-modulo-situacao {
+  flex: 0 0 auto;
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+.trilha-modulo-situacao--completo {
+  color: var(--cor-destaque-texto);
+}
+
+.trilha-missoes {
+  margin: 0;
+  padding: 0 0 10px 26px;
+  list-style: none;
+}
+
+.trilha-missao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  color: var(--cor-texto-secundario);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.trilha-missao-texto {
+  transition: transform 200ms ease, color 200ms ease;
+}
+
+.trilha-missao:hover .trilha-missao-texto {
+  color: var(--cor-texto);
+  transform: translateX(4px);
+}
+
+.trilha-missao--atual {
+  color: var(--cor-texto);
+}
+
+.trilha-numero {
+  margin-right: 8px;
+  color: var(--cor-texto-discreto);
+  font-family: var(--fonte-mono);
+  font-size: 11px;
+}
+
+/* O ponto: cheio = feita; anel = a de agora; contorno = a fazer. */
+.trilha-ponto {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--cor-texto-discreto);
+  border-radius: 50%;
+}
+
+.trilha-missao--feita .trilha-ponto {
+  border-color: var(--cor-destaque);
+  background-color: var(--cor-destaque);
+}
+
+.trilha-missao--atual .trilha-ponto {
+  border: 1.5px solid var(--cor-destaque);
+}
+
+/* --- O painel do progresso --- */
+
+.trilha-painel {
+  padding-top: 8px;
+}
+
+.trilha-painel p {
+  max-width: none;
+}
+
+.trilha-painel-rotulo {
+  margin-bottom: 2px;
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+.trilha-painel-valor {
+  margin-bottom: 14px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: var(--espacamento-titulo);
+  line-height: 1.4;
+}
+
+.trilha-painel-valor--curto {
+  margin-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.trilha-painel-de {
+  color: var(--cor-texto-discreto);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.trilha-barra {
+  height: 3px;
+  margin-bottom: 16px;
+  border-radius: 2px;
+  background-color: var(--cor-borda);
+}
+
+.trilha-barra span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background-color: var(--cor-destaque);
+}
+
+.trilha-conceitos {
+  margin: 0;
+  padding: 0;
+  color: var(--cor-texto-secundario);
+  font-family: var(--fonte-mono);
+  font-size: 12px;
+  line-height: 2;
+  list-style: none;
+}
+
+.trilha-painel-vazio {
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+@media (max-width: 40rem) {
+  .trilha {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  body:has(.trilha) .conteudo {
+    padding-top: 22px;
+  }
 }

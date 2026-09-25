@@ -1,5 +1,5 @@
 /* ==========================================================================
-   conferencia.js — as cinco conferências automáticas do conteúdo.
+   conferencia.js — as seis conferências automáticas do conteúdo.
 
    A rede de segurança para quando as 77 missões forem escritas. Rodam sobre
    todos os módulos já escritos e AVISAM NO CONSOLE — nunca quebram a tela.
@@ -10,12 +10,15 @@
         conceitosNovos dela somados aos de todas as missões anteriores.
      4. Nenhum conceito passa de 80 palavras (nos dois idiomas).
      5. Todo texto tem pt e en, e toda tabela e coluna usada está no
-        dicionario.js.
+        dicionario.js — inclusive as marcadas como selo (`nome_pais`) nos
+        textos, cada idioma com os seus nomes.
+     6. Cada desafio declara em `tabelas` exatamente as tabelas que o
+        gabarito usa (são elas que aparecem na barra da Consulta).
 
    Mais a estrutura de cada missão (campos obrigatórios, 3 dicas, 3 opções
    de palpite, ids, contagem por módulo).
 
-   As conferências 3, 4 e 5 e a estrutura não precisam do motor: rodam
+   As conferências 3, 4, 5 e 6 e a estrutura não precisam do motor: rodam
    sempre que o site abre (são leves). As 1 e 2 rodam os gabaritos no
    DuckDB — só com ?conferencia no endereço, para nenhum visitante baixar o
    motor à toa nem ter a base zerada no meio de uma missão.
@@ -25,7 +28,8 @@ import { modulos, carregarModulo } from './indice.js';
 import { personagens } from '../personagens.js';
 import { dicionario } from '../base/dicionario.js';
 import { recursosUsados, normalizarRecurso, compararResultados } from '../../js/conferir.js';
-import { separar, traduzirSQL, sqlEmIngles } from '../../js/traducao-sql.js';
+import { separar, traduzirSQL, sqlEmIngles, tabelasDoSQL } from '../../js/traducao-sql.js';
+import { clausulasNaOrdemDoBanco } from '../../js/passo-a-passo.js';
 
 const TIPOS = ['missao', 'revisao', 'desafio', 'projeto'];
 const LIMITE_DE_PALAVRAS = 80;
@@ -58,7 +62,7 @@ export async function conferirConteudo({ comMotor = false, bd = null } = {}) {
 
 function relatar(avisos, lista, comMotor) {
   const missoes = lista.reduce((soma, { missoes }) => soma + missoes.length, 0);
-  const quais = comMotor ? 'as 5 conferências' : 'as conferências 3, 4 e 5 e a estrutura';
+  const quais = comMotor ? 'as 6 conferências' : 'as conferências 3 a 6 e a estrutura';
   if (!avisos.length) {
     if (missoes) console.info(`[conferência] ${missoes} missões conferidas (${quais}): tudo certo.`);
     return;
@@ -69,7 +73,7 @@ function relatar(avisos, lista, comMotor) {
 }
 
 /* --------------------------------------------------------------------------
-   Sem o motor: estrutura, 3, 4 e 5
+   Sem o motor: estrutura, 3, 4, 5 e 6
    -------------------------------------------------------------------------- */
 
 /**
@@ -142,6 +146,18 @@ export function conferirSemMotor(lista) {
           avisos.push(`${onde(missao)}: [5] ${rotulo} usa "${nome}", que não é tabela nem coluna do dicionário.`);
         }
       }
+      for (const { idioma, nome } of selosDesconhecidos(missao)) {
+        avisos.push(`${onde(missao)}: [5] o selo \`${nome}\` (${idioma}) não é tabela nem coluna do dicionário nesse idioma.`);
+      }
+
+      // --- 6. As tabelas de cada desafio são as do gabarito --------------------
+      for (const [i, desafio] of (missao.desafios ?? []).entries()) {
+        const doGabarito = tabelasDoSQL(desafio.gabarito).sort();
+        const declaradas = [...(desafio.tabelas ?? [])].sort();
+        if (doGabarito.join() !== declaradas.join()) {
+          avisos.push(`${onde(missao)}: [6] desafios[${i}].tabelas é [${declaradas.join(', ')}], mas o gabarito usa [${doGabarito.join(', ')}].`);
+        }
+      }
     }
   }
   return avisos;
@@ -166,8 +182,22 @@ function conferirEstrutura(missao) {
     exigir(Array.isArray(missao.tabelas) && missao.tabelas.length > 0, 'faltam as tabelas.');
     exigir(temTexto(missao.conceito), 'falta o conceito.');
     exigir(sqlEmIngles(missao.exemplo).trim(), 'falta o exemplo.');
-    exigir(Array.isArray(missao.raioX) && missao.raioX.length > 0, 'falta o Raio-X.');
+    exigir(temTexto(missao.resumo), 'falta o resumo (a linha que lembra o pedido no conceito).');
+    exigir(missao.passoAPasso && typeof missao.passoAPasso === 'object', 'falta o Passo a passo.');
     exigir(missao.palpite, 'falta o palpite.');
+  }
+
+  // O Passo a passo: uma frase {pt, en} para cada cláusula do exemplo — nem
+  // uma a mais, nem uma a menos. A ordem vem do exemplo (a do banco).
+  if (missao.passoAPasso && missao.exemplo) {
+    const doExemplo = clausulasNaOrdemDoBanco(sqlEmIngles(missao.exemplo));
+    const escritas = Object.keys(missao.passoAPasso);
+    for (const clausula of doExemplo) {
+      exigir(temTexto(missao.passoAPasso[clausula]), `passoAPasso.${clausula} falta (o exemplo tem ${clausula}), ou está sem pt e en.`);
+    }
+    for (const clausula of escritas) {
+      exigir(doExemplo.includes(clausula), `passoAPasso.${clausula} sobra: o exemplo não tem ${clausula}.`);
+    }
   }
 
   if (missao.palpite) {
@@ -175,10 +205,6 @@ function conferirEstrutura(missao) {
     exigir(temTexto(pergunta), 'o palpite está sem pergunta.');
     exigir(Array.isArray(opcoes) && opcoes.length === 3, 'o palpite precisa de exatamente 3 opções.');
     exigir(Number.isInteger(correta) && correta >= 0 && correta < 3, 'palpite.correta deve ser 0, 1 ou 2.');
-  }
-
-  for (const [i, etapa] of (missao.raioX ?? []).entries()) {
-    exigir(etapa.etapa && sqlEmIngles(etapa.sql).trim(), `raioX[${i}] precisa de etapa e sql.`);
   }
 
   for (const [i, desafio] of (missao.desafios ?? []).entries()) {
@@ -212,10 +238,8 @@ function consultasDaMissao(missao) {
     }
   };
   versaoPt('o exemplo', missao.exemplo);
-  for (const [i, etapa] of (missao.raioX ?? []).entries()) versaoPt(`raioX[${i}]`, etapa.sql);
   if (missao.amostra) consultas.push({ rotulo: 'a amostra', sql: sqlEmIngles(missao.amostra) });
   if (missao.exemplo) consultas.push({ rotulo: 'o exemplo', sql: sqlEmIngles(missao.exemplo) });
-  for (const [i, etapa] of (missao.raioX ?? []).entries()) consultas.push({ rotulo: `raioX[${i}]`, sql: sqlEmIngles(etapa.sql) });
   for (const [i, desafio] of (missao.desafios ?? []).entries()) {
     if (desafio.inicial) consultas.push({ rotulo: `desafios[${i}].inicial`, sql: sqlEmIngles(desafio.inicial) });
     consultas.push({ rotulo: `desafios[${i}].gabarito`, sql: desafio.gabarito ?? '' });
@@ -232,6 +256,46 @@ function contarPalavras(texto) {
 }
 
 /** Os lugares da missão onde um texto {pt, en} está com um lado faltando. */
+/** Os nomes de cada idioma: tabelas e colunas do dicionário. */
+const NOMES = { pt: new Set(), en: new Set() };
+for (const [tabelaEn, tabela] of Object.entries(dicionario)) {
+  NOMES.en.add(tabelaEn);
+  NOMES.pt.add(tabela.pt);
+  for (const [colunaEn, coluna] of Object.entries(tabela.colunas)) {
+    NOMES.en.add(colunaEn);
+    NOMES.pt.add(coluna.pt);
+  }
+}
+
+/**
+ * Os nomes em minúsculas dentro dos selos (`nome_pais`) dos textos de uma
+ * missão que não são tabela nem coluna naquele idioma. Palavras-chave
+ * (MAIÚSCULAS), apelidos (depois do AS), números e textos entre aspas
+ * ficam de fora.
+ */
+function selosDesconhecidos(valor, achados = []) {
+  if (!valor || typeof valor !== 'object') return achados;
+  if (typeof valor.pt === 'string' && typeof valor.en === 'string') {
+    for (const idioma of ['pt', 'en']) {
+      for (const [, selo] of valor[idioma].matchAll(/`([^`]+)`/g)) {
+        let anterior = '';
+        for (const pedaco of separar(selo).filter((p) => p.tipo !== 'espaco')) {
+          // Um apelido (o nome depois do AS) é inventado pela consulta: vale.
+          const apelido = anterior.toUpperCase() === 'AS';
+          if (pedaco.tipo === 'nome' && !apelido && /[a-z]/.test(pedaco.texto) &&
+              pedaco.texto === pedaco.texto.toLowerCase() && !NOMES[idioma].has(pedaco.texto)) {
+            achados.push({ idioma, nome: pedaco.texto });
+          }
+          anterior = pedaco.texto;
+        }
+      }
+    }
+    return achados;
+  }
+  for (const filho of Object.values(valor)) selosDesconhecidos(filho, achados);
+  return achados;
+}
+
 function textosIncompletos(valor, caminho = '') {
   if (!valor || typeof valor !== 'object') return [];
   if ('pt' in valor || 'en' in valor) {
@@ -330,7 +394,6 @@ export async function conferirComMotor(lista, { abrirBase, zerarBase, consultar,
       const outras = [
         { rotulo: 'a amostra', sql: sqlEmIngles(missao.amostra) },
         { rotulo: 'o exemplo', sql: sqlEmIngles(missao.exemplo) },
-        ...(missao.raioX ?? []).map((e, i) => ({ rotulo: `raioX[${i}]`, sql: sqlEmIngles(e.sql) })),
       ];
       for (const { rotulo, sql } of outras) {
         if (!sql) continue;
@@ -349,7 +412,6 @@ export async function conferirComMotor(lista, { abrirBase, zerarBase, consultar,
       // [1] As versões em português escritas à mão rodam na base em português.
       const escritasEmPt = [
         { rotulo: 'o exemplo (pt)', valor: missao.exemplo },
-        ...(missao.raioX ?? []).map((e, i) => ({ rotulo: `raioX[${i}] (pt)`, valor: e.sql })),
       ].filter(({ valor }) => valor && typeof valor === 'object' && valor.pt);
       for (const { rotulo, valor } of escritasEmPt) {
         try {

@@ -56,6 +56,11 @@ resolvido com SQL de verdade rodando no navegador, sobre dados reais de países.
 
 ## VISUAL
 
+> **Atenção — o visual mudou depois do passo 12.** Paletas, tipografia (sem serifada), tema
+> padrão (escuro), missão, Passo a passo (no lugar do Raio-X) e trilha seguem hoje a seção
+> **"Design depois do passo 12"**, na Parte 2. As tabelas abaixo ficam como registro do
+> briefing original.
+
 > **Atenção:** duas cores do modo claro foram **ajustadas depois do briefing**, com
 > aprovação do Fernando no passo 2, para passar de 4,5:1 também sobre a superfície: o
 > texto discreto (`#71717A` → **`#6D6D76`**) e o `GROUP BY` (`#A0620F` → **`#9D600F`**).
@@ -143,6 +148,11 @@ pedido aparece como **memorando**: nome (na serifada), cargo e hora numa linha f
 
 ## METODOLOGIA — A MISSÃO (8 a 12 min)
 
+> **Atenção:** desde o redesenho depois do passo 12, a missão tem **6 etapas** (pedido ·
+> conceito · palpite · tente você · sem ajuda · entrega — "olhe os dados" virou a amostra
+> na bancada do Pedido), e o Raio-X virou o **Passo a passo**. Ver "Design depois do passo
+> 12", na Parte 2.
+
 1. **O pedido** (memorando)
 2. **Olhe os dados** (5 linhas)
 3. **O conceito**: exemplo mínimo, no máximo **80 palavras**, e o **RAIO-X** — tabela viva
@@ -175,7 +185,7 @@ Regras:
 | 1 | Escolher colunas | 8 | Kofi | `SELECT`, `*`, apelidos, `DISTINCT`, contas, `\|\|`, comentários, `LIMIT` |
 | 2 | Filtrar linhas | 9 | Kofi | `WHERE`, comparações, `AND`/`OR`/`NOT`, `IN`, `BETWEEN`, `LIKE`, `IS NULL` |
 | 3 | Ordenar e transformar | 10 | Lucía | `ORDER BY`, texto, número, data, `CAST`, `COALESCE`, `CASE WHEN` |
-| 4 | Resumir e agrupar | 8 | Amélie | agregações, `GROUP BY`, `HAVING`, ordem lógica |
+| 4 | Resumir e agrupar | 8 | Amélie | agregações, `GROUP BY`, `HAVING` *(a ordem lógica saiu como missão própria: o Passo a passo a mostra em toda missão; fica só uma explicação curta de por que o apelido do `SELECT` não funciona no `WHERE`)* |
 | 5 | Juntar tabelas | 9 | Tomasz | chaves, `INNER`, `LEFT`, várias tabelas, muitos-para-muitos, self join |
 | 6 | Consultas dentro de consultas | 8 | Tomasz | subconsultas, `EXISTS`, `ALL`, correlacionadas, `UNION`/`INTERSECT`/`EXCEPT` |
 | 7 | Análise moderna | 10 | Nadia | `WITH`, `ROW_NUMBER`, `RANK`, `LAG`/`LEAD`, total acumulado, média móvel, `QUALIFY`, `PIVOT`, `WITH RECURSIVE` |
@@ -252,7 +262,7 @@ aspas**). Valores (nomes de países) ficam em inglês.
 | **Nivelamento** | 6 desafios |
 | **Início** | continuar, atalhos com hover e ilustração, exportar/importar |
 | **Trilha** | acordeão + linha do meridiano |
-| **Missão** | história à esquerda (40%); editor em cima e resultado embaixo à direita (60%) |
+| **Missão** | história à esquerda (40%); editor em cima e resultado embaixo à direita (60%) *(hoje: texto à esquerda e bancada à direita — ver "Design depois do passo 12")* |
 | **Laboratório** | |
 | **Cola** | |
 | **Jogos** | |
@@ -314,8 +324,9 @@ Fernando pedir para testar, o Claude sobe o `servidor.py` e abre o navegador.
   **não** funciona por duplo clique (`file://`) — precisa de um servidor local.
 - Comentários e nomes de arquivo em português. Os **dados** (CSVs, nomes de tabela e
   coluna de origem, gabaritos) ficam em inglês — ver "A base em dois idiomas".
-- **Dependências:** só o DuckDB-WASM e as duas fontes, todos copiados para dentro do
-  repositório (`vendor/duckdb/` e `fontes/`), com versão e licença registradas ao lado.
+- **Dependências:** só o DuckDB-WASM e a fonte mono (a serifada saiu depois do passo 12),
+  copiados para dentro do repositório (`vendor/duckdb/` e `fontes/`), com versão e
+  licença registradas ao lado.
   Nada de CDN, nada carregado de outro domínio. Zero etapa de build.
   - O DuckDB-WASM depende do **Apache Arrow**, que por isso também está em
     `vendor/arrow/` (passo 5). Não é uma escolha nossa: vem junto com o motor.
@@ -413,8 +424,8 @@ Aprovadas pelo Fernando depois de uma consulta à API do Banco Mundial:
 ## Código SQL na tela
 
 - **Realce:** as cores de cláusula do briefing, e `QUALIFY` na cor do `WHERE` (os dois
-  filtram; decisão do passo 7). Um só realce (`realce.js`) para editor, Raio-X, cola e
-  jogos.
+  filtram; decisão do passo 7). Um só realce (`realce.js`) para editor, Passo a passo,
+  selos, cola e jogos.
 - **Resultado:** valores crus, como um banco mostraria — sem separador de milhar, ponto
   como separador decimal —, porque é assim que o aluno vai escrevê-los num `WHERE`.
 - **Erros:** nunca a mensagem crua do DuckDB sozinha. Sempre uma frase simples com
@@ -481,6 +492,9 @@ laboratório, cola, os três jogos) **+ módulos 0 a 2 escritos** (20 missões).
 
 ## Contraste da paleta
 
+> **Atenção:** as medições desta seção são do passo 2 e valem como histórico. As paletas
+> e os contrastes de hoje estão em "Design depois do passo 12", logo abaixo.
+
 Medido no passo 2 (razão de contraste WCAG 2), todos os pares, sobre o fundo e sobre a
 superfície — o editor e as áreas destacadas ficam na superfície.
 
@@ -508,10 +522,157 @@ Regras que saíram da medição:
 
 ## Fontes
 
-Aprovadas no passo 2: **Source Serif 4** e **JetBrains Mono**, do Google Fonts, só o
-subconjunto latino, um arquivo variável por fonte (serifada de 400 a 600, mono de 400 a
-500; 82 KB as duas). A serifada é pedida já no `<head>` (`preload`), porque aparece logo de
-cara na marca e no título. Origem, data e licenças: `fontes/LEIA-ME.md`.
+Aprovadas no passo 2: **Source Serif 4** e **JetBrains Mono**. **A serifada saiu no
+redesenho depois do passo 12**: títulos, marca e texto usam a fonte do sistema. Fica só a
+**JetBrains Mono** (Google Fonts, subconjunto latino, um arquivo variável de 400 a 500, 31
+KB), usada só em código, números, códigos (ISO3…) e NULL. Origem, data e licença:
+`fontes/LEIA-ME.md`.
+
+## Design depois do passo 12
+
+Duas rodadas aprovadas pelo Fernando antes do passo 13 (detalhes e caixas marcadas no
+`PLANO.md`: "Redesenho depois do passo 12" e "Ajustes de design — rodada 2").
+
+### Tipografia e tema
+
+- **Sem serifada.** Títulos, marca e texto na fonte do sistema; títulos com peso 600 e
+  `letter-spacing: -0.02em`. A marca "meridiano." em 17px, peso 600, com o ponto no
+  destaque. **JetBrains Mono só** em código, números, códigos (ISO3) e NULL.
+- **O site abre no escuro.** O claro vale só por escolha, salva em `meridiano:config`
+  (`tema: 'claro'`). A regra está no `<head>` do `index.html` e no `app.js`.
+- `tema.css` continua o único arquivo com cores.
+
+### Paletas
+
+**Escuro** (o padrão):
+
+| Elemento | Cor |
+|---|---|
+| Fundo | `#0E1726` |
+| Superfície | `#16213A` |
+| Painel (a bancada) | `#131E33` |
+| Código e selos | `#1A2640` |
+| Bordas | `#26324D` |
+| Texto | `#F2F0E9` |
+| Texto secundário | `#B6B8BD` |
+| Texto discreto | `#878D99` |
+| Destaque (âmbar) — linhas, pontos e texto | `#E9B44C` |
+| Botão principal | fundo `#FFFEFA`, texto `#0E1726` |
+| Botão secundário | texto `#F2F0E9`, borda `#878D99` |
+| Linha ativa do Passo a passo | `rgba(255,254,250,.06)` |
+| Erro | fundo `#5B1F2A`, texto `#F7C1C1` |
+| Cláusulas | as do briefing (`#B9A8F0`, `#8DB6E0`, `#7FD1C0`, `#F0997B`, `#EE9CB6`, `#B5D98A`) |
+
+**Claro** — branco, com a bancada em vidro:
+
+| Elemento | Cor |
+|---|---|
+| Fundo | `#FFFFFF` |
+| Bordas | `rgba(14,23,38,.08)` |
+| Código, selos e superfície | `rgba(14,23,38,.04)` |
+| Texto | `#0E1726` |
+| Texto secundário | `#4A5670` |
+| Texto discreto | `#626D83` |
+| Destaque em linhas, pontos e sublinhados | `#B7791F` |
+| Destaque quando é **texto** ("Sua tarefa", links, "3 de 3") | `#9A6212` (`--cor-destaque-texto`) |
+| Botão principal | fundo `#0E1726`, texto `#FFFFFF` |
+| Linha ativa do Passo a passo | `rgba(255,255,255,.7)` — ela **acende** (ver contraste) |
+| Erro | fundo `#FEE2E2`, texto `#B91C1C` |
+| `SELECT` · `FROM`/`JOIN` · `WHERE` | `#6A4BB5` · `#2563A6` · `#1F7A6E` |
+| `GROUP BY`/`HAVING` | `#B4532A` (coral, para não se confundir com o âmbar) |
+| `ORDER BY`/`LIMIT` · `WITH`/`OVER` | `#A33A5B` · `#4D7A1F` |
+
+**O vidro — a ÚNICA exceção a "sem sombras e sem desfoque":** só no tema claro, só na
+bancada (`.painel`) e nos painéis flutuantes (`.flutuante`, a lista de colunas). Bancada:
+fundo `rgba(255,255,255,.7)`, `backdrop-filter: blur(24px) saturate(160%)`, borda
+`rgba(14,23,38,.08)`, raio 12px, sombra `inset 0 1px 0 rgba(255,255,255,.9), 0 10px 30px
+rgba(14,23,38,.06)`. Flutuante: fundo `rgba(255,255,255,.85)`, `blur(20px)`, raio 10px,
+sombra `0 8px 24px rgba(14,23,38,.08)`. Sem manchas nem brilho no fundo da página. Onde o
+navegador não desfoca (`@supports`), fundo branco sólido. No escuro, o flutuante é o
+fundo de código com borda.
+
+**Contraste medido (rodada 2):**
+
+- **Escuro:** tudo passa. Texto 15,75 no fundo / 13,20 no código; secundário 9,05 /
+  7,58; discreto 5,39 / 4,52; destaque 9,49; cláusulas de 6,84 a 9,50 no código e de 5,73
+  a 7,97 na linha ativa; botão 17,8. Única exceção: discreto **na linha ativa** (3,79) —
+  só afetaria um comentário no fim de uma linha de cláusula.
+- **Claro:** texto 17,96 no fundo / 16,57 no código; secundário 7,35 / 6,78; discreto
+  5,21 / 4,80; destaque de texto 5,08 / 4,69; cláusulas de 4,99 a 6,39 no fundo e de
+  4,60 a 5,90 no código; botão 17,96; erro 5,30. O âmbar `#B7791F` (3,64) é só para
+  linhas e pontos, que pedem 3:1. Com véu escuro, a linha ativa deixava `GROUP BY`,
+  `WITH` e `WHERE` abaixo de 4,5 — por isso ela acende (agora 4,87 a 5,04).
+
+### A missão
+
+- **Cabeçalho** numa linha: marca · contexto discreto ("Módulo 0 · Missão 2 de 3") · PT ·
+  EN · tema · Sair.
+- **6 etapas**, na **linha do meridiano** horizontal: pontos cheios nas visitadas, anel na
+  de agora, apagados nas que faltam; só as visitadas são clicáveis (é por ela que se
+  volta); ao lado, só "Tente você · 4 de 6".
+- **Duas colunas:** à esquerda, **texto** no fundo da página (210–260px), no máximo três
+  coisas por etapa; à direita, a **bancada** num painel, com seções separadas por barras
+  (aba com o nome da seção, sublinhada no destaque; informação e botões à direita).
+  **Um só botão principal por tela.** O personagem aparece **só no Pedido** (nome · cargo,
+  sem monograma nem hora). A tela cabe em 1280×800 sem rolar a página; a bancada rola por
+  dentro.
+- **Barra da Consulta:** à esquerda a aba "Consulta"; à direita, nesta ordem: as
+  **tabelas** da tarefa (rótulo discreto + nomes em mono com sublinhado pontilhado, sem
+  fundo nem contorno — hover, foco ou toque abre a lista de colunas com "ver 5 linhas";
+  Esc fecha; 4+ tabelas viram as duas primeiras e "+2"; nada pisca), o **ícone Formatar**
+  (⇧⌥F, só quando pedido) e **Rodar** (o atalho no `title`). A barra nunca quebra de
+  linha.
+- **A tarefa sempre mostra as tabelas que usa:** cada desafio declara `tabelas`, e a 6ª
+  conferência confere que são exatamente as do gabarito.
+
+### Passo a passo (no lugar do Raio-X)
+
+O código do exemplo na ordem **normal**; o destaque segue a ordem em que o banco lê
+(`FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT`, só as que existem).
+Linha ativa inteira, com véu e borda de 2px na cor da cláusula; as outras a 40%. Embaixo,
+uma frase simples por cláusula (escrita na missão) e, no 1º passo, a nota "Você escreve o
+`SELECT` em cima, mas o banco começa por aqui". Amostra de 5 a 8 linhas com o efeito de
+cada passo (o que sai fica a 18%, transição de 0,45 s). Anterior/Próximo e "1 de 3" na
+barra do painel. A regra antiga do "fundo do Raio-X" deixou de existir.
+
+### Tabelas
+
+Uma só para o site (amostra, Passo a passo, resultado, laboratório): fonte do sistema a
+13px; mono só em números, códigos e NULL; números à direita com `tabular-nums`; layout
+fixo; cabeçalho a 12px, peso 400, discreto; linhas finas, sem listras. **O cabeçalho nunca
+é cortado:** cada coluna tem pelo menos a largura do nome; números, códigos e datas têm a
+largura do maior valor mostrado; só o **texto** das células pode terminar em "…" (com o
+valor inteiro no `title`). Se não couber, rolagem lateral com barra fina.
+
+### Selos
+
+Todo comando, tabela ou coluna no **texto corrido** (pedido, resumo, conceito, Passo a
+passo, tarefa, pista, entrega, erros e conferência) é escrito **entre crases** nos textos
+(`` `SELECT` ``, `` `nome_pais` ``) e vira um **selo**: mono a `.88em`, fundo de código,
+`padding: 1px 5px`, raio 4px, sem quebra de linha; palavra-chave na cor da cláusula, nomes
+na cor do texto (`textoComSelos` e `selosEmHtml`, em `realce.js`). Selos curtos (até uns 25
+caracteres), porque a coluna de texto é estreita. O conceito não repete a consulta inteira:
+diz "no exemplo ao lado" e cita só as peças. A conferência 5 confere os nomes dentro dos
+selos.
+
+### Trilha
+
+Título, subtítulo discreto e **Continuar** com o nome da próxima missão e o módulo ao
+lado. **Linha do meridiano** vertical à esquerda, com um traço por módulo, preenchida no
+destaque até o módulo de agora. Módulos em **acordeão**, uma coluna: número (mono,
+discreto), nome e, à direita, "3 de 3" (no destaque quando completo), "2 de 8", "9
+missões" ou "em breve" (apagado, não abre); o módulo atual abre sozinho; teclado e
+`aria-expanded`. Dentro, as missões com ponto (cheio = feita, anel = a de agora, contorno
+= a fazer), número "01" e título. **Nunca um id interno** (m0-01) na tela. O destaque só em
+marcas de progresso, nunca em títulos. Hover do digita (o texto escurece e anda 4px).
+Painel à direita: sequência, missões (x de 77, barra fina), conceitos que mais escapam. O
+início leva à trilha; a lógica (desbloqueio, progresso de verdade) é o passo 14.
+
+### As 6 conferências automáticas
+
+As 5 do passo 9 mais a **6ª: as tabelas de cada desafio são exatamente as do gabarito**.
+As com o motor (1 e 2) rodam com `?conferencia` **na trilha** — dentro de uma missão, a
+base é zerada no meio delas.
 
 ## Outros
 

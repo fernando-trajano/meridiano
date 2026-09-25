@@ -1,6 +1,11 @@
 /* ==========================================================================
-   editor.js — o editor de SQL: realce por cláusula, autocompletar, atalhos,
-   botão de formatar. Usado na missão e no laboratório.
+   editor.js — o editor de SQL: realce por cláusula, autocompletar, atalhos
+   e formatar. Usado na missão e no laboratório.
+
+   Desde o redesenho depois do passo 12, o editor é só a área de código: a
+   barra em cima dele (a aba "Consulta", o atalho e o botão Rodar) é de quem
+   o usa — ver a missão. Sem números de linha: a linha de um erro ganha uma
+   marca fina na margem.
 
    Como é feito: um <textarea> de verdade, com o texto transparente, deitado
    por cima de uma cópia colorida da consulta (<pre>). Tudo o que o navegador
@@ -12,6 +17,7 @@
    Atalhos:
      Cmd/Ctrl + Enter   roda
      Cmd/Ctrl + /       comenta ou descomenta as linhas
+     Shift + Alt + F    formata (⇧⌥F no Mac) — só quando pedido, nunca sozinho
      Tab / Shift+Tab    recua / desrecua (Esc e depois Tab sai do editor)
      Enter              quebra a linha mantendo o recuo
      ↑ ↓ Enter Tab Esc  navegam nas sugestões, quando abertas
@@ -27,6 +33,10 @@ import { traduzirSQL, separar } from './traducao-sql.js';
 import { dicionario } from '../dados/base/dicionario.js';
 
 const EH_MAC = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+
+/** Os atalhos de rodar e de formatar, escritos para este sistema. */
+export const ATALHO_RODAR = EH_MAC ? '⌘ Enter' : 'Ctrl + Enter';
+export const ATALHO_FORMATAR = EH_MAC ? '⇧⌥F' : 'Shift + Alt + F';
 const RECUO = '  ';
 const MAX_SUGESTOES = 8;
 
@@ -36,18 +46,17 @@ let contador = 0;
  * Monta um editor dentro de um elemento.
  * @param {HTMLElement} alvo
  * @param {{inicial?: string, aoRodar?: (sql: string) => void,
- *          linhasMin?: number, linhasMax?: number, barra?: boolean}} [opcoes]
- *   barra: mostra os botões Rodar e Formatar e a linha de atalhos
+ *          linhasMin?: number, linhasMax?: number}} [opcoes]
  */
-export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin = 6, linhasMax = 18, barra = true } = {}) {
+export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin = 3, linhasMax = 10 } = {}) {
   contador += 1;
   const id = `editor-${contador}`;
 
   alvo.classList.add('editor');
   alvo.innerHTML = `
     <div class="editor-corpo">
-      <pre class="editor-numeros mono" aria-hidden="true"></pre>
       <div class="editor-area">
+        <span class="editor-marca-erro" aria-hidden="true" hidden></span>
         <pre class="editor-realce mono" aria-hidden="true"><code></code></pre>
         <textarea class="editor-texto mono" id="${id}-texto" spellcheck="false" autocapitalize="off"
           autocomplete="off" autocorrect="off" wrap="off" aria-autocomplete="list"
@@ -58,19 +67,13 @@ export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin 
         <span class="editor-medida mono" aria-hidden="true">MMMMMMMMMM</span>
       </div>
     </div>
-    ${barra
-      ? `<div class="editor-barra">
-          <button type="button" class="botao botao--principal editor-rodar" data-i18n="editor.rodar">${t('editor.rodar')}</button>
-          <button type="button" class="botao editor-formatar" data-i18n="editor.formatar">${t('editor.formatar')}</button>
-          <p class="editor-dica discreto" id="${id}-dica"></p>
-        </div>`
-      : `<p class="apenas-leitor-de-tela" id="${id}-dica"></p>`}
+    <p class="apenas-leitor-de-tela" id="${id}-dica"></p>
   `;
 
   const texto = alvo.querySelector('.editor-texto');
   const realce = alvo.querySelector('.editor-realce');
   const codigo = realce.querySelector('code');
-  const numeros = alvo.querySelector('.editor-numeros');
+  const marcaErro = alvo.querySelector('.editor-marca-erro');
   const area = alvo.querySelector('.editor-area');
   const lista = alvo.querySelector('.editor-sugestoes');
   const medida = alvo.querySelector('.editor-medida');
@@ -94,20 +97,13 @@ export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin 
     codigo.innerHTML = realcarSQL(texto.value) + '\n';
 
     const total = texto.value.split('\n').length;
-    numeros.innerHTML = Array.from({ length: total }, (_, i) =>
-      i + 1 === linhaComErro ? `<span class="editor-numero-erro">${i + 1}</span>` : String(i + 1)
-    ).join('\n') + '\n';
-
     const estilo = getComputedStyle(texto);
     const alturaDaLinha = parseFloat(estilo.lineHeight);
     const margens = parseFloat(estilo.paddingTop) + parseFloat(estilo.paddingBottom);
     const linhas = Math.min(Math.max(total, linhasMin), linhasMax);
-    // 14px de folga para a barra de rolagem horizontal, quando aparece. A
-    // coluna dos números tem a mesma altura: sem isso, numa consulta maior
-    // que a caixa, ela cresceria com o texto em vez de rolar junto com ele.
-    const altura = `${Math.ceil(linhas * alturaDaLinha + margens + 14)}px`;
-    area.style.height = altura;
-    numeros.style.height = altura;
+    // A barra de rolagem horizontal, quando aparece, ganha o seu espaço.
+    const folga = texto.scrollWidth > texto.clientWidth ? 12 : 0;
+    area.style.height = `${Math.ceil(linhas * alturaDaLinha + margens + folga)}px`;
 
     sincronizarRolagem();
   }
@@ -115,13 +111,24 @@ export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin 
   function sincronizarRolagem() {
     realce.scrollTop = texto.scrollTop;
     realce.scrollLeft = texto.scrollLeft;
-    numeros.scrollTop = texto.scrollTop;
+    posicionarMarcaDeErro();
+  }
+
+  /** A marca fina na margem, na altura da linha que o DuckDB apontou. */
+  function posicionarMarcaDeErro() {
+    marcaErro.hidden = linhaComErro === null;
+    if (linhaComErro === null) return;
+    const estilo = getComputedStyle(texto);
+    const alturaDaLinha = parseFloat(estilo.lineHeight);
+    marcaErro.style.top = `${parseFloat(estilo.paddingTop) + (linhaComErro - 1) * alturaDaLinha - texto.scrollTop}px`;
+    marcaErro.style.height = `${alturaDaLinha}px`;
   }
 
   function atualizarDica() {
     dica.textContent = t('editor.dica', {
-      rodar: EH_MAC ? '⌘ Enter' : 'Ctrl Enter',
-      comentar: EH_MAC ? '⌘ /' : 'Ctrl /',
+      rodar: ATALHO_RODAR,
+      comentar: EH_MAC ? '⌘ /' : 'Ctrl + /',
+      formatar: ATALHO_FORMATAR,
     });
   }
 
@@ -329,6 +336,8 @@ export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin 
     // americano, "IntlRo" (ao lado do Shift direito) no ABNT2.
     const barra = evento.key === '/' || evento.code === 'Slash' || evento.code === 'IntlRo';
     if (comando && barra) { evento.preventDefault(); comentar(); return; }
+    // evento.code, e não evento.key: no Mac, Option+F escreve "ƒ".
+    if (evento.shiftKey && evento.altKey && evento.code === 'KeyF') { evento.preventDefault(); fecharSugestoes(); formatar(); return; }
 
     if (evento.key === 'Escape') { sairComTab = true; return; }
     if (evento.key === 'Tab') {
@@ -356,9 +365,6 @@ export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin 
     evento.preventDefault();
     aceitar([...lista.children].indexOf(item));
   });
-
-  alvo.querySelector('.editor-rodar')?.addEventListener('click', () => aoRodar(texto.value));
-  alvo.querySelector('.editor-formatar')?.addEventListener('click', formatar);
 
   // Trocar o idioma da tela traduz os nomes de tabela e coluna do texto.
   function aoMudarIdioma(evento) {
@@ -406,7 +412,12 @@ export function criarEditor(alvo, { inicial = '', aoRodar = () => {}, linhasMin 
     },
     focar: () => texto.focus(),
     formatar,
-    /** Marca, nos números da margem, a linha que o DuckDB apontou. */
+    /** Roda o que está escrito (o botão Rodar da barra de quem usa o editor). */
+    rodar: () => {
+      fecharSugestoes();
+      aoRodar(texto.value);
+    },
+    /** Marca, na margem, a linha que o DuckDB apontou. */
     marcarErro(linha) {
       linhaComErro = linha;
       atualizar();

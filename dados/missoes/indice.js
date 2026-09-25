@@ -12,7 +12,7 @@
 
    Na versão 1, só os módulos 0 a 2 são escritos (passo 10). Para escrever um
    módulo novo: criar o arquivo seguindo o MODELO.md, apontar `arquivo` para
-   ele aqui e abrir o site com ?conferencia para rodar as 5 conferências.
+   ele aqui e abrir o site com ?conferencia para rodar as 6 conferências.
    ========================================================================== */
 
 export const modulos = [

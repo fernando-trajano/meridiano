@@ -19,8 +19,8 @@ navegador, sobre dados reais de países.
 
 - **SQL de verdade desde a primeira missão**, num banco de dados completo (DuckDB) que
   roda dentro da página — nada para instalar.
-- **Um conceito novo por missão**, com um **Raio-X** que mostra a consulta acontecendo
-  etapa por etapa: quais linhas ficam, quais saem, como os grupos se formam.
+- **Um conceito novo por missão**, com um **Passo a passo** que mostra a consulta na
+  ordem em que o banco a lê: quais linhas ficam, quais colunas saem.
 - **A resposta é conferida pelo resultado**, não pelo texto: escrever de outro jeito
   vale, e quando algo dá errado o site diz *como* errou.
 - **Laboratório** para consultas livres, **cola** com a sintaxe e três **jogos** curtos.
@@ -66,9 +66,9 @@ recarregada.
 
 ```
 css/          estilos — tema.css guarda todas as cores em variáveis
-js/           lógica — telas, motor SQL, editor, Raio-X, conferência
+js/           lógica — telas, motor SQL, editor, Passo a passo, conferência
 dados/        conteúdo — missões, base de dados, jogos e traduções (PT/EN)
-fontes/       Source Serif 4 e JetBrains Mono, com as licenças OFL
+fontes/       JetBrains Mono, com a licença OFL
 vendor/       DuckDB-WASM, versão fixada
 ferramentas/  scripts em Python que baixam e geram a base
 ```
@@ -79,4 +79,4 @@ em `dados/missoes/`, sem tocar no código.
 ## Licença
 
 Código: [MIT](LICENSE) — © 2026 Fernando Rodrigo Trajano da Silva.
-Dados do Banco Mundial: CC BY 4.0. Fontes: SIL Open Font License. DuckDB-WASM: MIT.
+Dados do Banco Mundial: CC BY 4.0. Fonte: SIL Open Font License. DuckDB-WASM: MIT.

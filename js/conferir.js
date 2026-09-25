@@ -26,6 +26,7 @@
 import { t } from './i18n.js';
 import { consultar, idiomaDaBase } from './bd.js';
 import { traduzirSQL, separar } from './traducao-sql.js';
+import { seloDe, selosEmHtml } from './realce.js';
 
 /* --------------------------------------------------------------------------
    Conferir uma resposta
@@ -65,7 +66,7 @@ function comMensagem(resultado) {
   const { motivo } = resultado;
   const valores = { ...dados };
 
-  if (dados.recurso) valores.recurso = `<code>${dados.recurso}</code>`;
+  if (dados.recurso) valores.recurso = seloDe(dados.recurso);
 
   // "1 coluna" / "3 colunas", "1 linha" / "5 linhas".
   const contar = (n, um, varios) => (n === 1 ? t(`conferir.${um}`) : t(`conferir.${varios}`, { n }));
@@ -82,7 +83,7 @@ function comMensagem(resultado) {
   if (motivo === 'linhasFaltando' && dados.aluno === 0) frase = 'linhasVazio';
   if (motivo === 'linhasDiferentes' && dados.quantas === 1) frase = 'linhasDiferentesUma';
 
-  return { ...resultado, dados, mensagem: t(`conferir.${frase}`, valores) };
+  return { ...resultado, dados, mensagem: selosEmHtml(t(`conferir.${frase}`, valores)) };
 }
 
 /* --------------------------------------------------------------------------

@@ -20,7 +20,7 @@
 import { t } from './i18n.js';
 import { dicionario } from '../dados/base/dicionario.js';
 import { separar } from './traducao-sql.js';
-import { escapar } from './realce.js';
+import { seloDe } from './realce.js';
 
 /**
  * @param {string} mensagem  o erro do DuckDB
@@ -396,7 +396,7 @@ function nomesDaBase(idiomaDaBase) {
 
 /** Um trecho de código dentro da frase: <code>, com o texto escapado. */
 function codigo(texto) {
-  return `<code>${escapar(String(texto))}</code>`;
+  return seloDe(texto);
 }
 
 /** Os pedaços da consulta sem espaços e comentários. */

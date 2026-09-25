@@ -10,7 +10,7 @@
    ========================================================================== */
 
 import { t } from '../i18n.js';
-import { globo } from '../ilustracoes.js';
+import { globo, animarGlobo } from '../ilustracoes.js';
 
 /**
  * Mostra a tela e devolve os controles dela.
@@ -30,13 +30,14 @@ export function mostrarAbrindo({ aoTentarDeNovo } = {}) {
   camada.setAttribute('role', 'status');
 
   camada.innerHTML = `
-    ${globo({ girando: true, classe: 'abrindo-globo' })}
+    ${globo({ classe: 'abrindo-globo' })}
     <p class="abrindo-titulo" data-i18n="abrindo.titulo">${t('abrindo.titulo')}</p>
     <div class="abrindo-progresso" aria-hidden="true"><span></span></div>
     <p class="abrindo-etapa discreto" data-i18n="abrindo.motor">${t('abrindo.motor')}</p>
   `;
   document.body.append(camada);
 
+  const pararGlobo = animarGlobo(camada.querySelector('.globo'));
   const barra = camada.querySelector('.abrindo-progresso span');
   const etapa = camada.querySelector('.abrindo-etapa');
 
@@ -51,6 +52,7 @@ export function mostrarAbrindo({ aoTentarDeNovo } = {}) {
     },
 
     fechar() {
+      pararGlobo();
       camada.classList.add('abrindo--saindo');
       camada.addEventListener('transitionend', () => camada.remove(), { once: true });
       // Rede de segurança: sem transição (movimento reduzido), some na hora.
@@ -59,6 +61,7 @@ export function mostrarAbrindo({ aoTentarDeNovo } = {}) {
 
     falhar(erro) {
       console.error('[abrindo]', erro);
+      pararGlobo();
       camada.classList.add('abrindo--erro');
       camada.innerHTML = `
         ${globo({ classe: 'abrindo-globo' })}

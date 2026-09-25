@@ -36,25 +36,20 @@
   }
   </script>
 
-  <!-- Escolhe o tema ANTES de a página aparecer, para não piscar branco em
-       quem usa o modo escuro. É o único JavaScript fora da pasta js/, e ele
-       precisa estar aqui: qualquer coisa carregada depois já seria tarde.
-       A regra é a mesma do app.js (ver a seção Tema lá): a escolha manual
-       só vale enquanto o sistema continuar no tema que tinha quando ela foi
-       feita. Ela está repetida aqui porque isto roda antes de tudo. -->
+  <!-- Escolhe o tema ANTES de a página aparecer, para não piscar. É o único
+       JavaScript fora da pasta js/, e ele precisa estar aqui: qualquer coisa
+       carregada depois já seria tarde. A regra (redesenho depois do passo
+       12): o site abre no escuro; o claro vale só se a pessoa escolheu. -->
   <script>
     (function () {
-      var salvo = {};
+      var tema = 'escuro';
       try {
-        salvo = JSON.parse(localStorage.getItem('meridiano:config') || '{}');
+        var salvo = JSON.parse(localStorage.getItem('meridiano:config') || '{}');
+        if (salvo.tema === 'claro') tema = 'claro';
       } catch (erro) {
-        /* navegador sem localStorage: segue o sistema */
+        /* navegador sem localStorage: fica o escuro */
       }
-      var sistema =
-        window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro';
-
-      document.documentElement.dataset.tema =
-        salvo.tema && salvo.temaDoSistemaNaEscolha === sistema ? salvo.tema : sistema;
+      document.documentElement.dataset.tema = tema;
     })();
   </script>
 
@@ -67,17 +62,12 @@
 
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 
-  <!-- A serifada aparece logo de cara (marca e título): pedir o arquivo já
-       aqui evita a troca de fonte visível. A mono só entra nas telas com
-       código, então não precisa de pressa. -->
-  <link rel="preload" href="./fontes/source-serif-4/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
-
   <link rel="stylesheet" href="./css/tema.css">
   <link rel="stylesheet" href="./css/fontes.css">
   <link rel="stylesheet" href="./css/base.css">
   <link rel="stylesheet" href="./css/componentes.css">
   <link rel="stylesheet" href="./css/editor.css">
-  <link rel="stylesheet" href="./css/raio-x.css">
+  <link rel="stylesheet" href="./css/passo-a-passo.css">
   <link rel="stylesheet" href="./css/telas.css">
 </head>
 <body>
@@ -93,38 +83,44 @@
     <symbol id="icone-lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
       <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"></path>
     </symbol>
+    <!-- Formatar: três linhas alinhadas à esquerda. -->
+    <symbol id="icone-formatar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+      <path d="M4 7h16M4 12h10M4 17h13"></path>
+    </symbol>
   </svg>
 
   <div class="cabecalho-faixa">
     <header class="cabecalho">
-      <!-- A marca é só o nome, na serifada, com o ponto na cor de destaque.
-           Sempre volta ao início. -->
-      <a class="marca" href="./">meridiano<span class="marca-ponto">.</span></a>
+      <!-- A marca é só o nome, com o ponto na cor de destaque. Sempre volta
+           ao início (a trilha). -->
+      <a class="marca" href="#/">meridiano<span class="marca-ponto">.</span></a>
+
+      <!-- O contexto da tela (na missão: "Módulo 0 · Missão 2 de 3"),
+           preenchido por js/cabecalho.js. -->
+      <span class="cabecalho-contexto" hidden></span>
 
       <nav class="cabecalho-acoes">
-        <div class="seletor" role="group" data-i18n-aria="cabecalho.idioma" aria-label="Idioma da interface">
-          <button type="button" class="seletor-opcao" data-idioma="pt" aria-pressed="true">PT</button>
-          <button type="button" class="seletor-opcao" data-idioma="en" aria-pressed="false">EN</button>
+        <div class="idiomas" role="group" data-i18n-aria="cabecalho.idioma" aria-label="Idioma da interface">
+          <button type="button" class="idioma" data-idioma="pt" aria-pressed="true">PT</button>
+          <span class="idiomas-ponto" aria-hidden="true">·</span>
+          <button type="button" class="idioma" data-idioma="en" aria-pressed="false">EN</button>
         </div>
 
         <button type="button" class="botao-icone" id="botao-tema" data-i18n-aria="cabecalho.alternarTema" aria-label="Alternar entre modo claro e escuro">
-          <svg aria-hidden="true"><use href="#icone-lua"></use></svg>
+          <svg aria-hidden="true"><use href="#icone-sol"></use></svg>
         </button>
+
+        <!-- Só na missão. -->
+        <a class="cabecalho-sair" href="#/" data-i18n="cabecalho.sair" hidden>Sair</a>
       </nav>
     </header>
   </div>
 
   <!-- Todas as telas do site aparecem dentro deste <main>, trocadas pelo
-       JavaScript. O conteúdo escrito aqui é só o que se vê enquanto o
-       JavaScript não carregou.
-
-       PROVISÓRIO (passo 2): uma vitrine com as peças do visual — título,
-       memorando, código colorido por cláusula, botões e erro — para conferir
-       a paleta e as fontes nos dois modos. Sai quando a tela de entrada
-       chegar (passo 15). -->
+       roteador (js/roteador.js). O conteúdo escrito aqui é só a reserva, para
+       quem chega antes do JavaScript carregar. -->
   <main class="conteudo" id="tela">
-
-    <section class="secao vitrine-abertura">
+    <section class="secao">
       <h1 data-i18n="geral.instituto">Observatório Meridiano</h1>
       <p class="subtitulo" data-i18n="geral.subtitulo">SQL de verdade, com dados do mundo real</p>
       <p data-i18n="vitrine.texto">
@@ -132,70 +128,7 @@
         Genebra. Cada lição é uma missão: o pedido de um pesquisador,
         resolvido com SQL de verdade sobre dados reais de países.
       </p>
-      <div class="grupo-botoes">
-        <button type="button" class="botao botao--principal" data-i18n="vitrine.comecar">Começar</button>
-        <button type="button" class="botao" data-i18n="vitrine.jaSei">Já sei um pouco de SQL</button>
-      </div>
     </section>
-
-    <section class="secao vitrine-missao">
-      <div class="vitrine-historia">
-        <div class="memorando-cabecalho">
-          <span class="monograma" aria-hidden="true">KM</span>
-          <span class="memorando-quem">
-            <span class="memorando-nome">Kofi Mensah</span>
-            <span class="memorando-cargo" data-i18n="vitrine.cargo">Economista</span>
-          </span>
-          <span class="memorando-hora">09:14</span>
-        </div>
-        <p class="memorando-texto" data-i18n="vitrine.pedido">
-          Preciso saber, por região, quantos países já tiravam mais da metade
-          da energia de fontes renováveis. Só as regiões com pelo menos três
-          países.
-        </p>
-        <p class="discreto"><span data-i18n="vitrine.exemplo">Missão de exemplo</span> · <a href="#" data-i18n="vitrine.verDados">ver os dados</a></p>
-      </div>
-
-      <div class="vitrine-codigo">
-<pre class="bloco-codigo"><span class="sql-comentario" data-i18n="vitrine.comentario">-- Regiões com mais países acima de 50%</span>
-<span class="sql-with">WITH</span> recentes AS (
-  <span class="sql-select">SELECT</span> country_name, region, renewable_pct
-  <span class="sql-from">FROM</span> country_year
-  <span class="sql-from">JOIN</span> countries ON countries.code = country_year.code
-  <span class="sql-where">WHERE</span> renewable_pct &gt; <span class="sql-numero">50</span>
-)
-<span class="sql-select">SELECT</span> region, <span class="sql-funcao">COUNT</span>(*) AS total
-<span class="sql-from">FROM</span> recentes
-<span class="sql-where">WHERE</span> region &lt;&gt; <span class="sql-texto">'World'</span>
-<span class="sql-group">GROUP BY</span> region
-<span class="sql-group">HAVING</span> <span class="sql-funcao">COUNT</span>(*) &gt;= <span class="sql-numero">3</span>
-<span class="sql-order">ORDER BY</span> total DESC
-<span class="sql-order">LIMIT</span> <span class="sql-numero">5</span>;</pre>
-        <p class="aviso-erro" data-i18n="vitrine.erro">Faltou fechar um parêntese. Confira o fim da linha 3.</p>
-      </div>
-    </section>
-
-    <!-- PROVISÓRIO (passos 5 e 7): a bancada de teste do motor SQL, agora com o
-         editor, a tabela de resultado e os erros de verdade. Sai quando a tela
-         de missão chegar (passo 12). -->
-    <section class="secao bancada" id="bancada">
-      <h2 data-i18n="bancada.titulo">Bancada de teste</h2>
-      <p class="discreto" data-i18n="bancada.explicacao">Provisório: o editor e o motor de verdade, antes de existir a tela de missão.</p>
-      <p data-i18n="bancada.desafio">Desafio de teste: os 5 países mais populosos de 2023, do maior para o menor, sem os agregados.</p>
-      <div id="bancada-editor"></div>
-      <div class="bancada-resultado" id="bancada-resultado" aria-live="polite"></div>
-
-      <!-- PROVISÓRIO (passo 11): o Raio-X de cada missão, para ver antes da
-           tela de missão existir. -->
-      <div class="bancada-raiox">
-        <label class="bancada-rotulo">
-          <span data-i18n="bancada.raioX">Raio-X de teste: escolha uma missão.</span>
-          <select id="bancada-missao"></select>
-        </label>
-        <div id="bancada-raiox"></div>
-      </div>
-    </section>
-
   </main>
 
   <footer class="rodape">

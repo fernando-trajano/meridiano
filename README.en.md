@@ -68,7 +68,7 @@ cache anything, so a code change shows up as soon as the page reloads.
 css/          styles — tema.css holds every color as a CSS variable
 js/           logic — screens, SQL engine, editor, X-ray, answer checking
 dados/        content — missions, database, games and translations (PT/EN)
-fontes/       Source Serif 4 and JetBrains Mono, with their OFL licenses
+fontes/       JetBrains Mono, with its OFL license
 vendor/       DuckDB-WASM, pinned version
 ferramentas/  Python scripts that download and generate the database
 ```
@@ -79,4 +79,4 @@ Content and logic are kept apart on purpose: new missions can be written by edit
 ## License
 
 Code: [MIT](LICENSE) — © 2026 Fernando Rodrigo Trajano da Silva.
-World Bank data: CC BY 4.0. Fonts: SIL Open Font License. DuckDB-WASM: MIT.
+World Bank data: CC BY 4.0. Font: SIL Open Font License. DuckDB-WASM: MIT.

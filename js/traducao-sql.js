@@ -220,7 +220,7 @@ export function separar(sql) {
 }
 
 /**
- * O SQL de um campo de missão (exemplo, etapa do Raio-X, amostra…) no idioma
+ * O SQL de um campo de missão (exemplo, amostra, dica…) no idioma
  * pedido. O campo pode vir de dois jeitos:
  *   - texto: SQL escrito UMA vez, em inglês — traduzido aqui;
  *   - { pt, en }: cada idioma escrito à mão, com os seus nomes — para quando
@@ -251,4 +251,22 @@ export function sqlEmIngles(valor) {
  */
 export function nomeNoIdioma(nomeEn, idioma) {
   return idioma === 'pt' ? mapas.en.get(nomeEn) ?? nomeEn : nomeEn;
+}
+
+/**
+ * As tabelas que uma consulta em inglês usa (nomes em inglês, na ordem em
+ * que aparecem, sem repetir). Um nome logo depois de "." é coluna, não
+ * tabela — nunca conta.
+ * @param {string} sql
+ * @returns {string[]}
+ */
+export function tabelasDoSQL(sql) {
+  const achadas = [];
+  const pedacos = separar(sql ?? '').filter((p) => p.tipo !== 'espaco' && p.tipo !== 'comentario');
+  pedacos.forEach((pedaco, i) => {
+    const nome = pedaco.texto.toLowerCase();
+    if (pedaco.tipo !== 'nome' || !dicionario[nome] || pedacos[i - 1]?.texto === '.') return;
+    if (!achadas.includes(nome)) achadas.push(nome);
+  });
+  return achadas;
 }

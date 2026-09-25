@@ -24,19 +24,32 @@ export const missoes = [
       pt: 'Um parceiro na América Latina pediu a nossa lista de países da região — só os da América Latina e Caribe, que na base têm o código LCN.',
       en: 'A partner in Latin America asked for our list of countries in the region — only Latin America & Caribbean, coded LCN in the database.',
     },
+    // Uma linha que lembra o pedido na etapa do conceito.
+    resumo: { pt: 'os países da América Latina e Caribe (LCN).', en: 'the countries in Latin America & Caribbean (LCN).' },
     conceitosNovos: ['WHERE', '='],
     tabelas: ['countries'],
     amostra: 'SELECT country_name, region_code FROM countries LIMIT 5',
     conceito: {
-      pt: "WHERE filtra as linhas: só passam as que cumprem a condição. Ele vem depois do FROM. Textos vão entre aspas simples e têm de ser iguais letra por letra: WHERE tema = 'health' não encontra 'Health'. Números vão sem aspas: WHERE ano = 2023.",
-      en: "WHERE filters the rows: only those meeting the condition get through. It comes after FROM. Text goes in single quotes and must match letter by letter: WHERE topic = 'health' won’t find 'Health'. Numbers go without quotes: WHERE year = 2023.",
+      pt: "`WHERE` filtra as linhas: só passam as que cumprem a condição. Ele vem depois do `FROM`. Textos vão entre aspas simples e têm de ser iguais letra por letra: no exemplo ao lado, `tema = 'health'` não encontraria `'Health'`. Números vão sem aspas: `ano = 2023`.",
+      en: "`WHERE` filters the rows: only those meeting the condition get through. It comes after `FROM`. Text goes in single quotes and must match letter by letter: in the example alongside, `topic = 'health'` wouldn’t find `'Health'`. Numbers go without quotes: `year = 2023`.",
     },
     exemplo: "SELECT indicator_name FROM indicators WHERE topic = 'health'",
-    raioX: [
-      { etapa: 'FROM', sql: 'SELECT * FROM indicators' },
-      { etapa: 'WHERE', sql: "SELECT * FROM indicators WHERE topic = 'health'" },
-      { etapa: 'SELECT', sql: "SELECT indicator_name FROM indicators WHERE topic = 'health'" },
-    ],
+    // O Passo a passo: uma frase por cláusula do exemplo. A ordem (a do
+    // banco) e o efeito na tabela saem do próprio exemplo.
+    passoAPasso: {
+      FROM: {
+        pt: 'Primeiro, o banco pega a tabela `indicadores` inteira.',
+        en: 'First, the database takes the whole `indicators` table.',
+      },
+      WHERE: {
+        pt: 'Depois, deixa passar só as linhas com `tema` igual a `\'health\'`.',
+        en: 'Then it lets through only the rows whose `topic` is `\'health\'`.',
+      },
+      SELECT: {
+        pt: 'Por último, fica só com a coluna `nome_indicador`.',
+        en: 'Last, it keeps only the `indicator_name` column.',
+      },
+    },
     palpite: {
       pergunta: { pt: 'Quantas linhas o exemplo devolve?', en: 'How many rows does the example return?' },
       opcoes: [
@@ -51,9 +64,10 @@ export const missoes = [
         enunciado: { pt: 'O nome dos países da América Latina e Caribe (região LCN).', en: 'The names of the countries in Latin America & Caribbean (region LCN).' },
         inicial: 'SELECT country_name FROM countries WHERE ',
         gabarito: "SELECT country_name FROM countries WHERE region_code = 'LCN'",
+        tabelas: ['countries'],
         exige: ['WHERE'],
         dicas: [
-          { pt: "A região fica na coluna codigo_regiao, e o valor vai entre aspas simples: 'LCN'.", en: "The region is in the region_code column, and the value goes in single quotes: 'LCN'." },
+          { pt: "A região fica na coluna `codigo_regiao`, e o valor vai entre aspas simples: `'LCN'`.", en: "The region is in the `region_code` column, and the value goes in single quotes: `'LCN'`." },
           'SELECT country_name FROM countries WHERE ____ = ____',
           "SELECT country_name FROM countries WHERE region_code = 'LCN'",
         ],
@@ -62,9 +76,10 @@ export const missoes = [
         enunciado: { pt: 'Sem ajuda: o título dos projetos de energia (tema energy).', en: 'On your own: the titles of the energy projects (topic energy).' },
         inicial: '',
         gabarito: "SELECT title FROM projects WHERE topic = 'energy'",
+        tabelas: ['projects'],
         exige: ['WHERE'],
         dicas: [
-          { pt: "O tema do projeto está na coluna tema; o valor é 'energy', em minúsculas.", en: "The project topic is in the topic column; the value is 'energy', in lowercase." },
+          { pt: "O tema do projeto está na coluna `tema`; o valor é `'energy'`, em minúsculas.", en: "The project topic is in the `topic` column; the value is `'energy'`, in lowercase." },
           'SELECT title FROM projects WHERE ____',
           "SELECT title FROM projects WHERE topic = 'energy'",
         ],
@@ -86,19 +101,32 @@ export const missoes = [
       pt: 'Estou estudando emissões. Em que casos um país emitiu mais de 20 toneladas de CO₂ por pessoa num ano? Quero o código, o ano e o valor.',
       en: 'I am studying emissions. In which cases did a country emit more than 20 tonnes of CO₂ per person in a year? I want the code, the year and the value.',
     },
+    // Uma linha que lembra o pedido na etapa do conceito.
+    resumo: { pt: 'os casos com mais de 20 toneladas de CO₂ por pessoa.', en: 'the cases above 20 tonnes of CO₂ per person.' },
     conceitosNovos: ['COMPARACOES'],
     tabelas: ['country_year'],
     amostra: 'SELECT country_code, year, co2_per_capita FROM country_year LIMIT 5',
     conceito: {
-      pt: 'Além do =, o WHERE compara com > (maior), < (menor), >= (maior ou igual), <= (menor ou igual) e <> (diferente). Com números, é a comparação de sempre. WHERE salario_chf > 150000 deixa passar só quem ganha mais de 150 mil francos por ano.',
-      en: 'Besides =, WHERE compares with > (greater), < (less), >= (greater or equal), <= (less or equal) and <> (different). With numbers, it is the usual comparison. WHERE salary_chf > 150000 only lets through those earning over 150 thousand francs a year.',
+      pt: 'Além do `=`, o `WHERE` compara com `>` (maior), `<` (menor), `>=` (maior ou igual), `<=` (menor ou igual) e `<>` (diferente). Com números, é a comparação de sempre. No exemplo ao lado, `salario_chf > 150000` deixa passar só quem ganha mais de 150 mil francos por ano.',
+      en: 'Besides `=`, `WHERE` compares with `>` (greater), `<` (less), `>=` (greater or equal), `<=` (less or equal) and `<>` (different). With numbers, it is the usual comparison. In the example alongside, `salary_chf > 150000` only lets through those earning over 150 thousand francs a year.',
     },
     exemplo: 'SELECT full_name, salary_chf FROM staff WHERE salary_chf > 150000',
-    raioX: [
-      { etapa: 'FROM', sql: 'SELECT * FROM staff' },
-      { etapa: 'WHERE', sql: 'SELECT * FROM staff WHERE salary_chf > 150000' },
-      { etapa: 'SELECT', sql: 'SELECT full_name, salary_chf FROM staff WHERE salary_chf > 150000' },
-    ],
+    // O Passo a passo: uma frase por cláusula do exemplo. A ordem (a do
+    // banco) e o efeito na tabela saem do próprio exemplo.
+    passoAPasso: {
+      FROM: {
+        pt: 'Primeiro, o banco pega a tabela `equipe` inteira.',
+        en: 'First, the database takes the whole `staff` table.',
+      },
+      WHERE: {
+        pt: 'Depois, deixa passar só quem ganha mais de 150000 por ano.',
+        en: 'Then it lets through only people earning more than 150000 a year.',
+      },
+      SELECT: {
+        pt: 'Por último, fica só com `nome` e `salario_chf`.',
+        en: 'Last, it keeps only `full_name` and `salary_chf`.',
+      },
+    },
     palpite: {
       pergunta: { pt: 'Quem aparece no resultado do exemplo?', en: 'Who shows up in the example’s result?' },
       opcoes: [
@@ -113,9 +141,10 @@ export const missoes = [
         enunciado: { pt: 'Código do país, ano e CO₂ por pessoa, sempre que ele passou de 20 toneladas.', en: 'Country code, year and CO₂ per person, whenever it went over 20 tonnes.' },
         inicial: 'SELECT country_code, year, co2_per_capita FROM country_year WHERE ',
         gabarito: 'SELECT country_code, year, co2_per_capita FROM country_year WHERE co2_per_capita > 20',
+        tabelas: ['country_year'],
         exige: ['COMPARACOES'],
         dicas: [
-          { pt: 'A coluna é co2_per_capita, e "mais de" é >.', en: 'The column is co2_per_capita, and "more than" is >.' },
+          { pt: 'A coluna é `co2_per_capita`, e "mais de" é `>`.', en: 'The column is `co2_per_capita`, and "more than" is `>`.' },
           'SELECT country_code, year, co2_per_capita FROM country_year WHERE co2_per_capita ____ 20',
           'SELECT country_code, year, co2_per_capita FROM country_year WHERE co2_per_capita > 20',
         ],
@@ -124,9 +153,10 @@ export const missoes = [
         enunciado: { pt: 'Sem ajuda: o título e o orçamento dos projetos de 2 milhões de dólares ou mais.', en: 'On your own: the title and budget of projects worth 2 million dollars or more.' },
         inicial: '',
         gabarito: 'SELECT title, budget_usd FROM projects WHERE budget_usd >= 2000000',
+        tabelas: ['projects'],
         exige: ['COMPARACOES'],
         dicas: [
-          { pt: '"Ou mais" inclui o próprio valor: use >=. O número vai sem pontos: 2000000.', en: '"Or more" includes the value itself: use >=. The number goes without separators: 2000000.' },
+          { pt: '"Ou mais" inclui o próprio valor: use `>=`. O número vai sem pontos: `2000000`.', en: '"Or more" includes the value itself: use `>=`. The number goes without separators: `2000000`.' },
           'SELECT title, budget_usd FROM projects WHERE budget_usd ____ 2000000',
           'SELECT title, budget_usd FROM projects WHERE budget_usd >= 2000000',
         ],
@@ -148,19 +178,32 @@ export const missoes = [
       pt: 'Em 2023, onde a expectativa de vida passou dos 80 anos? Quero o código e a expectativa de vida.',
       en: 'In 2023, where did life expectancy go above 80 years? I want the code and the life expectancy.',
     },
+    // Uma linha que lembra o pedido na etapa do conceito.
+    resumo: { pt: 'onde a expectativa de vida passou dos 80 anos em 2023.', en: 'where life expectancy passed 80 in 2023.' },
     conceitosNovos: ['AND', 'OR', 'NOT'],
     tabelas: ['country_year'],
     amostra: 'SELECT country_code, year, life_expectancy FROM country_year LIMIT 5',
     conceito: {
-      pt: 'AND exige as duas condições ao mesmo tempo; OR aceita qualquer uma delas; NOT inverte uma condição. WHERE ano = 2023 AND expectativa_vida > 80 pega só 2023, e só acima de 80. Ao misturar AND com OR, use parênteses para deixar claro o que vai junto.',
-      en: 'AND requires both conditions at once; OR accepts either one; NOT flips a condition. WHERE year = 2023 AND life_expectancy > 80 takes only 2023, and only above 80. When mixing AND with OR, use parentheses to make clear what goes together.',
+      pt: '`AND` exige as duas condições ao mesmo tempo; `OR` aceita qualquer uma delas; `NOT` inverte uma condição. No exemplo ao lado, o `OR` junta `tema = \'health\'` e `tema = \'energy\'`: passam os dois temas. Ao misturar `AND` com `OR`, use parênteses para deixar claro o que vai junto.',
+      en: '`AND` requires both conditions at once; `OR` accepts either one; `NOT` flips a condition. In the example alongside, `OR` joins `topic = \'health\'` and `topic = \'energy\'`: both topics get through. When mixing `AND` with `OR`, use parentheses to make clear what goes together.',
     },
     exemplo: "SELECT title, topic FROM projects WHERE topic = 'health' OR topic = 'energy'",
-    raioX: [
-      { etapa: 'FROM', sql: 'SELECT * FROM projects' },
-      { etapa: 'WHERE', sql: "SELECT * FROM projects WHERE topic = 'health' OR topic = 'energy'" },
-      { etapa: 'SELECT', sql: "SELECT title, topic FROM projects WHERE topic = 'health' OR topic = 'energy'" },
-    ],
+    // O Passo a passo: uma frase por cláusula do exemplo. A ordem (a do
+    // banco) e o efeito na tabela saem do próprio exemplo.
+    passoAPasso: {
+      FROM: {
+        pt: 'Primeiro, o banco pega a tabela `projetos` inteira.',
+        en: 'First, the database takes the whole `projects` table.',
+      },
+      WHERE: {
+        pt: 'Depois, deixa passar as linhas em que o `tema` é `\'health\'` ou `\'energy\'` — basta uma das duas.',
+        en: 'Then it lets through the rows whose `topic` is `\'health\'` or `\'energy\'` — either one is enough.',
+      },
+      SELECT: {
+        pt: 'Por último, fica só com `titulo` e `tema`.',
+        en: 'Last, it keeps only `title` and `topic`.',
+      },
+    },
     palpite: {
       pergunta: { pt: 'O exemplo devolve os projetos…', en: 'The example returns the projects…' },
       opcoes: [
@@ -175,20 +218,22 @@ export const missoes = [
         enunciado: { pt: 'Código e expectativa de vida onde ela passou de 80 anos, em 2023.', en: 'Code and life expectancy where it went above 80 years, in 2023.' },
         inicial: 'SELECT country_code, life_expectancy FROM country_year WHERE year = 2023 ',
         gabarito: 'SELECT country_code, life_expectancy FROM country_year WHERE year = 2023 AND life_expectancy > 80',
+        tabelas: ['country_year'],
         exige: ['AND'],
         dicas: [
-          { pt: 'Falta a segunda condição, ligada à primeira por AND.', en: 'The second condition is missing, linked to the first by AND.' },
+          { pt: 'Falta a segunda condição, ligada à primeira por `AND`.', en: 'The second condition is missing, linked to the first by `AND`.' },
           'SELECT country_code, life_expectancy FROM country_year WHERE year = 2023 ____ life_expectancy > 80',
           'SELECT country_code, life_expectancy FROM country_year WHERE year = 2023 AND life_expectancy > 80',
         ],
       },
       {
-        enunciado: { pt: 'Sem ajuda: o título e o tema de todos os projetos que NÃO são do tema digital — usando NOT.', en: 'On your own: the title and topic of every project that is NOT about digital — using NOT.' },
+        enunciado: { pt: 'Sem ajuda: o título e o tema de todos os projetos que NÃO são do tema digital — usando `NOT`.', en: 'On your own: the title and topic of every project that is NOT about digital — using `NOT`.' },
         inicial: '',
         gabarito: "SELECT title, topic FROM projects WHERE NOT topic = 'digital'",
+        tabelas: ['projects'],
         exige: ['NOT'],
         dicas: [
-          { pt: 'O NOT vem antes da condição que ele inverte.', en: 'NOT comes before the condition it flips.' },
+          { pt: 'O `NOT` vem antes da condição que ele inverte.', en: '`NOT` comes before the condition it flips.' },
           "SELECT title, topic FROM projects WHERE ____ topic = 'digital'",
           "SELECT title, topic FROM projects WHERE NOT topic = 'digital'",
         ],
@@ -210,19 +255,32 @@ export const missoes = [
       pt: 'Para o relatório sobre desigualdade: a expectativa de vida em 2023 em cada grupo de renda. Os códigos dos grupos são LIC, LMC, UMC e HIC.',
       en: 'For the inequality report: life expectancy in 2023 in each income group. The group codes are LIC, LMC, UMC and HIC.',
     },
+    // Uma linha que lembra o pedido na etapa do conceito.
+    resumo: { pt: 'a expectativa de vida em 2023 em cada grupo de renda.', en: 'life expectancy in 2023 for each income group.' },
     conceitosNovos: ['IN'],
     tabelas: ['country_year'],
     amostra: 'SELECT country_code, year, life_expectancy FROM country_year LIMIT 5',
     conceito: {
-      pt: "IN compara com uma lista: WHERE departamento IN ('Research', 'Economics') é o mesmo que um OR para cada valor, só que mais curto. A lista vai entre parênteses, com os valores separados por vírgula. NOT IN faz o contrário: deixa passar o que não está na lista.",
-      en: "IN compares against a list: WHERE department IN ('Research', 'Economics') is the same as one OR per value, only shorter. The list goes in parentheses, with the values separated by commas. NOT IN does the opposite: it lets through what is not on the list.",
+      pt: "`IN` compara com uma lista: no exemplo ao lado, `IN` com a lista `('Research', 'Economics')` é o mesmo que um `OR` para cada valor, só que mais curto. A lista vai entre parênteses, com os valores separados por vírgula. `NOT IN` faz o contrário: deixa passar o que não está na lista.",
+      en: "`IN` compares against a list: in the example alongside, `IN` with the list `('Research', 'Economics')` is the same as one `OR` per value, only shorter. The list goes in parentheses, with the values separated by commas. `NOT IN` does the opposite: it lets through what is not on the list.",
     },
     exemplo: "SELECT full_name, department FROM staff WHERE department IN ('Research', 'Economics')",
-    raioX: [
-      { etapa: 'FROM', sql: 'SELECT * FROM staff' },
-      { etapa: 'WHERE', sql: "SELECT * FROM staff WHERE department IN ('Research', 'Economics')" },
-      { etapa: 'SELECT', sql: "SELECT full_name, department FROM staff WHERE department IN ('Research', 'Economics')" },
-    ],
+    // O Passo a passo: uma frase por cláusula do exemplo. A ordem (a do
+    // banco) e o efeito na tabela saem do próprio exemplo.
+    passoAPasso: {
+      FROM: {
+        pt: 'Primeiro, o banco pega a tabela `equipe` inteira.',
+        en: 'First, the database takes the whole `staff` table.',
+      },
+      WHERE: {
+        pt: 'Depois, deixa passar só quem está em Research ou em Economics.',
+        en: 'Then it lets through only people in Research or Economics.',
+      },
+      SELECT: {
+        pt: 'Por último, fica só com `nome` e `departamento`.',
+        en: 'Last, it keeps only `full_name` and `department`.',
+      },
+    },
     palpite: {
       pergunta: { pt: 'O filtro do exemplo é o mesmo que…', en: 'The example’s filter is the same as…' },
       opcoes: [
@@ -237,9 +295,10 @@ export const missoes = [
         enunciado: { pt: 'Código e expectativa de vida dos quatro grupos de renda (LIC, LMC, UMC e HIC), em 2023.', en: 'Code and life expectancy of the four income groups (LIC, LMC, UMC and HIC), in 2023.' },
         inicial: 'SELECT country_code, life_expectancy FROM country_year WHERE year = 2023 AND country_code ',
         gabarito: "SELECT country_code, life_expectancy FROM country_year WHERE year = 2023 AND country_code IN ('LIC', 'LMC', 'UMC', 'HIC')",
+        tabelas: ['country_year'],
         exige: ['IN'],
         dicas: [
-          { pt: 'Depois do IN, a lista entre parênteses, cada código entre aspas simples.', en: 'After IN, the list in parentheses, each code in single quotes.' },
+          { pt: 'Depois do `IN`, a lista entre parênteses, cada código entre aspas simples.', en: 'After `IN`, the list in parentheses, each code in single quotes.' },
           'SELECT country_code, life_expectancy FROM country_year WHERE year = 2023 AND country_code IN (____)',
           "SELECT country_code, life_expectancy FROM country_year WHERE year = 2023 AND country_code IN ('LIC', 'LMC', 'UMC', 'HIC')",
         ],
@@ -248,9 +307,10 @@ export const missoes = [
         enunciado: { pt: 'Sem ajuda: nome e departamento de quem trabalha em Climate & Energy ou em Data Engineering.', en: 'On your own: name and department of everyone in Climate & Energy or Data Engineering.' },
         inicial: '',
         gabarito: "SELECT full_name, department FROM staff WHERE department IN ('Climate & Energy', 'Data Engineering')",
+        tabelas: ['staff'],
         exige: ['IN'],
         dicas: [
-          { pt: 'Os valores têm de ser escritos exatamente como na coluna departamento, com o & e as maiúsculas.', en: 'The values must be written exactly as in the department column, with the & and the capitals.' },
+          { pt: 'Os valores têm de ser escritos exatamente como na coluna `departamento`, com o & e as maiúsculas.', en: 'The values must be written exactly as in the `department` column, with the & and the capitals.' },
           'SELECT full_name, department FROM staff WHERE department IN (____, ____)',
           "SELECT full_name, department FROM staff WHERE department IN ('Climate & Energy', 'Data Engineering')",
         ],
@@ -272,19 +332,32 @@ export const missoes = [
       pt: 'Quero ver a década da internet: a porcentagem da população mundial usando a internet, de 2010 a 2020. O mundo inteiro tem o código WLD.',
       en: 'I want to see the internet decade: the share of the world population using the internet, from 2010 to 2020. The whole world has the code WLD.',
     },
+    // Uma linha que lembra o pedido na etapa do conceito.
+    resumo: { pt: 'a internet no mundo (WLD), de 2010 a 2020.', en: 'internet use worldwide (WLD), from 2010 to 2020.' },
     conceitosNovos: ['BETWEEN'],
     tabelas: ['country_year'],
     amostra: 'SELECT country_code, year, internet_pct FROM country_year LIMIT 5',
     conceito: {
-      pt: 'BETWEEN pega uma faixa de valores, com as duas pontas incluídas: WHERE ano BETWEEN 2010 AND 2020 é o mesmo que ano >= 2010 AND ano <= 2020. Serve para números, datas e até textos. O AND aqui faz parte do BETWEEN — não é uma segunda condição.',
-      en: 'BETWEEN takes a range of values, both ends included: WHERE year BETWEEN 2010 AND 2020 is the same as year >= 2010 AND year <= 2020. It works for numbers, dates and even text. The AND here is part of BETWEEN — not a second condition.',
+      pt: '`BETWEEN` pega uma faixa de valores, com as duas pontas incluídas: `ano BETWEEN 2010 AND 2020` é o mesmo que usar `>=` e `<=` com `AND`. No exemplo ao lado, a faixa é de orçamentos. Serve para números, datas e até textos. O `AND` aqui faz parte do `BETWEEN` — não é uma segunda condição.',
+      en: '`BETWEEN` takes a range of values, both ends included: `year BETWEEN 2010 AND 2020` is the same as using `>=` and `<=` with `AND`. In the example alongside, the range is of budgets. It works for numbers, dates and even text. The `AND` here is part of `BETWEEN` — not a second condition.',
     },
     exemplo: 'SELECT title, budget_usd FROM projects WHERE budget_usd BETWEEN 500000 AND 1000000',
-    raioX: [
-      { etapa: 'FROM', sql: 'SELECT * FROM projects' },
-      { etapa: 'WHERE', sql: 'SELECT * FROM projects WHERE budget_usd BETWEEN 500000 AND 1000000' },
-      { etapa: 'SELECT', sql: 'SELECT title, budget_usd FROM projects WHERE budget_usd BETWEEN 500000 AND 1000000' },
-    ],
+    // O Passo a passo: uma frase por cláusula do exemplo. A ordem (a do
+    // banco) e o efeito na tabela saem do próprio exemplo.
+    passoAPasso: {
+      FROM: {
+        pt: 'Primeiro, o banco pega a tabela `projetos` inteira.',
+        en: 'First, the database takes the whole `projects` table.',
+      },
+      WHERE: {
+        pt: 'Depois, deixa passar só os orçamentos de 500000 a 1000000, com as duas pontas.',
+        en: 'Then it lets through only budgets from 500000 to 1000000, both ends included.',
+      },
+      SELECT: {
+        pt: 'Por último, fica só com `titulo` e `orcamento_usd`.',
+        en: 'Last, it keeps only `title` and `budget_usd`.',
+      },
+    },
     palpite: {
       pergunta: { pt: 'Um projeto de exatamente 1.000.000 de dólares entraria no resultado do exemplo?', en: 'Would a project of exactly 1,000,000 dollars be in the example’s result?' },
       opcoes: [
@@ -299,9 +372,10 @@ export const missoes = [
         enunciado: { pt: 'Ano e porcentagem da população mundial (WLD) na internet, de 2010 a 2020.', en: 'Year and share of the world population (WLD) on the internet, from 2010 to 2020.' },
         inicial: "SELECT year, internet_pct FROM country_year WHERE country_code = 'WLD' AND ",
         gabarito: "SELECT year, internet_pct FROM country_year WHERE country_code = 'WLD' AND year BETWEEN 2010 AND 2020",
+        tabelas: ['country_year'],
         exige: ['BETWEEN'],
         dicas: [
-          { pt: 'Falta a faixa de anos: ano BETWEEN o primeiro AND o último.', en: 'The range of years is missing: year BETWEEN the first AND the last.' },
+          { pt: 'Falta a faixa de anos: `ano BETWEEN` o primeiro `AND` o último.', en: 'The range of years is missing: `year BETWEEN` the first `AND` the last.' },
           "SELECT year, internet_pct FROM country_year WHERE country_code = 'WLD' AND year BETWEEN ____ AND ____",
           "SELECT year, internet_pct FROM country_year WHERE country_code = 'WLD' AND year BETWEEN 2010 AND 2020",
         ],
@@ -310,9 +384,10 @@ export const missoes = [
         enunciado: { pt: 'Sem ajuda: nome e data de admissão de quem entrou na equipe de 1º de janeiro de 2020 a 31 de dezembro de 2022.', en: 'On your own: name and hire date of everyone who joined the staff from 1 January 2020 to 31 December 2022.' },
         inicial: '',
         gabarito: "SELECT full_name, hire_date FROM staff WHERE hire_date BETWEEN '2020-01-01' AND '2022-12-31'",
+        tabelas: ['staff'],
         exige: ['BETWEEN'],
         dicas: [
-          { pt: "Datas vão entre aspas simples, no formato ano-mês-dia: '2020-01-01'. A coluna é data_admissao.", en: "Dates go in single quotes, as year-month-day: '2020-01-01'. The column is hire_date." },
+          { pt: "Datas vão entre aspas simples, no formato ano-mês-dia: `'2020-01-01'`. A coluna é `data_admissao`.", en: "Dates go in single quotes, as year-month-day: `'2020-01-01'`. The column is `hire_date`." },
           'SELECT full_name, hire_date FROM staff WHERE hire_date BETWEEN ____ AND ____',
           "SELECT full_name, hire_date FROM staff WHERE hire_date BETWEEN '2020-01-01' AND '2022-12-31'",
         ],
@@ -334,18 +409,31 @@ export const missoes = [
       pt: 'Estou juntando dados sobre pequenos estados insulares. Para começar, me mostre os países e territórios cujo nome em inglês tem a palavra "Islands".',
       en: 'I am gathering data on small island states. To start, show me the countries and territories whose English name contains the word "Islands".',
     },
+    // Uma linha que lembra o pedido na etapa do conceito.
+    resumo: { pt: 'os países com "Islands" no nome.', en: 'the countries with "Islands" in the name.' },
     conceitosNovos: ['LIKE'],
     tabelas: ['countries'],
     conceito: {
-      pt: "LIKE procura um pedaço de texto. O % quer dizer \"qualquer coisa, até nada\": 'Senior%' é tudo o que começa com Senior; '%Islands%' é tudo o que tem Islands em algum lugar. O _ vale por uma letra só. Maiúsculas e minúsculas contam.",
-      en: "LIKE searches for a piece of text. The % means \"anything, even nothing\": 'Senior%' is everything that starts with Senior; '%Islands%' is everything with Islands somewhere in it. The _ stands for a single letter. Upper and lower case matter.",
+      pt: "`LIKE` procura um pedaço de texto. O `%` quer dizer \"qualquer coisa, até nada\": no exemplo ao lado, `'Senior%'` é tudo o que começa com Senior; `'%Islands%'` é tudo o que tem Islands em algum lugar. O `_` vale por uma letra só. Maiúsculas e minúsculas contam.",
+      en: "`LIKE` searches for a piece of text. The `%` means \"anything, even nothing\": in the example alongside, `'Senior%'` is everything that starts with Senior; `'%Islands%'` is everything with Islands somewhere in it. The `_` stands for a single letter. Upper and lower case matter.",
     },
     exemplo: "SELECT full_name, job_title FROM staff WHERE job_title LIKE 'Senior%'",
-    raioX: [
-      { etapa: 'FROM', sql: 'SELECT * FROM staff' },
-      { etapa: 'WHERE', sql: "SELECT * FROM staff WHERE job_title LIKE 'Senior%'" },
-      { etapa: 'SELECT', sql: "SELECT full_name, job_title FROM staff WHERE job_title LIKE 'Senior%'" },
-    ],
+    // O Passo a passo: uma frase por cláusula do exemplo. A ordem (a do
+    // banco) e o efeito na tabela saem do próprio exemplo.
+    passoAPasso: {
+      FROM: {
+        pt: 'Primeiro, o banco pega a tabela `equipe` inteira.',
+        en: 'First, the database takes the whole `staff` table.',
+      },
+      WHERE: {
+        pt: 'Depois, deixa passar só os cargos que começam com Senior.',
+        en: 'Then it lets through only job titles starting with Senior.',
+      },
+      SELECT: {
+        pt: 'Por último, fica só com `nome` e `cargo`.',
+        en: 'Last, it keeps only `full_name` and `job_title`.',
+      },
+    },
     palpite: {
       pergunta: { pt: "Qual destes cargos passa em LIKE 'Senior%'?", en: "Which of these job titles passes LIKE 'Senior%'?" },
       opcoes: [
@@ -360,9 +448,10 @@ export const missoes = [
         enunciado: { pt: 'O nome dos países e territórios que têm "Islands" no nome.', en: 'The names of the countries and territories with "Islands" in the name.' },
         inicial: 'SELECT country_name FROM countries WHERE country_name ',
         gabarito: "SELECT country_name FROM countries WHERE country_name LIKE '%Islands%'",
+        tabelas: ['countries'],
         exige: ['LIKE'],
         dicas: [
-          { pt: 'A palavra pode estar em qualquer lugar do nome: % antes e % depois.', en: 'The word can be anywhere in the name: % before and % after.' },
+          { pt: 'A palavra pode estar em qualquer lugar do nome: `%` antes e `%` depois.', en: 'The word can be anywhere in the name: `%` before and `%` after.' },
           "SELECT country_name FROM countries WHERE country_name LIKE ____",
           "SELECT country_name FROM countries WHERE country_name LIKE '%Islands%'",
         ],
@@ -371,9 +460,10 @@ export const missoes = [
         enunciado: { pt: 'Sem ajuda: o título dos relatórios anuais do Observatório — todos começam com "Meridiano Observatory annual report".', en: 'On your own: the titles of the Observatory’s annual reports — they all start with "Meridiano Observatory annual report".' },
         inicial: '',
         gabarito: "SELECT title FROM publications WHERE title LIKE 'Meridiano Observatory annual report%'",
+        tabelas: ['publications'],
         exige: ['LIKE'],
         dicas: [
-          { pt: 'Começa com: o texto e depois o %. O título fica na coluna titulo da tabela publicacoes.', en: 'Starts with: the text, then the %. The title is in the title column of the publications table.' },
+          { pt: 'Começa com: o texto e depois o `%`. O título fica na coluna `titulo` da tabela `publicacoes`.', en: 'Starts with: the text, then the `%`. The title is in the `title` column of the `publications` table.' },
           "SELECT title FROM publications WHERE title LIKE ____",
           "SELECT title FROM publications WHERE title LIKE 'Meridiano Observatory annual report%'",
         ],
@@ -395,19 +485,32 @@ export const missoes = [
       pt: 'O índice de Gini mede a desigualdade de renda, mas não é medido todo ano em todo país. Em 2021, onde há Gini medido? Quero o código e o valor.',
       en: 'The Gini index measures income inequality, but it isn’t measured every year in every country. In 2021, where is there a measured Gini? I want the code and the value.',
     },
+    // Uma linha que lembra o pedido na etapa do conceito.
+    resumo: { pt: 'onde há Gini medido em 2021.', en: 'where Gini was measured in 2021.' },
     conceitosNovos: ['IS NULL'],
     tabelas: ['country_year'],
     amostra: 'SELECT country_code, year, gini FROM country_year LIMIT 5',
     conceito: {
-      pt: 'Um dado que não existe é NULL — nem zero, nem vazio: desconhecido. Por isso, = NULL nunca funciona. Para achar os vazios, use IS NULL; para achar os preenchidos, IS NOT NULL. WHERE codigo_regiao IS NULL encontra os agregados, que não têm região.',
-      en: 'Data that doesn’t exist is NULL — not zero, not blank: unknown. That is why = NULL never works. To find the empty ones, use IS NULL; to find the filled ones, IS NOT NULL. WHERE region_code IS NULL finds the aggregates, which have no region.',
+      pt: 'Um dado que não existe é `NULL` — nem zero, nem vazio: desconhecido. Por isso, `= NULL` nunca funciona. Para achar os vazios, use `IS NULL`; para achar os preenchidos, `IS NOT NULL`. No exemplo ao lado, `codigo_regiao IS NULL` encontra os agregados, que não têm região.',
+      en: 'Data that doesn’t exist is `NULL` — not zero, not blank: unknown. That is why `= NULL` never works. To find the empty ones, use `IS NULL`; to find the filled ones, `IS NOT NULL`. In the example alongside, `region_code IS NULL` finds the aggregates, which have no region.',
     },
     exemplo: 'SELECT country_name FROM countries WHERE region_code IS NULL',
-    raioX: [
-      { etapa: 'FROM', sql: 'SELECT * FROM countries' },
-      { etapa: 'WHERE', sql: 'SELECT * FROM countries WHERE region_code IS NULL' },
-      { etapa: 'SELECT', sql: 'SELECT country_name FROM countries WHERE region_code IS NULL' },
-    ],
+    // O Passo a passo: uma frase por cláusula do exemplo. A ordem (a do
+    // banco) e o efeito na tabela saem do próprio exemplo.
+    passoAPasso: {
+      FROM: {
+        pt: 'Primeiro, o banco pega a tabela `paises` inteira.',
+        en: 'First, the database takes the whole `countries` table.',
+      },
+      WHERE: {
+        pt: 'Depois, deixa passar só as linhas sem região (`NULL`): os agregados.',
+        en: 'Then it lets through only the rows with no region (`NULL`): the aggregates.',
+      },
+      SELECT: {
+        pt: 'Por último, fica só com `nome_pais`.',
+        en: 'Last, it keeps only `country_name`.',
+      },
+    },
     palpite: {
       pergunta: { pt: 'Quantas linhas o exemplo devolve?', en: 'How many rows does the example return?' },
       opcoes: [
@@ -422,9 +525,10 @@ export const missoes = [
         enunciado: { pt: 'Código e índice de Gini onde ele foi medido, em 2021.', en: 'Code and Gini index wherever it was measured, in 2021.' },
         inicial: 'SELECT country_code, gini FROM country_year WHERE year = 2021 AND gini ',
         gabarito: 'SELECT country_code, gini FROM country_year WHERE year = 2021 AND gini IS NOT NULL',
+        tabelas: ['country_year'],
         exige: ['IS NULL'],
         dicas: [
-          { pt: 'Queremos os preenchidos: IS NOT NULL.', en: 'We want the filled ones: IS NOT NULL.' },
+          { pt: 'Queremos os preenchidos: `IS NOT NULL`.', en: 'We want the filled ones: `IS NOT NULL`.' },
           'SELECT country_code, gini FROM country_year WHERE year = 2021 AND gini IS ____',
           'SELECT country_code, gini FROM country_year WHERE year = 2021 AND gini IS NOT NULL',
         ],
@@ -433,9 +537,10 @@ export const missoes = [
         enunciado: { pt: 'Sem ajuda: o título dos projetos que ainda estão em andamento — os que não têm data de fim.', en: 'On your own: the titles of the projects still running — the ones with no end date.' },
         inicial: '',
         gabarito: 'SELECT title FROM projects WHERE end_date IS NULL',
+        tabelas: ['projects'],
         exige: ['IS NULL'],
         dicas: [
-          { pt: 'A data de fim fica em data_fim; sem data de fim quer dizer NULL.', en: 'The end date is in end_date; no end date means NULL.' },
+          { pt: 'A data de fim fica em `data_fim`; sem data de fim quer dizer `NULL`.', en: 'The end date is in `end_date`; no end date means `NULL`.' },
           'SELECT title FROM projects WHERE end_date ____',
           'SELECT title FROM projects WHERE end_date IS NULL',
         ],
@@ -464,8 +569,9 @@ export const missoes = [
         enunciado: { pt: 'Nome e região dos países do Sul da Ásia (SAS) e da América do Norte (NAC).', en: 'Name and region of the countries in South Asia (SAS) and North America (NAC).' },
         inicial: '',
         gabarito: "SELECT country_name, region_code FROM countries WHERE region_code IN ('SAS', 'NAC')",
+        tabelas: ['countries'],
         dicas: [
-          { pt: 'Dois valores possíveis para a mesma coluna: IN.', en: 'Two possible values for the same column: IN.' },
+          { pt: 'Dois valores possíveis para a mesma coluna: `IN`.', en: 'Two possible values for the same column: `IN`.' },
           'SELECT country_name, region_code FROM countries WHERE region_code IN (____)',
           "SELECT country_name, region_code FROM countries WHERE region_code IN ('SAS', 'NAC')",
         ],
@@ -474,8 +580,9 @@ export const missoes = [
         enunciado: { pt: 'Título e downloads das publicações com 1000 downloads ou mais.', en: 'Title and downloads of the publications with 1000 downloads or more.' },
         inicial: '',
         gabarito: 'SELECT title, downloads FROM publications WHERE downloads >= 1000',
+        tabelas: ['publications'],
         dicas: [
-          { pt: '"Ou mais" é >=.', en: '"Or more" is >=.' },
+          { pt: '"Ou mais" é `>=`.', en: '"Or more" is `>=`.' },
           'SELECT title, downloads FROM publications WHERE downloads ____',
           'SELECT title, downloads FROM publications WHERE downloads >= 1000',
         ],
@@ -484,8 +591,9 @@ export const missoes = [
         enunciado: { pt: 'Nome, cargo e salário de quem tem "Analyst" no cargo e ganha menos de 120 mil francos por ano.', en: 'Name, job title and salary of everyone with "Analyst" in their job title who earns less than 120 thousand francs a year.' },
         inicial: '',
         gabarito: "SELECT full_name, job_title, salary_chf FROM staff WHERE job_title LIKE '%Analyst%' AND salary_chf < 120000",
+        tabelas: ['staff'],
         dicas: [
-          { pt: 'Duas condições com AND: um LIKE para o cargo e um < para o salário.', en: 'Two conditions with AND: a LIKE for the title and a < for the salary.' },
+          { pt: 'Duas condições com `AND`: um `LIKE` para o cargo e um `<` para o salário.', en: 'Two conditions with `AND`: a `LIKE` for the title and a `<` for the salary.' },
           "SELECT full_name, job_title, salary_chf FROM staff WHERE job_title LIKE ____ AND salary_chf ____",
           "SELECT full_name, job_title, salary_chf FROM staff WHERE job_title LIKE '%Analyst%' AND salary_chf < 120000",
         ],
@@ -514,9 +622,10 @@ export const missoes = [
         enunciado: { pt: 'Em 2021: renovável acima de 80% e eletricidade abaixo de 50%. Código, renovável e eletricidade.', en: 'In 2021: renewables above 80% and electricity below 50%. Code, renewables and electricity.' },
         inicial: '',
         gabarito: 'SELECT country_code, renewable_pct, electricity_pct FROM country_year WHERE year = 2021 AND renewable_pct > 80 AND electricity_pct < 50',
+        tabelas: ['country_year'],
         exige: ['WHERE', 'AND'],
         dicas: [
-          { pt: 'Três condições ligadas por AND: o ano, o renovável (renovavel_pct) e a eletricidade (eletricidade_pct).', en: 'Three conditions linked by AND: the year, renewables (renewable_pct) and electricity (electricity_pct).' },
+          { pt: 'Três condições ligadas por `AND`: o ano, o renovável (`renovavel_pct`) e a eletricidade (`eletricidade_pct`).', en: 'Three conditions linked by `AND`: the year, renewables (`renewable_pct`) and electricity (`electricity_pct`).' },
           'SELECT country_code, renewable_pct, electricity_pct FROM country_year WHERE year = 2021 AND ____ AND ____',
           'SELECT country_code, renewable_pct, electricity_pct FROM country_year WHERE year = 2021 AND renewable_pct > 80 AND electricity_pct < 50',
         ],

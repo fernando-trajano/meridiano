@@ -1,6 +1,6 @@
 /* ==========================================================================
-   componentes.css — peças reutilizáveis: seções, botões, seletor PT/EN,
-   memorando, monograma, aviso de erro e o realce de SQL por cláusula.
+   componentes.css — peças reutilizáveis: seções, botões, o painel da
+   bancada, a tabela, aviso de erro e o realce de SQL por cláusula.
    Adaptado do digita. Só usa variáveis do tema.css.
    ========================================================================== */
 
@@ -81,129 +81,277 @@
   gap: var(--esp-3);
 }
 
+/* Botão pequeno: nas barras da bancada (Rodar, Anterior, Próximo). Com
+   .botao--principal, o botão de fundo cheio. */
+.botao--pequeno {
+  padding: 5px 12px;
+  font-size: 12px;
+}
+
+/* Um botão que parece link: "Pedir uma pista", "Formatar". */
+.botao-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cor-texto-secundario);
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color var(--transicao);
+}
+
+.botao-link:hover {
+  color: var(--cor-texto);
+}
+
+/* Os botões de uma barra do painel nunca encolhem. */
+.painel-barra > .botao {
+  flex: 0 0 auto;
+}
+
 /* --- Botão de ícone (tema, som) ---------------------------------------- */
 
+/* Sem borda: só o ícone, na cor secundária, como no resto do cabeçalho. */
 .botao-icone {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 1.75rem;
+  height: 1.75rem;
   padding: 0;
-  border: var(--borda);
+  border: 0;
   border-radius: var(--raio-p);
   background-color: transparent;
   color: var(--cor-texto-secundario);
 
   cursor: pointer;
-  transition: color var(--transicao), border-color var(--transicao);
+  transition: color var(--transicao);
 }
 
 .botao-icone:hover {
   color: var(--cor-texto);
-  border-color: var(--cor-texto-secundario);
 }
 
 .botao-icone svg {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1rem;
+  height: 1rem;
 }
 
-/* --- Seletor de duas opções (PT / EN) ---------------------------------- */
+/* --- Painel (a bancada) ----------------------------------------------------
+   Um fundo próprio (--cor-painel), borda fina e cantos de 10px. Dentro,
+   seções separadas por barras: cada barra tem uma aba à esquerda (o nome da
+   seção, sublinhado no destaque) e, à direita, informação e botões.
+   ----------------------------------------------------------------------- */
 
-.seletor {
-  display: inline-flex;
+.painel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   border: var(--borda);
-  border-radius: var(--raio-p);
+  border-radius: var(--raio-painel);
+  background-color: var(--cor-painel);
   overflow: hidden;
 }
 
-.seletor-opcao {
-  padding: var(--esp-2) var(--esp-3);
-  border: 0;
-  background-color: transparent;
-  color: var(--cor-texto-secundario);
-
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: background-color var(--transicao), color var(--transicao);
-}
-
-.seletor-opcao + .seletor-opcao {
-  border-left: var(--borda);
-}
-
-.seletor-opcao:hover {
-  color: var(--cor-texto);
-}
-
-/* aria-pressed="true" marca a opção ativa: o estado visual e o estado que o
-   leitor de tela anuncia são a mesma coisa. */
-.seletor-opcao[aria-pressed="true"] {
-  background-color: var(--cor-botao-fundo);
-  color: var(--cor-botao-texto);
-}
-
-/* --- Memorando -----------------------------------------------------------
-   O pedido de cada missão chega como memorando: monograma, nome na
-   serifada, cargo e hora — tudo numa linha, com uma linha fina embaixo.
-   ----------------------------------------------------------------------- */
-
-.memorando-cabecalho {
+.painel-barra {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
-  gap: var(--esp-3);
-  padding-bottom: var(--esp-3);
+  gap: 10px;
+  min-height: 2.5rem;
+  padding: 0 14px;
   border-bottom: var(--borda);
 }
 
-.memorando-quem {
+/* Uma barra no meio do painel (a do Resultado) tem linha em cima também. */
+* + .painel-barra {
+  border-top: var(--borda);
+}
+
+.painel-aba {
+  flex: 0 0 auto;
+  padding: 9px 0 7.5px;
+  border: 0;
+  border-bottom: 1.5px solid var(--cor-destaque);
+  background: none;
+  color: var(--cor-texto);
+  font-size: 12px;
+  line-height: 1.6;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Várias abas lado a lado (as tabelas de uma revisão): só a de agora
+   fica sublinhada. */
+button.painel-aba {
+  cursor: pointer;
+}
+
+.painel-aba[aria-selected="false"] {
+  border-bottom-color: transparent;
+  color: var(--cor-texto-discreto);
+}
+
+.painel-aba + .painel-aba {
+  margin-left: 6px;
+}
+
+.painel-info {
+  overflow: hidden;
+  color: var(--cor-texto-discreto);
+  font-size: 11px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.painel-espaco {
+  flex: 1;
+}
+
+.painel-codigo {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 12px 14px;
+  background-color: var(--cor-codigo);
+  font-size: 13px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* --- A barra da Consulta: tabelas · Formatar · Rodar --------------------
+   Nunca quebra de linha: se faltar espaço, os nomes das tabelas encolhem
+   (com "…"), e os botões ficam inteiros.
+   ----------------------------------------------------------------------- */
+
+.painel-barra--consulta {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.tabelas-da-barra {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12px;
+}
+
+.tabelas-da-barra-rotulo,
+.tabelas-da-barra-ponto {
+  flex: 0 0 auto;
+  color: var(--cor-texto-discreto);
+}
+
+/* O nome de uma tabela: mono, na cor secundária, sem fundo nem contorno. O
+   pontilhado é o único sinal de que abre alguma coisa. */
+.nome-tabela {
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--fonte-mono);
+  font-variant-ligatures: none;
+  color: var(--cor-texto-secundario);
+  text-decoration: underline dotted;
+  text-decoration-color: var(--cor-texto-discreto);
+  text-underline-offset: 4px;
+  text-overflow: ellipsis;
+  cursor: help;
+}
+
+.nome-tabela:hover,
+.nome-tabela[aria-expanded="true"] {
+  color: var(--cor-texto);
+}
+
+/* Formatar: só o ícone, pequeno. */
+.botao-icone--pequeno {
+  flex: 0 0 auto;
+  width: 1.625rem;
+  height: 1.625rem;
+}
+
+.botao-icone--pequeno svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+/* --- Painel flutuante (a lista de colunas) ----------------------------------
+   No escuro: o fundo de código, com borda. No claro, vidro (ver tema.css). */
+
+.flutuante {
+  border: var(--borda);
+  border-radius: var(--raio-m);
+  background-color: var(--cor-codigo);
+}
+
+.tabelas-flutuante {
+  position: fixed;
+  z-index: 30;
   display: flex;
   flex-direction: column;
-  line-height: 1.3;
+  gap: 12px;
+  width: max-content;
+  max-width: min(22rem, calc(100vw - 16px));
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: normal;
 }
 
-.memorando-nome {
-  font-family: var(--fonte-titulo);
-  font-size: 1.1rem;
-  font-weight: var(--peso-titulo);
-  letter-spacing: var(--espacamento-titulo);
+.tabelas-flutuante[hidden] {
+  display: none;
 }
 
-.memorando-cargo {
-  color: var(--cor-texto-secundario);
-  font-size: 0.875rem;
+.tabelas-flutuante p {
+  max-width: none;
 }
 
-.memorando-hora {
-  margin-left: auto;
-  color: var(--cor-texto-discreto);
+.tabelas-flutuante-nome {
+  color: var(--cor-texto);
   font-family: var(--fonte-mono);
-  font-size: 0.8rem;
 }
 
-.memorando-texto {
-  margin-top: var(--esp-3);
+.tabelas-flutuante-rotulo {
+  color: var(--cor-texto-discreto);
 }
 
-/* Os personagens não têm rosto: são monogramas cinza, num círculo de traço. */
-.monograma {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
+.tabelas-flutuante-colunas {
+  margin-bottom: 6px;
+}
 
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 1px solid var(--cor-texto-discreto);
-  border-radius: 50%;
+.tabelas-flutuante-colunas span {
+  white-space: nowrap;
+}
+
+.tabelas-flutuante-colunas {
   color: var(--cor-texto-secundario);
+  font-family: var(--fonte-mono);
+  font-variant-ligatures: none;
+}
 
-  font-family: var(--fonte-titulo);
-  font-size: 0.85rem;
-  font-weight: var(--peso-titulo);
+/* A parte que rola por dentro, quando o painel tem altura fixa. */
+.painel-rolagem {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cor-borda) transparent;
+}
+
+.painel-rodape {
+  flex: 0 0 auto;
+  max-width: none;
+  padding: 8px 14px;
+  color: var(--cor-texto-discreto);
+  font-size: 11px;
+}
+
+.painel-rodape:empty {
+  display: none;
 }
 
 /* --- Aviso de erro ------------------------------------------------------ */
@@ -221,21 +369,35 @@
 
 /* --- Bloco de código (leitura) ----------------------------------------- */
 
-/* Código só para ler (exemplos, cola). O editor de verdade é do passo 7. */
+/* Código só para ler, fora do painel (as dicas, a cola). */
 .bloco-codigo {
-  padding: var(--esp-4) var(--esp-5);
-  border-radius: var(--raio-m);
-  background-color: var(--cor-superficie);
+  padding: 10px 12px;
+  border-radius: var(--raio-p);
+  background-color: var(--cor-codigo);
   color: var(--cor-texto);
 
-  font-size: 0.875rem;
+  font-size: 12.5px;
   line-height: 1.7;
-  white-space: pre;
-  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* --- Selo: código dentro do texto corrido -------------------------------
+   `SELECT`, `nome_pais`: mono, um pouco menor que o texto, num fundo de
+   código. A palavra-chave vem na cor da cláusula (realce.js). */
+
+.selo {
+  font-family: var(--fonte-mono);
+  font-size: 0.88em;
+  font-variant-ligatures: none;
+  background: var(--cor-codigo);
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
 /* --- Realce de SQL por cláusula -----------------------------------------
-   As classes que o realce.js (passo 7) vai pôr em cada pedaço da consulta.
+   As classes que o realce.js põe em cada pedaço da consulta.
    Só a cor das letras muda — nunca o fundo. Palavras que não são cláusula
    (AS, AND, ON, DESC) e os nomes de tabela e coluna ficam na cor do texto.
    ----------------------------------------------------------------------- */
@@ -258,38 +420,88 @@
   font-style: italic;
 }
 
-/* --- Tabela de resultado ---------------------------------------------------
-   O resultado de uma consulta: mono, linhas finas, números à direita (para
-   as casas decimais se alinharem), NULL discreto. Passa a ser desenhada pelo
-   tabela-resultado.js no passo 7.
+/* --- Tabela ---------------------------------------------------------------
+   Uma só para o site (amostra, Passo a passo, resultado, laboratório):
+   fonte do sistema a 13px; mono só em números, códigos e NULL; números à
+   direita; uma linha por registro, com "…" no que não cabe; cabeçalho
+   discreto; linhas finas; sem listras. Montada pelo tabela-resultado.js.
    ----------------------------------------------------------------------- */
 
-.tabela-resultado {
+.tabela {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.85rem;
-  font-variant-numeric: tabular-nums;
+  table-layout: fixed;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
-.tabela-resultado th {
-  padding: var(--esp-2) var(--esp-3);
-  border-bottom: 1px solid var(--cor-texto-discreto);
-  color: var(--cor-texto-secundario);
-  font-weight: 500;
-  text-align: left;
-  white-space: nowrap;
-}
-
-.tabela-resultado td {
-  padding: var(--esp-2) var(--esp-3);
+.tabela th,
+.tabela td {
+  padding: 7px 12px;
   border-bottom: var(--borda);
-  vertical-align: top;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: opacity var(--transicao-passo);
 }
 
-.tabela-resultado .numero {
+.tabela th {
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+  font-weight: 400;
+  /* O nome da coluna nunca é cortado (a largura já garante que cabe). */
+  text-overflow: clip;
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabela .numero,
+.tabela .codigo,
+.tabela .nulo {
+  font-family: var(--fonte-mono);
+  font-variant-ligatures: none;
+  font-variant-numeric: tabular-nums;
+  font-size: 12.5px;
+}
+
+.tabela .numero {
   text-align: right;
 }
 
-.tabela-resultado .nulo {
+.tabela th.numero {
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.tabela .nulo {
   color: var(--cor-texto-discreto);
+}
+
+/* O que um passo do Passo a passo descartou: fica, mas quase some. */
+.tabela .apagada,
+.tabela tr.apagada td {
+  opacity: 0.18;
+}
+
+/* O cabeçalho fica visível ao rolar um resultado comprido. */
+.tabela-rolagem {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cor-borda) transparent;
+}
+
+.tabela-rolagem .tabela thead th {
+  position: sticky;
+  top: 0;
+  background-color: var(--cor-painel-solido);
+}
+
+.tabela-aviso {
+  max-width: none;
+  padding: 10px 14px;
+  color: var(--cor-texto-secundario);
+  font-size: 13px;
 }

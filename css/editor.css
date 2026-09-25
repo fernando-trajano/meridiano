@@ -1,38 +1,38 @@
 /* ==========================================================================
-   editor.css — o editor de SQL e o painel de resultado.
+   editor.css — o editor de SQL e o resultado.
    Só usa variáveis do tema.css.
 
    A REGRA DE OURO do editor: o <textarea> (transparente, onde se digita) e o
    <pre> (colorido, embaixo) têm de ter EXATAMENTE a mesma fonte, tamanho,
    altura de linha, recuo e quebra. Qualquer diferença desalinha o cursor do
    texto que se vê. Por isso as medidas moram nas variáveis logo abaixo e
-   valem para as três camadas (números, realce, texto).
+   valem para as duas camadas.
+
+   Desde o redesenho depois do passo 12, o editor mora dentro do painel da
+   bancada: fundo de código, sem borda nem números de linha próprios.
    ========================================================================== */
 
 .editor {
-  --editor-fonte-tamanho: 0.875rem;
-  --editor-altura-linha: 1.7;
-  --editor-margem: var(--esp-4);
+  --editor-fonte-tamanho: 13px;
+  --editor-altura-linha: 1.75;
+  --editor-margem-v: 12px;
+  --editor-margem-h: 14px;
 
   display: flex;
   flex-direction: column;
-  gap: var(--esp-3);
 }
 
 .editor-corpo {
   display: flex;
-  border-radius: var(--raio-m);
-  background-color: var(--cor-superficie);
-  overflow: hidden;
+  background-color: var(--cor-codigo);
 }
 
-/* O anel de foco fica no corpo inteiro: o textarea, lá dentro, seria cortado. */
+/* O anel de foco: por dentro, para não ser cortado pelo painel. */
 .editor-corpo:has(.editor-texto:focus-visible) {
   outline: 2px solid var(--cor-texto);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
 
-.editor-numeros,
 .editor-realce,
 .editor-texto,
 .editor-medida {
@@ -42,25 +42,6 @@
   letter-spacing: 0;
   tab-size: 2;
   white-space: pre;
-}
-
-/* --- Os números das linhas -------------------------------------------------- */
-
-.editor-numeros {
-  flex: 0 0 auto;
-  min-width: 2.75rem;
-  padding: var(--editor-margem) var(--esp-2) var(--editor-margem) var(--esp-3);
-  border-right: var(--borda);
-  color: var(--cor-texto-discreto);
-  text-align: right;
-  overflow: hidden;
-  user-select: none;
-}
-
-/* A linha que o DuckDB apontou no erro. */
-.editor-numero-erro {
-  color: var(--cor-erro-texto);
-  font-weight: 500;
 }
 
 /* --- As duas camadas: realce embaixo, texto em cima -------------------------- */
@@ -75,7 +56,7 @@
 .editor-texto {
   position: absolute;
   inset: 0;
-  padding: var(--editor-margem);
+  padding: var(--editor-margem-v) var(--editor-margem-h);
   border: 0;
 }
 
@@ -103,12 +84,24 @@
   background: transparent;
   /* O texto de verdade é invisível: quem se vê é o realce, embaixo. */
   color: transparent;
-  caret-color: var(--cor-texto);
+  caret-color: var(--cor-destaque);
   -webkit-text-fill-color: transparent;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cor-borda) transparent;
 }
 
 .editor-texto::selection {
   background-color: var(--cor-selecao);
+}
+
+/* A linha que o DuckDB apontou no erro: um traço fino na margem esquerda. */
+.editor-marca-erro {
+  position: absolute;
+  left: 4px;
+  width: 2px;
+  border-radius: 1px;
+  background-color: var(--cor-erro-texto);
+  pointer-events: none;
 }
 
 /* Só para medir a largura de uma letra (a fonte é mono: todas iguais). */
@@ -159,45 +152,18 @@
   white-space: nowrap;
 }
 
-/* --- A barra: Rodar, Formatar, atalhos ---------------------------------------- */
-
-.editor-barra {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--esp-3);
-}
-
-.editor-dica {
-  margin-left: auto;
-}
-
-/* --- Resultado ---------------------------------------------------------------- */
-
-.resultado-info {
-  margin-bottom: var(--esp-2);
-}
-
-.resultado-rolagem {
-  max-height: 28rem;
-  overflow: auto;
-}
-
-/* O cabeçalho fica visível ao rolar um resultado comprido. */
-.resultado-rolagem .tabela-resultado thead th {
-  position: sticky;
-  top: 0;
-  background-color: var(--cor-fundo);
-}
+/* --- Erro ------------------------------------------------------------------ */
 
 .resultado-erro {
   display: flex;
   flex-direction: column;
   gap: var(--esp-2);
-  padding: var(--esp-3) var(--esp-4);
+  margin: 12px 14px;
+  padding: 10px 14px;
   border-radius: var(--raio-p);
   background-color: var(--cor-erro-fundo);
   color: var(--cor-erro-texto);
+  font-size: 13px;
 }
 
 .resultado-erro p {
@@ -217,9 +183,7 @@
 }
 
 .resultado-erro-original {
-  margin-top: var(--esp-2);
-  color: var(--cor-texto-discreto);
-  font-size: 0.8rem;
+  font-size: 12px;
 }
 
 .resultado-erro-original summary {
@@ -233,14 +197,18 @@
 }
 
 /* --- O veredito da conferência -------------------------------------------------
-   Certo: texto comum, com um traço fino na cor do destaque (progresso). Errado:
-   no tom de erro. A frase diz como errou — ver conferir.js. */
+   Uma linha logo acima da tabela. Certo: texto comum, com um traço fino na
+   cor do destaque (progresso). Errado: no tom de erro. A frase diz como
+   errou — ver conferir.js. */
 
 .conferencia-certa,
 .conferencia-errada {
+  flex: 0 0 auto;
   max-width: none;
-  padding: var(--esp-2) var(--esp-4);
+  margin: 10px 14px 4px;
+  padding: 4px 12px;
   border-left: 2px solid var(--cor-destaque);
+  font-size: 13px;
 }
 
 .conferencia-errada {

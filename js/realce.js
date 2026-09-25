@@ -1,7 +1,7 @@
 /* ==========================================================================
    realce.js — colore uma consulta SQL por cláusula.
 
-   Usado em todo lugar onde há código: editor, Raio-X, cola e jogos. Devolve
+   Usado em todo lugar onde há código: editor, Passo a passo, cola e jogos. Devolve
    HTML com <span class="sql-…">; as cores moram no tema.css e as classes no
    componentes.css. Só a cor das letras muda, nunca o fundo.
 
@@ -66,7 +66,7 @@ export function realcarSQL(sql) {
 }
 
 /**
- * A classe de cada pedaço (ou null). Separado do HTML para o Raio-X e os
+ * A classe de cada pedaço (ou null). Separado do HTML para o Passo a passo e os
  * jogos poderem perguntar "de que cláusula é esta palavra?".
  * @param {{tipo: string, texto: string}[]} pedacos
  * @returns {(string|null)[]}
@@ -129,4 +129,51 @@ export function classificar(pedacos) {
 /** Escapa o texto para ir dentro de HTML. */
 export function escapar(texto) {
   return texto.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* --------------------------------------------------------------------------
+   Selos: código dentro do texto corrido
+
+   Nos textos (i18n e missões), um comando, tabela ou coluna vem entre
+   crases: `SELECT`, `nome_pais`. Na tela, cada um vira um "selo" — mono,
+   num fundo de código —, com a palavra-chave na cor da cláusula e o nome na
+   cor do texto (o mesmo realce do editor).
+   -------------------------------------------------------------------------- */
+
+const SELO = /`([^`]+)`/g;
+
+function selo(codigo) {
+  return `<code class="selo">${realcarSQL(codigo)}</code>`;
+}
+
+/**
+ * Um texto comum (ainda não escapado) em HTML, com os selos.
+ * @param {string} texto
+ * @returns {string}
+ */
+export function textoComSelos(texto) {
+  let html = '';
+  let ultimo = 0;
+  for (const achado of String(texto ?? '').matchAll(SELO)) {
+    html += escapar(texto.slice(ultimo, achado.index)) + selo(achado[1]);
+    ultimo = achado.index + achado[0].length;
+  }
+  return html + escapar(String(texto ?? '').slice(ultimo));
+}
+
+/**
+ * O mesmo, num HTML já seguro (as frases do conferir.js e do erros-sql.js,
+ * que já chegam com as lacunas escapadas). O que está entre crases é
+ * desescapado antes do realce, que escapa de novo.
+ * @param {string} html
+ * @returns {string}
+ */
+export function selosEmHtml(html) {
+  return String(html ?? '').replace(SELO, (_, codigo) =>
+    selo(codigo.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')));
+}
+
+/** Um pedaço de código já pronto para ir dentro de um HTML, como selo. */
+export function seloDe(codigo) {
+  return selo(String(codigo));
 }

@@ -7,9 +7,9 @@
    coisas pergunta aqui; quem mudar alguma, avisa aqui.
 
    Uma ideia importante (a mesma do digita): o valor `null` significa "o
-   usuário ainda não escolheu". Enquanto for null, o site segue o palpite —
-   o idioma do navegador, o tema do sistema. Assim que a pessoa escolhe, o
-   valor é gravado e a escolha manual vale.
+   usuário ainda não escolheu". Enquanto for null, o site segue o padrão —
+   o idioma do navegador; o tema escuro. Assim que a pessoa escolhe, o valor
+   é gravado e a escolha manual vale.
    ========================================================================== */
 
 import { CHAVES, ler, gravar } from './armazenamento.js';
@@ -17,12 +17,7 @@ import { CHAVES, ler, gravar } from './armazenamento.js';
 /** Como o site começa, para quem nunca esteve aqui. */
 const PADRAO = {
   idioma: null, // null = usar o idioma do navegador
-  tema: null, // null = acompanhar o modo claro/escuro do sistema
-
-  /* O tema que o SISTEMA tinha quando o usuário escolheu um tema à mão.
-     Guardar isto é o que permite saber, na volta, se o sistema mudou desde
-     então — e, se mudou, descartar a escolha. Ver a seção Tema do app.js. */
-  temaDoSistemaNaEscolha: null,
+  tema: null, // null = escuro, o padrão; 'claro' só por escolha
 
   mudo: false, // o botão de mudo — os sons só existem nos jogos (passo 21)
 

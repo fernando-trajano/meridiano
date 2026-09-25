@@ -116,7 +116,9 @@ async function abrir(aoProgredir) {
 
   // 5. As tabelas, no idioma da tela.
   aoProgredir(0.95, 'tabelas');
-  await zerarBase(idioma());
+  // Direto, sem passar pela fila: quem está na fila pode estar esperando
+  // justamente esta abertura terminar.
+  await zerarAgora(idioma());
   aoProgredir(1, 'tabelas');
 
   medicoes.totalMs = Math.round(performance.now() - inicio);
@@ -218,7 +220,18 @@ function nomeDoArquivo(tabela) {
  * É chamado no começo de cada missão e ao trocar de idioma.
  * @param {'pt'|'en'} [idiomaDaBase]  com que nomes criar as tabelas
  */
-export async function zerarBase(idiomaDaBase = idioma()) {
+export function zerarBase(idiomaDaBase = idioma()) {
+  // Uma de cada vez: trocar o idioma (que zera a base) e abrir uma missão
+  // (que também zera) quase ao mesmo tempo misturava os DETACH e ATTACH das
+  // duas, e o motor recusava. Cada pedido espera o anterior terminar.
+  const vez = filaDeZerar.catch(() => {}).then(() => zerarAgora(idiomaDaBase));
+  filaDeZerar = vez;
+  return vez;
+}
+
+let filaDeZerar = Promise.resolve();
+
+async function zerarAgora(idiomaDaBase) {
   if (!db) await abrirBase();
   const inicio = performance.now();
 

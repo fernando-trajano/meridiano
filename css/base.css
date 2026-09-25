@@ -50,7 +50,7 @@ textarea {
 }
 
 /* Quem prefere menos animação no sistema não vê nenhuma. Vale para tudo o
-   que vier depois: globo girando, Raio-X, números que contam, o pulso do
+   que vier depois: globo girando, Passo a passo, números que contam, o pulso do
    ponto da marca e as View Transitions. */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -68,8 +68,8 @@ textarea {
 
 /* --- Tipografia ------------------------------------------------------- */
 
-/* Títulos na serifada: é ela que dá o tom de "instituto", de papel
-   impresso. O texto corrido fica na fonte do sistema, como no digita. */
+/* Títulos, marca e texto na fonte do sistema (a serifada saiu no redesenho
+   depois do passo 12): peso 600 e letras um pouco mais juntas. */
 h1,
 h2,
 h3 {
@@ -95,9 +95,9 @@ p {
   max-width: 62ch; /* linha curta o bastante para ler sem cansar */
 }
 
-/* Links são um dos quatro usos do destaque. */
+/* Links são um dos quatro usos do destaque (na versão de texto). */
 a {
-  color: var(--cor-destaque);
+  color: var(--cor-destaque-texto);
   text-underline-offset: 0.2em;
 }
 
@@ -128,18 +128,27 @@ samp {
   border-radius: var(--raio-p);
 }
 
-/* --- Cabeçalho -------------------------------------------------------- */
+/* O título de cada tela recebe o foco pelo código (tabindex="-1"), para o
+   leitor de tela começar por ele. O foco fica; só o anel some — ele não
+   serve a quem usa o teclado, porque ninguém chega ali com Tab. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* --- Cabeçalho --------------------------------------------------------
+   Uma linha só: marca · contexto da tela (discreto) · … · PT · EN · tema ·
+   Sair (só na missão). Tudo pequeno: quem manda na tela é o conteúdo.
+   ----------------------------------------------------------------------- */
 
 .cabecalho {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--esp-4);
+  gap: 14px;
 
   width: 100%;
   max-width: var(--largura-max);
   margin-inline: auto;
-  padding: var(--esp-4) var(--esp-5);
+  padding: 12px var(--esp-5);
 }
 
 /* A linha fina embaixo do cabeçalho atravessa a página inteira; o conteúdo
@@ -148,13 +157,13 @@ samp {
   border-bottom: var(--borda);
 }
 
-/* A marca: o nome em minúsculas, na serifada, e o ponto final na cor de
-   destaque. É um link que sempre volta ao início. */
+/* A marca: o nome em minúsculas e o ponto final na cor de destaque. É um
+   link que sempre volta ao início. */
 .marca {
   font-family: var(--fonte-titulo);
-  font-size: 1.4rem;
+  font-size: 17px;
   font-weight: var(--peso-titulo);
-  letter-spacing: -0.02em;
+  letter-spacing: var(--espacamento-titulo);
   line-height: 1;
   white-space: nowrap;
   text-decoration: none;
@@ -168,10 +177,59 @@ samp {
   color: var(--cor-destaque);
 }
 
+.cabecalho-contexto {
+  overflow: hidden;
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .cabecalho-acoes {
   display: flex;
   align-items: center;
-  gap: var(--esp-3);
+  gap: 14px;
+  margin-left: auto;
+}
+
+/* PT · EN: texto, não botão com borda. O idioma de agora fica na cor do
+   texto; o outro, secundário. */
+.idiomas {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--cor-texto-secundario);
+  font-size: 12px;
+}
+
+.idioma {
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--cor-texto-secundario);
+  font-size: inherit;
+  cursor: pointer;
+  transition: color var(--transicao);
+}
+
+.idioma:hover,
+.idioma[aria-pressed="true"] {
+  color: var(--cor-texto);
+}
+
+.idioma[aria-pressed="true"] {
+  cursor: default;
+}
+
+.cabecalho-sair {
+  color: var(--cor-texto-secundario);
+  font-size: 12px;
+  text-decoration: none;
+  transition: color var(--transicao);
+}
+
+.cabecalho-sair:hover {
+  color: var(--cor-texto);
 }
 
 /* --- Área de conteúdo -------------------------------------------------- */
@@ -241,7 +299,12 @@ samp {
 
 @media (max-width: 40rem) {
   .cabecalho {
-    padding: var(--esp-3) var(--esp-4);
+    gap: 10px;
+    padding: 12px var(--esp-4);
+  }
+
+  .cabecalho-acoes {
+    gap: 12px;
   }
 
   .conteudo {

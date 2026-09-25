@@ -11,32 +11,67 @@
    linha — chegam com as telas que os usam.
    ========================================================================== */
 
+let contadorDeGlobos = 0;
+
+/** Quantos meridianos o globo tem, e o raio dele (no viewBox de 200×200). */
+const MERIDIANOS = 4;
+const RAIO = 80;
+
+/** A largura (rx) de cada meridiano num ângulo de giro θ. */
+function larguras(theta) {
+  return Array.from({ length: MERIDIANOS }, (_, i) => RAIO * Math.abs(Math.cos(theta + (i * Math.PI) / MERIDIANOS)));
+}
+
+/** O ângulo em que o globo fica parado (sem animação): nenhum meridiano some. */
+const THETA_PARADO = 0.3;
+
 /**
- * O globo com meridianos. Com `girando`, os meridianos se estreitam e se
- * alargam em compassos defasados, e o globo parece girar devagar (a
- * animação está no telas.css e respeita prefers-reduced-motion).
- * @param {{girando?: boolean, classe?: string}} [opcoes]
+ * O globo com meridianos.
+ *
+ * Os meridianos são elipses SEMPRE centradas no meio do globo: o giro vem
+ * de estreitar e alargar cada uma (a largura rx = 80 × |cos(θ + defasagem)|),
+ * nunca de mover a elipse. Tudo o que está dentro é recortado pelo próprio
+ * círculo, então nada escapa do contorno. Para girar, ver animarGlobo().
+ * @param {{classe?: string}} [opcoes]
  * @returns {string} o SVG, como texto
  */
-export function globo({ girando = false, classe = '' } = {}) {
-  // Quatro meridianos, espaçados de 45 graus: cada um começa a animação num
-  // ponto diferente do ciclo (atraso negativo), e juntos formam a rotação.
-  // Parado (sem animação ou com movimento reduzido), cada um fica numa
-  // largura diferente (--parado), para o globo continuar parecendo um globo.
-  const larguraParado = [0, 0.45, 0.8, 1];
-  const meridianos = larguraParado
-    .map(
-      (largura, i) =>
-        `<ellipse class="globo-meridiano" style="--parado: ${largura}; animation-delay: ${-i * 2}s" cx="60" cy="60" rx="48" ry="48"/>`
-    )
+export function globo({ classe = '' } = {}) {
+  contadorDeGlobos += 1;
+  const recorte = `globo-recorte-${contadorDeGlobos}`;
+  const meridianos = larguras(THETA_PARADO)
+    .map((rx) => `<ellipse class="globo-meridiano" cx="100" cy="100" rx="${rx.toFixed(2)}" ry="${RAIO}"/>`)
     .join('');
 
   return `
-    <svg class="globo ${girando ? 'globo--girando' : ''} ${classe}" viewBox="0 0 120 120" aria-hidden="true"
-         fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-      <circle cx="60" cy="60" r="48"/>
-      <path d="M12 60h96" opacity="0.7"/>
-      <path d="M19 36h82M19 84h82" opacity="0.35"/>
-      <g opacity="0.8">${meridianos}</g>
+    <svg class="globo ${classe}" viewBox="0 0 200 200" aria-hidden="true"
+         fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+      <defs><clipPath id="${recorte}"><circle cx="100" cy="100" r="${RAIO}"/></clipPath></defs>
+      <g clip-path="url(#${recorte})">
+        <path d="M20 100h160" opacity="0.7"/>
+        <path d="M20 60h160M20 140h160" opacity="0.35"/>
+        <g opacity="0.8">${meridianos}</g>
+      </g>
+      <circle cx="100" cy="100" r="${RAIO}"/>
     </svg>`;
+}
+
+/**
+ * Faz o globo girar devagar (meia volta a cada 8 segundos), por
+ * requestAnimationFrame. Com prefers-reduced-motion, ele fica parado.
+ * @param {SVGElement} svg  um globo feito por globo()
+ * @returns {() => void} para parar
+ */
+export function animarGlobo(svg) {
+  if (!svg || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {};
+  const elipses = [...svg.querySelectorAll('.globo-meridiano')];
+  const inicio = performance.now();
+  let pedido = 0;
+
+  function quadro(agora) {
+    const theta = THETA_PARADO + ((agora - inicio) / 8000) * Math.PI;
+    larguras(theta).forEach((rx, i) => elipses[i].setAttribute('rx', rx.toFixed(2)));
+    pedido = requestAnimationFrame(quadro);
+  }
+  pedido = requestAnimationFrame(quadro);
+  return () => cancelAnimationFrame(pedido);
 }
