@@ -245,7 +245,7 @@ export async function mostrarNivelamento(tela) {
       ${proxima
         ? `<a class="botao botao--principal" href="#/missao/${proxima.id}">${escapar(t('nivelamento.seguirPara', { titulo: emIdioma(proxima.titulo) }))}</a>`
         : ''}
-      <p class="nivelamento-trilha"><a class="botao-link" href="#/">${escapar(t('missao.voltarInicio'))}</a></p>`;
+      <p class="nivelamento-trilha"><a class="botao-link" href="#/trilha">${escapar(t('missao.voltarInicio'))}</a></p>`;
   }
 
   function bancadaResultado() {

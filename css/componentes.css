@@ -382,6 +382,134 @@ button.painel-aba {
   overflow-wrap: anywhere;
 }
 
+/* --- A moldura de duas colunas (moldura.js) ------------------------------
+   A mesma do digita: o centro e, à direita, o painel de progresso, com
+   14rem em todas as telas. Nenhuma tela define a própria grade — é o que
+   deixa o título, a coluna do meio e o painel parados ao ir de uma tela
+   para a outra.
+   ----------------------------------------------------------------------- */
+
+.moldura {
+  display: grid;
+  gap: var(--esp-6);
+}
+
+.moldura-centro {
+  min-width: 0;
+}
+
+/* O título da página: o primeiro elemento do centro, igual em todas. */
+.moldura-titulo {
+  align-self: stretch;   /* a mesma caixa em todas, mesmo num topo em flex */
+  font-size: clamp(1.875rem, 1.5rem + 1.2vw, 2.25rem);
+  line-height: 1.15;
+}
+
+@media (min-width: 64rem) {
+  .moldura {
+    grid-template-columns: minmax(0, 1fr) 14rem;
+    gap: var(--esp-8);
+    align-items: start;
+  }
+
+  .moldura-progresso {
+    position: sticky;
+    top: var(--esp-6);
+  }
+}
+
+/* Numa coluna só, o painel vem logo depois do título e do topo da tela, e
+   antes do resto do conteúdo: o centro se desfaz na grade para o painel
+   poder entrar no meio. */
+@media (max-width: 63.99rem) {
+  .moldura-centro {
+    display: contents;
+  }
+
+  .moldura-topo     { order: 1; }
+  .moldura-progresso { order: 2; }
+  .moldura-corpo    { order: 3; min-width: 0; }
+}
+
+/* --- O painel "Seu progresso" (painel-progresso.js) ---------------------
+   Um lugar só para as classes do painel, no padrão do digita. Nenhuma tela
+   redefine espaçamento ou tamanho dele.
+   ----------------------------------------------------------------------- */
+
+.moldura-progresso p {
+  max-width: none;
+}
+
+.painel-titulo {
+  margin-bottom: 12px;
+  color: var(--cor-texto-discreto);
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.09em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.painel-bloco + .painel-bloco {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: var(--borda);
+}
+
+.painel-numero {
+  font-size: 26px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--espacamento-titulo);
+  line-height: 1.2;
+}
+
+.painel-de {
+  color: var(--cor-texto-discreto);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.painel-legenda,
+.painel-subtitulo {
+  color: var(--cor-texto-secundario);
+  font-size: 12.5px;
+}
+
+.barra {
+  height: 3px;
+  margin-top: 10px;
+  border-radius: 2px;
+  background-color: var(--cor-borda);
+}
+
+.barra span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background-color: var(--cor-destaque);
+}
+
+.painel-selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* Mais específico que .selo (que vem depois neste arquivo e mede em em). */
+.moldura-progresso .painel-selo {
+  font-size: 12px;
+  padding: 2px 7px;
+}
+
+.painel-vazio {
+  margin-top: 6px;
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
 /* --- O globo (ilustracoes.js) -------------------------------------------
    Um componente só: na entrada e na tela "Abrindo o observatório...". O
    traço é o da cor de quem o contém; o meridiano da marca (só na entrada), a

@@ -32,9 +32,10 @@
    ========================================================================== */
 
 import { t, emIdioma } from '../i18n.js';
-import { missaoFeita, moduloLiberado, sequenciaAtual, conceitosQueMaisEscapam, aoMudarProgresso, escolherProxima } from '../progresso.js';
+import { missaoFeita, moduloLiberado, aoMudarProgresso, escolherProxima } from '../progresso.js';
+import { montarMoldura } from '../moldura.js';
 import { escapar, textoComSelos } from '../realce.js';
-import { modulos, carregarModulo, TOTAL_DE_MISSOES } from '../../dados/missoes/indice.js';
+import { modulos, carregarModulo } from '../../dados/missoes/indice.js';
 
 /**
  * @param {HTMLElement} tela
@@ -126,37 +127,20 @@ export async function mostrarTrilha(tela) {
       })
       .join('');
 
-    // --- O painel -----------------------------------------------------------------
-    const sequencia = sequenciaAtual();
-    const escapam = conceitosQueMaisEscapam(3).map(nomeDoConceito);
-    const porcentagem = TOTAL_DE_MISSOES ? (totalFeitas / TOTAL_DE_MISSOES) * 100 : 0;
-
-    tela.innerHTML = `
-      <div class="trilha">
-        <div class="trilha-principal">
-          <h1 class="trilha-titulo">${escapar(t('trilha.titulo'))}</h1>
-          <p class="trilha-subtitulo">${textoComSelos(t('trilha.subtitulo'))}</p>
-          ${continuar}
-          <div class="trilha-lista">
-            <div class="trilha-meridiano" aria-hidden="true">
-              <span class="trilha-meridiano-cheio"></span>
-            </div>
-            <ol class="trilha-modulos" aria-label="${escapar(t('trilha.modulos'))}">${itens}</ol>
+    tela.innerHTML = montarMoldura({
+      titulo: t('trilha.titulo'),
+      classe: 'trilha',
+      topo: `
+        <p class="trilha-subtitulo">${textoComSelos(t('trilha.subtitulo'))}</p>
+        ${continuar}`,
+      conteudo: `
+        <div class="trilha-lista">
+          <div class="trilha-meridiano" aria-hidden="true">
+            <span class="trilha-meridiano-cheio"></span>
           </div>
-        </div>
-        <aside class="trilha-painel">
-          <p class="trilha-painel-rotulo">${escapar(t('trilha.sequencia'))}</p>
-          <p class="trilha-painel-valor">${escapar(sequencia === 1 ? t('trilha.umDia') : t('trilha.dias', { n: sequencia }))}</p>
-          <p class="trilha-painel-rotulo">${escapar(t('trilha.missoes'))}</p>
-          <p class="trilha-painel-valor trilha-painel-valor--curto">${totalFeitas} <span class="trilha-painel-de">${escapar(t('trilha.deTotal', { total: TOTAL_DE_MISSOES }))}</span></p>
-          <div class="trilha-barra" role="progressbar" aria-valuemin="0" aria-valuemax="${TOTAL_DE_MISSOES}" aria-valuenow="${totalFeitas}"
-            aria-label="${escapar(t('trilha.missoes'))}"><span style="width: ${porcentagem}%"></span></div>
-          <p class="trilha-painel-rotulo">${escapar(t('trilha.conceitosEscapam'))}</p>
-          ${escapam.length
-            ? `<ul class="trilha-conceitos">${escapam.map((c) => `<li>${escapar(c)}</li>`).join('')}</ul>`
-            : `<p class="trilha-painel-vazio">${escapar(t('trilha.semConceitos'))}</p>`}
-        </aside>
-      </div>`;
+          <ol class="trilha-modulos" aria-label="${escapar(t('trilha.modulos'))}">${itens}</ol>
+        </div>`,
+    });
 
     tela.querySelectorAll('.trilha-modulo-cabeca:not(:disabled)').forEach((botao) => {
       botao.addEventListener('click', () => {
@@ -217,16 +201,4 @@ export async function mostrarTrilha(tela) {
     pararDeOuvir();
     observador?.disconnect();
   };
-}
-
-/* Os conceitos cujo nome canônico não se explica sozinho ganham um nome
-   na tela ("|| (juntar)"); os outros (DISTINCT, WHERE…) aparecem como são. */
-const CONCEITOS_COM_NOME = {
-  COLUNAS: 'colunas', CONTAS: 'contas', AS: 'apelidos', COMPARACOES: 'comparacoes',
-  '||': 'juntar', '--': 'comentario', '*': 'asterisco', '=': 'igual',
-};
-
-function nomeDoConceito(conceito) {
-  const chave = CONCEITOS_COM_NOME[conceito];
-  return chave ? t(`trilha.conceitos.${chave}`) : conceito;
 }

@@ -18,6 +18,7 @@ import { rota, iniciarRoteador } from './roteador.js';
 import { mostrarTrilha } from './telas/trilha.js';
 import { mostrarEntrada } from './telas/entrada.js';
 import { mostrarNivelamento } from './telas/nivelamento.js';
+import { mostrarInicio } from './telas/inicio.js';
 import { totalFeitas, nivelamentoFeito } from './progresso.js';
 import { mostrarMissao } from './telas/missao.js';
 import { conferirConteudo } from '../dados/missoes/conferencia.js';
@@ -95,13 +96,13 @@ conferirMapa();
 definirIdioma(config().idioma ?? detectarIdioma());
 
 // As telas. "#/" decide: quem nunca concluiu nada (nem missão, nem
-// nivelamento) vê a entrada; os outros vão à trilha (o início de verdade é o
-// passo 16).
+// nivelamento) vê a entrada; quem volta vê o início (passo 16).
 rota(/^\/missao\/(m\d-\d{2})$/, mostrarMissao);
 rota(/^\/trilha$/, mostrarTrilha);
 rota(/^\/entrada$/, mostrarEntrada);
 rota(/^\/nivelamento$/, mostrarNivelamento);
-rota(/^\/$/, (tela) => (totalFeitas() === 0 && !nivelamentoFeito() ? mostrarEntrada(tela) : mostrarTrilha(tela)));
+rota(/^\/inicio$/, mostrarInicio);
+rota(/^\/$/, (tela) => (totalFeitas() === 0 && !nivelamentoFeito() ? mostrarEntrada(tela) : mostrarInicio(tela)));
 iniciarRoteador(document.querySelector('#tela'));
 
 // As conferências do conteúdo das missões (ver dados/missoes/conferencia.js).

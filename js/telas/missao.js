@@ -482,7 +482,7 @@ export async function mostrarMissao(tela, id) {
     if (seguinte && moduloLiberado(seguinte.modulo.id)) {
       proxima = `<a class="botao botao--principal" href="#/missao/${seguinte.missao.id}">${escapar(t('missao.proximaMissao'))}</a>`;
     } else if (seguinte) {
-      proxima = `<a class="botao botao--principal" href="#/">${escapar(t('missao.voltarInicio'))}</a>`;
+      proxima = `<a class="botao botao--principal" href="#/trilha">${escapar(t('missao.voltarInicio'))}</a>`;
     }
     el.texto.innerHTML = `
       <p class="missao-rotulo">${escapar(t('missao.entregue'))}</p>
@@ -538,7 +538,7 @@ export async function mostrarMissao(tela, id) {
           </div>
         </dl>
         ${liberou}
-        <a class="botao-link" href="#/">${escapar(t('missao.voltarInicio'))}</a>
+        <a class="botao-link" href="#/trilha">${escapar(t('missao.voltarInicio'))}</a>
       </div>`;
 
     // Os números contam do antes para o depois — só na primeira vez que a
@@ -650,7 +650,7 @@ function mostrarBloqueada(tela, modulo) {
       <section class="secao missao-bloqueada">
         <h1>${escapar(t('missao.bloqueadaTitulo'))}</h1>
         <p>${escapar(t('missao.bloqueadaTexto', { n: anterior?.numero ?? 0, titulo: anterior ? emIdioma(anterior.titulo) : '' }))}</p>
-        <p><a class="botao botao--principal" href="#/">${escapar(t('missao.voltarInicio'))}</a></p>
+        <p><a class="botao botao--principal" href="#/trilha">${escapar(t('missao.voltarInicio'))}</a></p>
       </section>`;
     document.title = `${t('missao.bloqueadaTitulo')} · meridiano.`;
   }
@@ -666,7 +666,7 @@ function mostrarNaoEncontrada(tela) {
   tela.innerHTML = `
     <section class="secao">
       <h1>${escapar(t('missao.naoEncontrada'))}</h1>
-      <p><a href="#/">${escapar(t('missao.voltarInicio'))}</a></p>
+      <p><a href="#/trilha">${escapar(t('missao.voltarInicio'))}</a></p>
     </section>`;
   return undefined;
 }

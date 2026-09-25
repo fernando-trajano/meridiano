@@ -120,6 +120,43 @@ export const pt = {
     bloqueadaTexto: 'Ela abre quando você concluir o desafio final do módulo {n} — {titulo}.',
   },
 
+  // O painel "Seu progresso" (início e trilha).
+  painelProgresso: {
+    rotulo: 'Seu progresso',
+    diaSeguido: 'dia seguido praticando',
+    diasSeguidos: 'dias seguidos praticando',
+    deTotal: 'de {total}',
+    missoesConcluidas: 'missões concluídas',
+    conceitosEscapam: 'Conceitos que mais escapam',
+    semConceitos: 'Nada por enquanto.',
+  },
+
+  // O início: a tela de quem volta (passo 16).
+  inicio: {
+    titulo: 'De volta ao Observatório',
+    tituloNovo: 'Tudo pronto para começar',
+    paradoEm: 'Você parou em',
+    comecarPor: 'Comece por',
+    doModulo: 'Módulo {n} · {titulo}',
+    feitasDoModulo: '{n} de {total} feitas',
+    continuar: 'Continuar de onde parei',
+    comecar: 'Começar',
+    tudoFeito: 'Todas as missões escritas estão feitas. As próximas chegam em ondas.',
+    irPara: 'Ir para',
+    atalhos: {
+      trilha: 'Trilha',
+      trilhaDescricao: 'Os 10 módulos, com o que você já fez e o que falta.',
+      nivelamento: 'Nivelamento',
+      nivelamentoDescricao: 'Seis desafios que liberam o que você já sabe.',
+      laboratorio: 'Laboratório',
+      laboratorioDescricao: 'A base inteira para consultas livres, com CSV e histórico.',
+      cola: 'Cola',
+      colaDescricao: 'A sintaxe por cláusula, as funções e o mapa das tabelas.',
+      jogos: 'Jogos',
+      jogosDescricao: 'Palpite, Telegrama e Infiltrado: SQL em partidas curtas.',
+    },
+  },
+
   // A entrada: a primeira tela de quem nunca esteve aqui (passo 15).
   entrada: {
     titulo: 'Aprenda SQL com dados do mundo real',
@@ -172,12 +209,8 @@ export const pt = {
     aFazer: 'a fazer',
     tudoFeito: 'Todas as missões escritas estão feitas.',
     sequencia: 'Sequência',
-    dias: '{n} dias',
-    umDia: '1 dia',
     missoes: 'Missões',
     deTotal: 'de {total}',
-    conceitosEscapam: 'Conceitos que mais escapam',
-    semConceitos: 'Nada por enquanto.',
     // Os nomes de alguns conceitos no painel "Conceitos que mais escapam".
     conceitos: {
       colunas: 'escolher colunas',

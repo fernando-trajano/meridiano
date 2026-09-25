@@ -18,6 +18,16 @@
 html {
   /* Rolagem suave quando a página pula para uma âncora. */
   scroll-behavior: smooth;
+  /* O espaço da barra de rolagem fica reservado sempre: a tela que rola e a
+     que não rola têm a mesma largura útil, e nada se desloca ao trocar. */
+  scrollbar-gutter: stable;
+}
+
+/* Navegador sem scrollbar-gutter: a barra aparece sempre, pelo mesmo motivo. */
+@supports not (scrollbar-gutter: stable) {
+  html {
+    overflow-y: scroll;
+  }
 }
 
 body {

@@ -132,6 +132,9 @@ Meridiano/
 │   ├── tabela-resultado.js    # a tabela do site inteiro (amostra, Passo a passo, resultado)
 │   ├── passo-a-passo.js       # a consulta na ordem do banco, com o efeito na amostra
 │   ├── tabelas-da-barra.js    # as tabelas da tarefa na barra da Consulta + lista de colunas
+│   ├── moldura.js             # a moldura de duas colunas (centro + painel) das telas
+│   │                          # com o painel de progresso
+│   ├── painel-progresso.js    # o painel "Seu progresso" (posto pela moldura)
 │   ├── bancada-consulta.js    # a bancada de um desafio (Consulta + Resultado), da missão e
 │   │                          # do nivelamento
 │   ├── progresso.js           # concluir missão, estrelas, desbloqueio, sequência de dias
@@ -139,7 +142,8 @@ Meridiano/
 │   │   ├── abrindo.js         # "Abrindo o observatório..." com o globo girando
 │   │   ├── entrada.js         # a 1ª tela de quem nunca esteve aqui: começar ou nivelar
 │   │   ├── nivelamento.js     # os 6 desafios (abertura, desafios, resultado)
-│   │   ├── inicio.js          # continuar, atalhos, exportar/importar
+│   │   ├── inicio.js          # continuar, atalhos com desenho (o exportar/importar é do
+│   │   │                      # passo 21)
 │   │   ├── trilha.js          # acordeão dos 10 módulos + linha do meridiano (o visual
 │   │   │                      # chegou antes; a lógica é o passo 14)
 │   │   ├── missao.js          # as 6 etapas da missão, com a bancada — e a entrega:
@@ -868,7 +872,29 @@ Ajustes finos pedidos pelo Fernando depois do redesenho. Testado no Safari pelo 
       (o mesmo componente da tela "Abrindo o observatório...") ganhou a opção
       `linhaMeridiano`, ligada só na entrada: o meridiano da marca, uma linha vertical
       no destaque; título e textos novos
-- [ ] **Passo 16** — início
+- [x] **Passo 16** — início (`telas/inicio.js`): a tela de quem volta — "#/" mostra a
+      entrada a quem nunca concluiu nada e o início aos outros (a trilha ficou em
+      `#/trilha`; o "Voltar à trilha" da missão e do nivelamento aponta para lá). Em
+      cima, o **Continuar**: "Você parou em", a próxima missão, o módulo e "1 de 3
+      feitas". Embaixo, os **atalhos** — trilha, nivelamento e, "em breve", laboratório,
+      cola e jogos — com o gesto do digita (o texto escurece e desliza 4px) e um
+      **desenho ao lado que troca com cross-fade** (fachada do instituto quando nenhum
+      está em foco; pino na rota, avião de papel, gráfico de linha, documento, grade de
+      pontos — `ilustracao()` em `ilustracoes.js`); no celular, sem o desenho. À direita,
+      o **painel de progresso**, que virou um componente (`painel-progresso.js`) usado
+      pelo início e pela trilha. O exportar/importar do progresso fica no passo 21
+      (backup), e vai morar nesta tela.
+      **Ajuste do início** (pedido depois do passo): a hierarquia do digita (título
+      grande, "Você parou em" colado, "Continuar de onde parei"); "Ir para" com os
+      atalhos em cartões numa grade de 3 colunas iguais; sem a ilustração; painel
+      próprio "Seu progresso" (números grandes, legendas, conceitos em selos); no tema
+      claro, e só nesta tela, borda do cartão mais marcada e descrição na cor discreta.
+      Depois, o painel "Seu progresso" do início virou o **componente único**
+      (`painel-progresso.js`), usado também pela trilha. Por fim, **a moldura única**
+      (`moldura.js`, a do digita): início e trilha montam a página por ela — mesma
+      grade (centro + painel de 14rem, `sticky`), mesmo título (`h1.moldura-titulo`),
+      mesmo padding — e nada "pula" ao trocar de tela; `scrollbar-gutter: stable` no
+      `html`; as classes do painel no padrão do digita
 - [ ] **Passo 17** — laboratório
 - [ ] **Passo 18** — cola
 - [ ] **Passo 19** — menu de jogos e Palpite

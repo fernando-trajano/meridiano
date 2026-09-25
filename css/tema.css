@@ -75,6 +75,12 @@
      texto colorido do realce, embaixo, continua aparecendo através dele. */
   --cor-selecao: #F2F0E938;
 
+  /* Os cartões de atalho do início. No escuro, as cores de sempre; no
+     claro, a borda mais marcada e a descrição na discreta (ajuste do início,
+     depois do passo 16 — só nesta tela). */
+  --cor-cartao-borda: var(--cor-borda);
+  --cor-cartao-descricao: var(--cor-texto-secundario);
+
   /* --- Fontes ---------------------------------------------------------- */
   /* Títulos, marca e texto na fonte do sistema, como no digita. A mono
      (fontes/) só em código, números, códigos (ISO3…) e NULL. */
@@ -148,6 +154,9 @@
      em vez de escurecer: assim as cores de cláusula mantêm 4,5:1 nela. */
   --cor-linha-ativa: rgba(255, 255, 255, 0.7);
   --cor-selecao: rgba(14, 23, 38, 0.14);
+
+  --cor-cartao-borda: rgba(14, 23, 38, 0.14);
+  --cor-cartao-descricao: var(--cor-texto-discreto);
 
   --raio-painel: 12px;
 }

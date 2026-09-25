@@ -686,6 +686,46 @@ acerto libera o módulo seguinte, "Não sei fazer este" encerra, e o que já est
 nunca fecha. Na trilha e no fim do nivelamento, **"por onde seguir"** é a primeira missão
 não feita do módulo liberado mais adiantado.
 
+### A moldura das telas com painel (depois do passo 16)
+
+Início e trilha — e toda tela futura com o painel de progresso — usam **a mesma
+moldura** (`js/moldura.js`, igual à do digita): `.moldura` (grade), `.moldura-centro`
+(título, topo e conteúdo) e `.moldura-progresso` (o painel, com **14rem** e `sticky` em
+tela larga, a partir de 64rem). **Nenhuma tela define a própria grade, o próprio padding
+do `.conteudo` nem o próprio título**: o título é sempre o `h1.moldura-titulo`, o primeiro
+elemento do centro, com o mesmo tamanho. Por isso, ao ir de uma tela para a outra, o
+título, a coluna do meio e o painel não se mexem nem um pixel (medido). Em tela estreita,
+uma coluna: título e topo, painel, resto. O `html` tem `scrollbar-gutter: stable`
+(recuo: `overflow-y: scroll`), para a barra de rolagem não deslocar a página. As classes
+do painel moram num lugar só (`componentes.css`), no padrão do digita: `.painel-titulo`,
+`.painel-bloco + .painel-bloco`, `.painel-numero`, `.painel-de`, `.painel-legenda`,
+`.painel-subtitulo`, `.barra`, `.painel-selo`.
+
+### Início (passo 16)
+
+A tela de quem volta ("#/" para quem já concluiu alguma coisa; a trilha fica em
+`#/trilha`), com a hierarquia do início do digita (ajustada depois do passo 16):
+
+- **Topo:** "De volta ao Observatório" como título da página (30–36px, 600); "Você parou
+  em" colado nele (12,5px, discreto); a missão (19px, 600) e "Módulo N · título · x de y
+  feitas" (12,5px, secundário); o botão **"Continuar de onde parei"**. Uma linha fina
+  fecha o bloco.
+- **"Ir para"** (título de seção, 19px): os atalhos em **cartões**, numa grade de **3
+  colunas de mesma largura** (gap 10px) — nome numa linha (500), descrição embaixo
+  (12,5px); borda de 1px, cantos de 10px; hover só escurece a borda. Os "em breve" com o
+  nome secundário e a etiqueta. Uma coluna em tela estreita. **Sem ilustração** nesta
+  tela (os desenhos continuam em `ilustracoes.js`, para quando outra tela precisar).
+- **Painel "Seu progresso"** — um **componente único** (`painel-progresso.js`), posto
+  na tela pela moldura, o mesmo no início e na trilha, com 14rem: rótulo em
+  maiúsculas pequenas (11,5px, 0.09em); dias seguidos e missões concluídas com o número
+  grande (26px) e a legenda embaixo; a barra fina; os **conceitos que mais escapam em
+  selos** (12px, padding 2px 7px), lado a lado.
+- **Só no claro e só nesta tela** (tokens `--cor-cartao-borda` e `--cor-cartao-descricao`;
+  no escuro eles apontam para as cores de sempre): borda do cartão `rgba(14,23,38,.14)`
+  (1,34:1 contra o fundo, decorativa) e descrição na discreta `#626D83` (5,21:1); nome em
+  `#0E1726` (17,96:1).
+- Em tela estreita: topo, progresso, "Ir para".
+
 ### As 6 conferências automáticas
 
 As 5 do passo 9 mais a **6ª: as tabelas de cada desafio são exatamente as do gabarito**.
