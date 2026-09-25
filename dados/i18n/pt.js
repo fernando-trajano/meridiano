@@ -116,6 +116,8 @@ export const pt = {
     diasUnidade: 'dias seguidos',
     proximaMissao: 'Próxima missão',
     ultimaEscrita: 'Esta é a última missão escrita, por enquanto.',
+    bloqueadaTitulo: 'Esta missão ainda está fechada',
+    bloqueadaTexto: 'Ela abre quando você concluir o desafio final do módulo {n} — {titulo}.',
   },
 
   // A trilha (o visual chegou no redesenho depois do passo 12; o
@@ -130,6 +132,8 @@ export const pt = {
     feitas: '{n} de {total}',
     missoesN: '{n} missões',
     emBreve: 'em breve',
+    bloqueado: 'bloqueado',
+    libera: 'Abre quando você concluir o desafio final do módulo {n}.',
     feita: 'feita',
     atual: 'a de agora',
     aFazer: 'a fazer',

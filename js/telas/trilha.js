@@ -21,12 +21,18 @@
    À direita, o painel: sequência (dias), missões (x de 77, com uma barra
    fina) e os conceitos que mais escapam.
 
-   O progresso vem do progresso.js (passo 13): missões feitas, sequência de
-   dias e conceitos que escaparam. A tela se redesenha quando ele muda.
+   O progresso vem do progresso.js (passo 13): missões feitas, módulos
+   liberados, sequência de dias e conceitos que escaparam. A tela se
+   redesenha quando ele muda.
+
+   Bloqueio (passo 14): um módulo só abre as missões depois que o desafio
+   final do anterior foi concluído (ou o nivelamento o liberou, no passo 15).
+   Bloqueado, ele mostra "9 missões", apagado; aberto, lista as missões sem
+   link e diz o que falta. O Continuar só aponta para missões liberadas.
    ========================================================================== */
 
 import { t, emIdioma } from '../i18n.js';
-import { missaoFeita, totalFeitas, sequenciaAtual, conceitosQueMaisEscapam, aoMudarProgresso } from '../progresso.js';
+import { missaoFeita, moduloLiberado, sequenciaAtual, conceitosQueMaisEscapam, aoMudarProgresso } from '../progresso.js';
 import { escapar, textoComSelos } from '../realce.js';
 import { modulos, carregarModulo, TOTAL_DE_MISSOES } from '../../dados/missoes/indice.js';
 
@@ -46,9 +52,10 @@ export async function mostrarTrilha(tela) {
   function desenhar() {
     const feita = (missao) => missaoFeita(missao.id);
 
-    // A próxima missão: a primeira escrita que ainda não foi feita.
+    // A próxima missão: a primeira escrita, e liberada, que ainda não foi feita.
     let proxima = null;
     for (const item of conteudo) {
+      if (!moduloLiberado(item.modulo.id)) continue;
       const achada = item.missoes.find((m) => !feita(m));
       if (achada) {
         proxima = { modulo: item.modulo, missao: achada };
@@ -74,18 +81,33 @@ export async function mostrarTrilha(tela) {
     const itens = conteudo
       .map(({ modulo, missoes }, i) => {
         const emBreve = missoes.length === 0;
+        const bloqueado = !emBreve && !moduloLiberado(modulo.id);
         const quantasFeitas = missoes.filter(feita).length;
         const completo = !emBreve && quantasFeitas === modulo.total;
         let situacao;
         if (emBreve) situacao = t('trilha.emBreve');
+        else if (bloqueado) situacao = t('trilha.missoesN', { n: modulo.total });
         else if (i <= indiceAtual || quantasFeitas > 0) situacao = t('trilha.feitas', { n: quantasFeitas, total: modulo.total });
         else situacao = t('trilha.missoesN', { n: modulo.total });
 
         const aberto = !emBreve && abertos.has(modulo.id);
         const idLista = `trilha-${modulo.id}`;
 
-        const lista = missoes
+        // Um módulo bloqueado abre só para mostrar o que vem: as missões
+        // apagadas, sem link, e o que falta para liberar.
+        const aviso = bloqueado
+          ? `<li class="trilha-aviso">${escapar(t('trilha.libera', { n: modulos[i - 1]?.numero ?? 0 }))}</li>` : '';
+        const lista = aviso + missoes
           .map((missao, j) => {
+            if (bloqueado) {
+              return `
+              <li><span class="trilha-missao trilha-missao--bloqueada">
+                <span class="trilha-ponto" aria-hidden="true"></span>
+                <span class="trilha-missao-texto">
+                  <span class="trilha-numero">${String(j + 1).padStart(2, '0')}</span>${escapar(emIdioma(missao.titulo))}
+                </span>
+              </span></li>`;
+            }
             const tipo = feita(missao) ? 'feita' : proxima?.missao === missao ? 'atual' : 'a-fazer';
             const rotulo = { feita: 'trilha.feita', atual: 'trilha.atual', 'a-fazer': 'trilha.aFazer' }[tipo];
             return `
@@ -100,11 +122,11 @@ export async function mostrarTrilha(tela) {
           .join('');
 
         return `
-          <li class="trilha-modulo ${aberto ? 'trilha-modulo--aberto' : ''} ${emBreve ? 'trilha-modulo--breve' : ''}" data-modulo="${modulo.id}">
+          <li class="trilha-modulo ${aberto ? 'trilha-modulo--aberto' : ''} ${emBreve ? 'trilha-modulo--breve' : ''} ${bloqueado ? 'trilha-modulo--bloqueado' : ''}" data-modulo="${modulo.id}">
             <button type="button" class="trilha-modulo-cabeca" ${emBreve ? 'disabled' : `aria-expanded="${aberto}" aria-controls="${idLista}"`}>
               <span class="trilha-modulo-numero">${modulo.numero}</span>
               <span class="trilha-modulo-nome">${escapar(emIdioma(modulo.titulo))}</span>
-              <span class="trilha-modulo-situacao ${completo ? 'trilha-modulo-situacao--completo' : ''}">${escapar(situacao)}</span>
+              <span class="trilha-modulo-situacao ${completo ? 'trilha-modulo-situacao--completo' : ''}">${escapar(situacao)}${bloqueado ? `<span class="apenas-leitor-de-tela"> (${escapar(t('trilha.bloqueado'))})</span>` : ''}</span>
             </button>
             ${emBreve ? '' : `<ol class="trilha-missoes" id="${idLista}" ${aberto ? '' : 'hidden'}>${lista}</ol>`}
           </li>`;

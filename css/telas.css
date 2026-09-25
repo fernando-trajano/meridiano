@@ -665,6 +665,27 @@ body:has(.trilha) .conteudo {
   font-size: 12px;
 }
 
+/* Bloqueado: o nome e o status discretos; as missões, apagadas e sem link. */
+.trilha-modulo--bloqueado .trilha-modulo-nome {
+  color: var(--cor-texto-discreto);
+}
+
+.trilha-aviso {
+  padding: 2px 0 6px;
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+.trilha-missao--bloqueada {
+  color: var(--cor-texto-discreto);
+  cursor: default;
+}
+
+.trilha-missao--bloqueada:hover .trilha-missao-texto {
+  color: var(--cor-texto-discreto);
+  transform: none;
+}
+
 .trilha-modulo-situacao--completo {
   color: var(--cor-destaque-texto);
 }

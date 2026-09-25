@@ -53,7 +53,7 @@ import { criarPassoAPasso } from '../passo-a-passo.js';
 import { definirContexto, definirSair } from '../cabecalho.js';
 import { mostrarAbrindo } from './abrindo.js';
 import { modulos, carregarModulo, TOTAL_DE_MISSOES } from '../../dados/missoes/indice.js';
-import { concluirMissao, registrarTropeco } from '../progresso.js';
+import { concluirMissao, registrarTropeco, moduloLiberado } from '../progresso.js';
 import { contarAte, pulsarPontoDaMarca } from '../movimento.js';
 import { personagens } from '../../dados/personagens.js';
 import { dicionario } from '../../dados/base/dicionario.js';
@@ -75,6 +75,9 @@ export async function mostrarMissao(tela, id) {
   const achada = todas.find(({ missao }) => missao.id === id);
   if (!achada) return mostrarNaoEncontrada(tela);
   const { modulo, missao } = achada;
+  // Um módulo bloqueado não abre pelo endereço (passo 14): antes do motor,
+  // para ninguém esperar o observatório abrir à toa.
+  if (!moduloLiberado(modulo.id)) return mostrarBloqueada(tela, modulo);
   const seguinte = todas[todas.indexOf(achada) + 1] ?? null;
   const personagem = personagens[missao.personagem];
   const posicaoNoModulo = todas.filter((item) => item.modulo === modulo).indexOf(achada) + 1;
@@ -532,9 +535,13 @@ export async function mostrarMissao(tela, id) {
   }
 
   function textoEntrega() {
-    const proxima = seguinte
-      ? `<a class="botao botao--principal" href="#/missao/${seguinte.missao.id}">${escapar(t('missao.proximaMissao'))}</a>`
-      : `<p class="missao-lembrete">${escapar(t('missao.ultimaEscrita'))}</p>`;
+    // A próxima, se estiver liberada; senão (ou se não houver), a trilha.
+    let proxima = `<p class="missao-lembrete">${escapar(t('missao.ultimaEscrita'))}</p>`;
+    if (seguinte && moduloLiberado(seguinte.modulo.id)) {
+      proxima = `<a class="botao botao--principal" href="#/missao/${seguinte.missao.id}">${escapar(t('missao.proximaMissao'))}</a>`;
+    } else if (seguinte) {
+      proxima = `<a class="botao botao--principal" href="#/">${escapar(t('missao.voltarInicio'))}</a>`;
+    }
     el.texto.innerHTML = `
       <p class="missao-rotulo">${escapar(t('missao.entregue'))}</p>
       <p class="missao-pedido">${textoComSelos(emIdioma(missao.entrega))}</p>
@@ -710,6 +717,26 @@ function sqlDaDica(dica) {
 
 function desenharEstrelas(n) {
   return [1, 2, 3].map((i) => `<span class="${i <= n ? 'estrela-cheia' : 'estrela-vazia'}" style="--i: ${i}">★</span>`).join('');
+}
+
+/** Uma missão de módulo bloqueado, aberta pelo endereço: diz o que falta. */
+function mostrarBloqueada(tela, modulo) {
+  const anterior = modulos[modulos.indexOf(modulo) - 1];
+  function desenhar() {
+    tela.innerHTML = `
+      <section class="secao missao-bloqueada">
+        <h1>${escapar(t('missao.bloqueadaTitulo'))}</h1>
+        <p>${escapar(t('missao.bloqueadaTexto', { n: anterior?.numero ?? 0, titulo: anterior ? emIdioma(anterior.titulo) : '' }))}</p>
+        <p><a class="botao botao--principal" href="#/">${escapar(t('missao.voltarInicio'))}</a></p>
+      </section>`;
+    document.title = `${t('missao.bloqueadaTitulo')} · meridiano.`;
+  }
+  desenhar();
+  document.addEventListener('idioma-mudou', desenhar);
+  return () => {
+    document.removeEventListener('idioma-mudou', desenhar);
+    document.title = t('documento.titulo');
+  };
 }
 
 function mostrarNaoEncontrada(tela) {

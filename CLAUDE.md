@@ -667,7 +667,9 @@ missões" ou "em breve" (apagado, não abre); o módulo atual abre sozinho; tecl
 marcas de progresso, nunca em títulos. Hover do digita (o texto escurece e anda 4px).
 Painel à direita: sequência, missões (x de 77, barra fina), conceitos que mais escapam. O
 início leva à trilha. O progresso de verdade chegou no passo 13 (`progresso.js`); o
-bloqueio dos módulos na tela é o passo 14.
+bloqueio, no 14: um módulo abre depois do desafio final do anterior (o 0 sempre aberto);
+bloqueado, mostra as missões apagadas e sem link; dentro de um módulo aberto, as missões
+ficam livres.
 
 ### As 6 conferências automáticas
 

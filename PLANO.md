@@ -405,7 +405,7 @@ o Fernando.
 | 11 | `raio-x.js` (virou `passo-a-passo.js` no redesenho) | A tabela viva, etapa por etapa |
 | 12 | Tela de **missão** | As 7 etapas (6 desde o redesenho), dicas · **🛑 teste no Safari** |
 | 13 | **Entrega** e `progresso.js` | Estrelas, números que contam, ponto da marca pulsando, desbloqueio |
-| 14 | Tela de **trilha** | O visual já chegou no redesenho; falta a lógica: desbloqueio, progresso e sequência de verdade |
+| 14 | Tela de **trilha** | O bloqueio dos módulos (o visual chegou no redesenho; o progresso, no passo 13) |
 | 15 | **Entrada** e **nivelamento** | Os 6 desafios que liberam o que o aluno já sabe |
 | 16 | Tela de **início** | Continuar, atalhos com hover e ilustração, painel à direita |
 | 17 | **Laboratório** | Base inteira, importar/exportar CSV, histórico, favoritas, link com a consulta |
@@ -837,7 +837,15 @@ Ajustes finos pedidos pelo Fernando depois do redesenho. Testado no Safari pelo 
       continua valendo. A trilha passou a ler o progresso de verdade (pontos, "2 de 3",
       sequência, conceitos com nomes legíveis) e se redesenha quando ele muda. O
       **bloqueio** dos módulos na trilha é o passo 14
-- [ ] **Passo 14** — trilha
+- [x] **Passo 14** — trilha: o bloqueio dos módulos. Um módulo só libera as missões
+      depois do desafio final do anterior (o módulo 0 sempre aberto); bloqueado, ele
+      mostra "9 missões" no tom discreto e, aberto, lista as missões apagadas e sem link,
+      com "Abre quando você concluir o desafio final do módulo N". O Continuar só aponta
+      para missões liberadas. Uma missão bloqueada aberta pelo endereço mostra o aviso,
+      sem carregar o motor; na entrega, "Próxima missão" vira "Voltar à trilha" se a
+      seguinte estiver fechada. (O visual, o progresso e a sequência chegaram antes: no
+      redesenho e no passo 13.) Dentro de um módulo liberado, as missões ficam livres,
+      em qualquer ordem
 - [ ] **Passo 15** — entrada e nivelamento
 - [ ] **Passo 16** — início
 - [ ] **Passo 17** — laboratório

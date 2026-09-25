@@ -103,6 +103,8 @@ export const en = {
     diasUnidade: 'days in a row',
     proximaMissao: 'Next mission',
     ultimaEscrita: 'This is the last mission written, for now.',
+    bloqueadaTitulo: 'This mission is still locked',
+    bloqueadaTexto: 'It opens once you complete the final challenge of module {n} — {titulo}.',
   },
 
   trilha: {
@@ -115,6 +117,8 @@ export const en = {
     feitas: '{n} of {total}',
     missoesN: '{n} missions',
     emBreve: 'coming soon',
+    bloqueado: 'locked',
+    libera: 'Opens once you complete the final challenge of module {n}.',
     feita: 'done',
     atual: 'current',
     aFazer: 'to do',
