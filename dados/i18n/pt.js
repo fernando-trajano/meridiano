@@ -110,6 +110,10 @@ export const pt = {
     estrelas3: 'Três estrelas: sem nenhuma dica.',
     estrelas2: 'Duas estrelas: com dicas, sem ver a resposta.',
     estrelas1: 'Uma estrela: com a resposta. Vale refazer depois, sem ela.',
+    melhorMarca: 'A sua melhor marca nesta missão continua valendo: {n} de 3 estrelas.',
+    moduloLiberado: 'Módulo {n} liberado: {titulo}.',
+    diaUnidade: 'dia seguido',
+    diasUnidade: 'dias seguidos',
     proximaMissao: 'Próxima missão',
     ultimaEscrita: 'Esta é a última missão escrita, por enquanto.',
   },
@@ -137,6 +141,17 @@ export const pt = {
     deTotal: 'de {total}',
     conceitosEscapam: 'Conceitos que mais escapam',
     semConceitos: 'Nada por enquanto.',
+    // Os nomes de alguns conceitos no painel "Conceitos que mais escapam".
+    conceitos: {
+      colunas: 'escolher colunas',
+      contas: 'contas',
+      apelidos: 'AS (apelidos)',
+      comparacoes: 'comparações',
+      juntar: '|| (juntar)',
+      comentario: '-- (comentário)',
+      asterisco: '* (todas as colunas)',
+      igual: '= (igual)',
+    },
   },
 
   editor: {

@@ -26,8 +26,13 @@
    Revisão e desafio final pulam conceito e palpite.
 
    Dicas em 3 degraus (pista, esqueleto, resposta). Estrelas: 3 sem dica,
-   2 sem ver a resposta, 1 com a resposta. A animação da entrega, o
-   progresso salvo e o desbloqueio são o passo 13.
+   2 sem ver a resposta, 1 com a resposta.
+
+   Ao chegar à entrega, a missão é concluída (progresso.js, passo 13): a
+   melhor nota fica guardada, a sequência de dias conta, o desafio final
+   libera o módulo seguinte, o ponto da marca pulsa uma vez e os números da
+   entrega contam do antes para o depois. Pedir dica ou errar a conferência
+   num desafio conta, uma vez, como tropeço nos conceitos dele.
 
    A base é zerada ao entrar na missão. Trocar o idioma no meio redesenha os
    textos no lugar; o editor traduz a consulta sozinho, e o Passo a passo se
@@ -47,7 +52,9 @@ import { conferirResposta } from '../conferir.js';
 import { criarPassoAPasso } from '../passo-a-passo.js';
 import { definirContexto, definirSair } from '../cabecalho.js';
 import { mostrarAbrindo } from './abrindo.js';
-import { modulos, carregarModulo } from '../../dados/missoes/indice.js';
+import { modulos, carregarModulo, TOTAL_DE_MISSOES } from '../../dados/missoes/indice.js';
+import { concluirMissao, registrarTropeco } from '../progresso.js';
+import { contarAte, pulsarPontoDaMarca } from '../movimento.js';
 import { personagens } from '../../dados/personagens.js';
 import { dicionario } from '../../dados/base/dicionario.js';
 
@@ -100,6 +107,9 @@ export async function mostrarMissao(tela, id) {
     idiomaDoSql: missao.desafios.map(() => idioma()),
     rodou: missao.desafios.map(() => false),
     palpite: null,
+    tropecou: missao.desafios.map(() => false),        // já contou um tropeço neste desafio?
+    conclusao: null,                                   // o antes e o depois, ao chegar à entrega
+    animouEntrega: false,
     tabelaAberta: 0,                                   // a aba de tabela na etapa do pedido
   };
   let editor = null;
@@ -175,6 +185,7 @@ export async function mostrarMissao(tela, id) {
     guardarEditor();
     estado.indice = i;
     estado.alcancada = Math.max(estado.alcancada, i);
+    if (etapas[i].tipo === 'entrega' && !estado.conclusao) concluir();
     desenharTopo();
     desenharTexto();
     desenharBancada();
@@ -411,6 +422,7 @@ export async function mostrarMissao(tela, id) {
         estado.confirmandoResposta[i] = true;
       } else {
         estado.grauDaDica[i] = grau + 1;
+        tropecar(i);
       }
       desenharTexto();
       el.texto.querySelector('.dica-proxima, .dica-levar')?.focus();
@@ -476,6 +488,7 @@ export async function mostrarMissao(tela, id) {
         linha.className = veredito.certo ? 'conferencia-certa' : 'conferencia-errada';
         linha.innerHTML = veredito.mensagem;   // já com os selos (conferir.js)
         saida.prepend(linha);
+        if (!veredito.certo && !estado.resolvido[i]) tropecar(i);
         if (veredito.certo && !estado.resolvido[i]) {
           estado.resolvido[i] = true;
           estado.alcancada = Math.max(estado.alcancada, estado.indice + 1);
@@ -528,15 +541,64 @@ export async function mostrarMissao(tela, id) {
       ${proxima}`;
   }
 
+  /** Conclui a missão (uma vez por visita): salva e guarda o antes e o depois. */
+  function concluir() {
+    estado.conclusao = concluirMissao(missao, {
+      estrelas: estrelas(),
+      dicas: Math.max(...estado.grauDaDica),
+      ultimaDoModulo: posicaoNoModulo === modulo.total,
+      idDoModulo: modulo.id,
+    });
+    pulsarPontoDaMarca();
+  }
+
+  /** Um tropeço nos conceitos do desafio — uma vez por desafio, por visita. */
+  function tropecar(i) {
+    if (estado.tropecou[i]) return;
+    estado.tropecou[i] = true;
+    const conceitos = missao.conceitosNovos?.length ? missao.conceitosNovos : (missao.desafios[i].exige ?? []);
+    registrarTropeco(conceitos);
+  }
+
   function bancadaEntrega() {
     const n = estrelas();
+    const c = estado.conclusao;
+    // A melhor nota continua valendo quando a de agora é menor.
+    const melhor = c.melhorAntes !== null && c.melhorAntes > n
+      ? `<p class="entrega-nota">${escapar(t('missao.melhorMarca', { n: c.melhorAntes }))}</p>` : '';
+    const liberou = c.liberou
+      ? `<p class="entrega-nota entrega-nota--liberou">${escapar(t('missao.moduloLiberado', { n: c.liberou.numero, titulo: emIdioma(c.liberou.titulo) }))}</p>` : '';
+
     el.bancada.classList.add('missao-bancada--entrega');
     el.bancada.innerHTML = `
       <div class="entrega">
-        <p class="estrelas" role="img" aria-label="${escapar(t('missao.estrelasRotulo', { n }))}">${desenharEstrelas(n)}</p>
+        <p class="estrelas ${estado.animouEntrega ? '' : 'estrelas--chegando'}" role="img"
+          aria-label="${escapar(t('missao.estrelasRotulo', { n }))}">${desenharEstrelas(n)}</p>
         <p class="entrega-frase">${escapar(t(`missao.estrelas${n}`))}</p>
+        ${melhor}
+        <dl class="entrega-numeros">
+          <div>
+            <dt>${escapar(t('trilha.missoes'))}</dt>
+            <dd><span class="entrega-numero entrega-feitas">${c.feitasDepois}</span>
+              <span class="entrega-de">${escapar(t('trilha.deTotal', { total: TOTAL_DE_MISSOES }))}</span></dd>
+          </div>
+          <div>
+            <dt>${escapar(t('trilha.sequencia'))}</dt>
+            <dd><span class="entrega-numero entrega-dias">${c.sequenciaDepois}</span>
+              <span class="entrega-de">${escapar(t(c.sequenciaDepois === 1 ? 'missao.diaUnidade' : 'missao.diasUnidade'))}</span></dd>
+          </div>
+        </dl>
+        ${liberou}
         <a class="botao-link" href="#/">${escapar(t('missao.voltarInicio'))}</a>
       </div>`;
+
+    // Os números contam do antes para o depois — só na primeira vez que a
+    // entrega aparece (voltar a ela pela linha do meridiano não reconta).
+    if (!estado.animouEntrega) {
+      contarAte(el.bancada.querySelector('.entrega-feitas'), c.feitasAntes, c.feitasDepois, { atraso: 500 });
+      contarAte(el.bancada.querySelector('.entrega-dias'), c.sequenciaAntes, c.sequenciaDepois, { atraso: 650 });
+      estado.animouEntrega = true;
+    }
   }
 
   /* ------------------------------------------------------------------------
@@ -647,7 +709,7 @@ function sqlDaDica(dica) {
 }
 
 function desenharEstrelas(n) {
-  return [1, 2, 3].map((i) => `<span class="${i <= n ? 'estrela-cheia' : 'estrela-vazia'}">★</span>`).join('');
+  return [1, 2, 3].map((i) => `<span class="${i <= n ? 'estrela-cheia' : 'estrela-vazia'}" style="--i: ${i}">★</span>`).join('');
 }
 
 function mostrarNaoEncontrada(tela) {

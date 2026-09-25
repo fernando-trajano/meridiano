@@ -666,7 +666,8 @@ missões" ou "em breve" (apagado, não abre); o módulo atual abre sozinho; tecl
 = a fazer), número "01" e título. **Nunca um id interno** (m0-01) na tela. O destaque só em
 marcas de progresso, nunca em títulos. Hover do digita (o texto escurece e anda 4px).
 Painel à direita: sequência, missões (x de 77, barra fina), conceitos que mais escapam. O
-início leva à trilha; a lógica (desbloqueio, progresso de verdade) é o passo 14.
+início leva à trilha. O progresso de verdade chegou no passo 13 (`progresso.js`); o
+bloqueio dos módulos na tela é o passo 14.
 
 ### As 6 conferências automáticas
 

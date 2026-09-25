@@ -411,6 +411,18 @@ body[data-tela="missao"] .conteudo {
   color: var(--cor-destaque);
 }
 
+/* Na primeira vez que a entrega aparece, as estrelas chegam uma a uma. */
+.estrelas--chegando span {
+  display: inline-block;
+  animation: estrela-chega 420ms ease-out both;
+  animation-delay: calc(var(--i) * 140ms);
+}
+
+@keyframes estrela-chega {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
 .estrela-vazia {
   color: var(--cor-borda);
 }
@@ -418,6 +430,45 @@ body[data-tela="missao"] .conteudo {
 .entrega-frase {
   color: var(--cor-texto-secundario);
   font-size: 14px;
+}
+
+.entrega-nota {
+  max-width: 30ch;
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+/* "Módulo 1 liberado": progresso, na versão de texto do destaque. */
+.entrega-nota--liberou {
+  color: var(--cor-destaque-texto);
+}
+
+/* Os números que contam: missões feitas e sequência de dias. */
+.entrega-numeros {
+  display: flex;
+  gap: 40px;
+  margin: 14px 0 6px;
+}
+
+.entrega-numeros dt {
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+.entrega-numeros dd {
+  margin: 0;
+}
+
+.entrega-numero {
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--espacamento-titulo);
+}
+
+.entrega-de {
+  color: var(--cor-texto-discreto);
+  font-size: 13px;
 }
 
 /* --- Tela estreita: uma coluna, a página rola ------------------------------------ */

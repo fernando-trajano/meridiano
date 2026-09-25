@@ -97,6 +97,10 @@ export const en = {
     estrelas3: 'Three stars: no hints at all.',
     estrelas2: 'Two stars: with hints, without seeing the answer.',
     estrelas1: 'One star: with the answer. Worth redoing later, without it.',
+    melhorMarca: 'Your best score on this mission still counts: {n} of 3 stars.',
+    moduloLiberado: 'Module {n} unlocked: {titulo}.',
+    diaUnidade: 'day in a row',
+    diasUnidade: 'days in a row',
     proximaMissao: 'Next mission',
     ultimaEscrita: 'This is the last mission written, for now.',
   },
@@ -122,6 +126,16 @@ export const en = {
     deTotal: 'of {total}',
     conceitosEscapam: 'Concepts that slip the most',
     semConceitos: 'Nothing yet.',
+    conceitos: {
+      colunas: 'choosing columns',
+      contas: 'arithmetic',
+      apelidos: 'AS (aliases)',
+      comparacoes: 'comparisons',
+      juntar: '|| (join text)',
+      comentario: '-- (comment)',
+      asterisco: '* (all columns)',
+      igual: '= (equals)',
+    },
   },
 
   editor: {

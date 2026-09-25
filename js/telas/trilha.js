@@ -21,13 +21,12 @@
    À direita, o painel: sequência (dias), missões (x de 77, com uma barra
    fina) e os conceitos que mais escapam.
 
-   O progresso vem de meridiano:progresso — { missoes: { 'm0-01': {
-   estrelas, em } } } —, que o passo 13 passa a gravar. Por enquanto, está
-   vazio para todo mundo.
+   O progresso vem do progresso.js (passo 13): missões feitas, sequência de
+   dias e conceitos que escaparam. A tela se redesenha quando ele muda.
    ========================================================================== */
 
 import { t, emIdioma } from '../i18n.js';
-import { CHAVES, ler } from '../armazenamento.js';
+import { missaoFeita, totalFeitas, sequenciaAtual, conceitosQueMaisEscapam, aoMudarProgresso } from '../progresso.js';
 import { escapar, textoComSelos } from '../realce.js';
 import { modulos, carregarModulo, TOTAL_DE_MISSOES } from '../../dados/missoes/indice.js';
 
@@ -45,9 +44,7 @@ export async function mostrarTrilha(tela) {
   let observador = null;
 
   function desenhar() {
-    const progresso = ler(CHAVES.progresso, { missoes: {} });
-    const feitas = progresso.missoes ?? {};
-    const feita = (missao) => Boolean(feitas[missao.id]);
+    const feita = (missao) => missaoFeita(missao.id);
 
     // A próxima missão: a primeira escrita que ainda não foi feita.
     let proxima = null;
@@ -115,8 +112,8 @@ export async function mostrarTrilha(tela) {
       .join('');
 
     // --- O painel -----------------------------------------------------------------
-    const sequencia = Number(ler(CHAVES.sequencia, { atual: 0 }).atual) || 0;
-    const escapam = conceitosQueMaisEscapam(ler(CHAVES.estatisticas, { conceitos: {} }).conceitos);
+    const sequencia = sequenciaAtual();
+    const escapam = conceitosQueMaisEscapam(3).map(nomeDoConceito);
     const porcentagem = TOTAL_DE_MISSOES ? (totalFeitas / TOTAL_DE_MISSOES) * 100 : 0;
 
     tela.innerHTML = `
@@ -197,19 +194,24 @@ export async function mostrarTrilha(tela) {
   }
 
   document.addEventListener('idioma-mudou', aoMudarIdioma);
+  const pararDeOuvir = aoMudarProgresso(desenhar);
   desenhar();
 
   return () => {
     document.removeEventListener('idioma-mudou', aoMudarIdioma);
+    pararDeOuvir();
     observador?.disconnect();
   };
 }
 
-/** Os três conceitos com mais dicas pedidas (meridiano:estatisticas, a partir do passo 13). */
-function conceitosQueMaisEscapam(conceitos = {}) {
-  return Object.entries(conceitos ?? {})
-    .filter(([, n]) => Number(n) > 0)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([conceito]) => conceito);
+/* Os conceitos cujo nome canônico não se explica sozinho ganham um nome
+   na tela ("|| (juntar)"); os outros (DISTINCT, WHERE…) aparecem como são. */
+const CONCEITOS_COM_NOME = {
+  COLUNAS: 'colunas', CONTAS: 'contas', AS: 'apelidos', COMPARACOES: 'comparacoes',
+  '||': 'juntar', '--': 'comentario', '*': 'asterisco', '=': 'igual',
+};
+
+function nomeDoConceito(conceito) {
+  const chave = CONCEITOS_COM_NOME[conceito];
+  return chave ? t(`trilha.conceitos.${chave}`) : conceito;
 }

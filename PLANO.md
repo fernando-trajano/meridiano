@@ -140,8 +140,8 @@ Meridiano/
 │   │   ├── inicio.js          # continuar, atalhos, exportar/importar
 │   │   ├── trilha.js          # acordeão dos 10 módulos + linha do meridiano (o visual
 │   │   │                      # chegou antes; a lógica é o passo 14)
-│   │   ├── missao.js          # as 6 etapas da missão, com a bancada
-│   │   ├── entrega.js         # resposta do personagem, estrelas, números que contam
+│   │   ├── missao.js          # as 6 etapas da missão, com a bancada — e a entrega:
+│   │   │                      # resposta do personagem, estrelas, números que contam
 │   │   ├── laboratorio.js
 │   │   ├── cola.js
 │   │   └── jogos.js           # o menu de jogos
@@ -363,10 +363,10 @@ Todas com o prefixo `meridiano:`:
 
 | Chave | Guarda |
 |---|---|
-| `meridiano:config` | `idioma`, `tema` e `temaDoSistemaNaEscolha` (a regra do tema do digita), `mudo`, `formatoCsv` (`br`/`internacional`; `null` = seguir o idioma). `null` em qualquer campo = "ainda não escolheu" |
-| `meridiano:progresso` | por missão: estrelas, dicas usadas, viu a resposta, concluída; módulos liberados |
-| `meridiano:sequencia` | dias seguidos, última data |
-| `meridiano:estatisticas` | erros por conceito (alimenta "conceitos que mais escapam") |
+| `meridiano:config` | `idioma`, `tema` (`null` = escuro, o padrão; `'claro'` só por escolha), `mudo`, `formatoCsv` (`br`/`internacional`; `null` = seguir o idioma). `null` em qualquer campo = "ainda não escolheu" |
+| `meridiano:progresso` | `{ versao: 1, missoes: { 'm0-01': { estrelas, dicas, viuResposta, concluida, vezes } }, liberados: ['m0', …] }` — `estrelas` é a **melhor** nota; `m0` sempre liberado (passo 13) |
+| `meridiano:sequencia` | `{ atual, maior, ultimoDia }` — dias seguidos com missão concluída, no fuso de quem usa; na leitura, vira 0 se passou um dia inteiro sem missão |
+| `meridiano:estatisticas` | `{ conceitos: { DISTINCT: 2, … } }` — quantas vezes cada conceito escapou (dica pedida ou conferência errada, uma vez por desafio); alimenta "conceitos que mais escapam" |
 | `meridiano:nivelamento` | as respostas dos 6 desafios e o que foi liberado |
 | `meridiano:laboratorio` | histórico (50 consultas), favoritas, a última consulta aberta |
 | `meridiano:jogos` | o último jogo e nível escolhidos no menu |
@@ -828,7 +828,15 @@ Ajustes finos pedidos pelo Fernando depois do redesenho. Testado no Safari pelo 
       "ver 5 linhas") · ícone Formatar (⇧⌥F) · Rodar (com o atalho no `title`)
 - [x] Conferência com o motor só na trilha (dentro de uma missão dava avisos falsos)
 
-- [ ] **Passo 13** — entrega e progresso
+- [x] **Passo 13** — entrega e progresso: `progresso.js` (conclui a missão guardando a
+      melhor nota, conta a sequência de dias, o desafio final libera o módulo seguinte,
+      registra os conceitos que escaparam) e `movimento.js` (números que contam, pulso
+      do ponto da marca, tudo parado com movimento reduzido). A entrega mostra as
+      estrelas chegando uma a uma, "Missões x de 77" e "Sequência" contando do antes
+      para o depois, "Módulo N liberado" e, ao refazer com nota menor, que a melhor
+      continua valendo. A trilha passou a ler o progresso de verdade (pontos, "2 de 3",
+      sequência, conceitos com nomes legíveis) e se redesenha quando ele muda. O
+      **bloqueio** dos módulos na trilha é o passo 14
 - [ ] **Passo 14** — trilha
 - [ ] **Passo 15** — entrada e nivelamento
 - [ ] **Passo 16** — início

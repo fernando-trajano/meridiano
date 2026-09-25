@@ -175,6 +175,18 @@ samp {
 .marca-ponto {
   display: inline-block;
   color: var(--cor-destaque);
+  transform-origin: 50% 80%;
+}
+
+/* Uma vez só, ao concluir uma missão (movimento.js). */
+.marca-ponto--pulsa {
+  animation: ponto-pulsa 700ms ease-out;
+}
+
+@keyframes ponto-pulsa {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.9); }
+  100% { transform: scale(1); }
 }
 
 .cabecalho-contexto {
