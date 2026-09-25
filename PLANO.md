@@ -335,7 +335,7 @@ Todas com o prefixo `meridiano:`:
 
 | Chave | Guarda |
 |---|---|
-| `meridiano:config` | idioma, tema, som, formato de exportação do CSV (BR/internacional) |
+| `meridiano:config` | `idioma`, `tema` e `temaDoSistemaNaEscolha` (a regra do tema do digita), `mudo`, `formatoCsv` (`br`/`internacional`; `null` = seguir o idioma). `null` em qualquer campo = "ainda não escolheu" |
 | `meridiano:progresso` | por missão: estrelas, dicas usadas, viu a resposta, concluída; módulos liberados |
 | `meridiano:sequencia` | dias seguidos, última data |
 | `meridiano:estatisticas` | erros por conceito (alimenta "conceitos que mais escapam") |
@@ -348,6 +348,11 @@ um backup antigo continuar entrando depois que o formato mudar.
 
 **Fora do localStorage:** o motor SQL fica no Cache Storage, na gaveta
 `meridiano:motor-<versão>` (passo 6). Não é progresso do aluno e não entra no backup.
+
+**Vizinhança:** o digita e o meridiano moram no mesmo endereço
+(`fernando-trajano.github.io`) e por isso dividem o mesmo `localStorage` e o mesmo Cache
+Storage. Os prefixos `digita:` e `meridiano:` são o que impede um de ler ou apagar as
+coisas do outro — nunca criar uma chave sem prefixo.
 
 ---
 
@@ -648,7 +653,10 @@ no painel de navegador do app e conferir, conforme o passo:
       Safari pelo Fernando**: rodar, acentos, autocompletar, atalhos, desfazer, formatar,
       erro traduzido com a linha marcada e colar. A bancada de teste continua até o
       passo 12
-- [ ] **Passo 8** — armazenamento e estado
+- [x] **Passo 8** — `armazenamento.js` e `estado.js`, adaptados do digita: idioma e tema
+      sobrevivem ao recarregar, com a regra do tema do digita (a última mudança vale, o
+      sistema é a referência); gaveta corrompida é descartada sem quebrar a tela.
+      `meridiano:config` já nasce com `mudo` e `formatoCsv`, para os passos 17 e 21
 - [ ] **Passo 9** — `conferir.js`, formato da missão, `conferencia.js` e `MODELO.md`
 - [ ] **Passo 10** — conteúdo dos módulos 0 a 2 · 🛑 revisão antes de escrever
 - [ ] **Passo 11** — `raio-x.js`

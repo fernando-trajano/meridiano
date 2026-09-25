@@ -12,6 +12,7 @@ import {
   ligarSeletorDeIdioma,
   conferirChaves,
 } from './i18n.js';
+import { config, definirConfig, aoMudarConfig } from './estado.js';
 import { conferirMapa } from './traducao-sql.js';
 import { ligarBancada } from './telas/bancada.js';
 
@@ -20,12 +21,24 @@ const botaoTema = document.querySelector('#botao-tema');
 const preferenciaEscura = window.matchMedia('(prefers-color-scheme: dark)');
 
 /* --------------------------------------------------------------------------
-   Tema
+   Tema (a regra do digita)
 
-   Por enquanto: começa no tema do sistema, o botão alterna, e uma mudança
-   no sistema com o site aberto é seguida. A escolha ainda NÃO é salva — no
-   passo 8 entra a regra inteira do digita (a última mudança vale, e o
-   sistema é a referência).
+   A regra, numa frase: a ÚLTIMA mudança vale, e o sistema é a referência.
+
+     - primeira visita: segue o tema do sistema;
+     - clique no botão: a escolha vale e fica salva;
+     - o sistema muda com o site aberto: o site acompanha e a escolha manual
+       é descartada, porque ela é a mudança mais antiga das duas;
+     - ao voltar ao site: se o sistema continua como estava quando a escolha
+       foi feita, a escolha vale; se mudou nesse meio-tempo, quem vale é o
+       sistema, e a escolha é descartada.
+
+   É por isso que a escolha manual é salva em DUAS partes: o tema escolhido e
+   o tema que o sistema tinha naquele momento. Sem a segunda não há como
+   saber, na volta, se o sistema mudou desde então.
+
+   A mesma regra está repetida no <head> do index.html, que roda antes de a
+   página aparecer.
    -------------------------------------------------------------------------- */
 
 /**
@@ -45,29 +58,70 @@ function temaDoSistema() {
   return preferenciaEscura.matches ? 'escuro' : 'claro';
 }
 
+/** Esquece a escolha manual: daqui em diante quem manda é o sistema. */
+function esquecerEscolhaDeTema() {
+  definirConfig({ tema: null, temaDoSistemaNaEscolha: null });
+}
+
+/** O tema que vale agora, com a regra inteira aplicada. */
+function temaQueVale() {
+  const { tema, temaDoSistemaNaEscolha } = config();
+  const sistema = temaDoSistema();
+
+  if (!tema) return sistema;
+
+  // O sistema mudou desde a escolha: ela caducou.
+  if (temaDoSistemaNaEscolha !== sistema) {
+    esquecerEscolhaDeTema();
+    return sistema;
+  }
+
+  return tema;
+}
+
 botaoTema.addEventListener('click', () => {
-  aplicarTema(raiz.dataset.tema === 'escuro' ? 'claro' : 'escuro');
+  const novo = raiz.dataset.tema === 'escuro' ? 'claro' : 'escuro';
+
+  definirConfig({ tema: novo, temaDoSistemaNaEscolha: temaDoSistema() });
+  aplicarTema(novo);
 });
 
+// O computador trocou de claro para escuro (ao anoitecer, por exemplo). Essa
+// é agora a última mudança, então ela vale — e a escolha manual anterior,
+// que era mais antiga, é descartada.
 preferenciaEscura.addEventListener('change', () => {
+  esquecerEscolhaDeTema();
   aplicarTema(temaDoSistema());
 });
 
 /* --------------------------------------------------------------------------
    Idioma
-
-   Por enquanto: o idioma do navegador ao abrir, e os botões PT/EN do
-   cabeçalho. A escolha ainda NÃO é salva — isso é o passo 8.
    -------------------------------------------------------------------------- */
 
 ligarSeletorDeIdioma();
+
+// Só o que veio de um clique é salvo: a detecção sugere, não decide.
+document.addEventListener('idioma-mudou', (evento) => {
+  if (evento.detail.manual) definirConfig({ idioma: evento.detail.idioma });
+});
+
+// Um backup importado (passo 21) pode trazer outro idioma ou tema: a tela
+// segue o estado, e não só o clique.
+aoMudarConfig((atual, mudancas) => {
+  if ('tema' in mudancas) aplicarTema(temaQueVale());
+  if ('idioma' in mudancas && atual.idioma && atual.idioma !== raiz.lang.slice(0, 2)) {
+    definirIdioma(atual.idioma);
+  }
+});
 
 /* --------------------------------------------------------------------------
    Partida
    -------------------------------------------------------------------------- */
 
-// O script do <head> já pôs o tema certo; aqui só acertamos o ícone.
-aplicarTema(raiz.dataset.tema || temaDoSistema());
+// O script no <head> do index.html já aplicou esta mesma regra antes de a
+// página aparecer. Repeti-la aqui acerta o ícone e, quando a escolha manual
+// caducou, é o que apaga de fato o que estava salvo.
+aplicarTema(temaQueVale());
 
 // pt.js e en.js com as mesmas chaves? Se não, avisa no console.
 conferirChaves();
@@ -75,7 +129,8 @@ conferirChaves();
 // Cada nome de tabela e coluna com um só par no outro idioma? Se não, avisa.
 conferirMapa();
 
-definirIdioma(detectarIdioma());
+// Idioma salvo, se houver; senão, o do navegador de quem chegou.
+definirIdioma(config().idioma ?? detectarIdioma());
 
-// PROVISÓRIO (passo 5): a bancada de teste do motor SQL. Sai no passo 7.
+// PROVISÓRIO: a bancada de teste do motor SQL. Sai no passo 12.
 ligarBancada();

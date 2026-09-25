@@ -39,11 +39,23 @@
   <!-- Escolhe o tema ANTES de a página aparecer, para não piscar branco em
        quem usa o modo escuro. É o único JavaScript fora da pasta js/, e ele
        precisa estar aqui: qualquer coisa carregada depois já seria tarde.
-       Por enquanto segue só o sistema; a escolha salva entra no passo 8,
-       com a mesma regra do digita. -->
+       A regra é a mesma do app.js (ver a seção Tema lá): a escolha manual
+       só vale enquanto o sistema continuar no tema que tinha quando ela foi
+       feita. Ela está repetida aqui porque isto roda antes de tudo. -->
   <script>
-    document.documentElement.dataset.tema =
-      window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro';
+    (function () {
+      var salvo = {};
+      try {
+        salvo = JSON.parse(localStorage.getItem('meridiano:config') || '{}');
+      } catch (erro) {
+        /* navegador sem localStorage: segue o sistema */
+      }
+      var sistema =
+        window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro';
+
+      document.documentElement.dataset.tema =
+        salvo.tema && salvo.temaDoSistemaNaEscolha === sistema ? salvo.tema : sistema;
+    })();
   </script>
 
   <!-- Import map: diz ao navegador onde fica o "apache-arrow" que o motor SQL
