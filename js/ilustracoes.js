@@ -2,11 +2,15 @@
    ilustracoes.js — os desenhos de traço do site, em SVG.
 
    Regras de todos eles:
-     - só traço, em currentColor: acompanham o tema sozinhos, sem cor própria;
+     - só traço, em currentColor: acompanham o tema sozinhos, sem cor própria
+       (a única exceção é o meridiano da marca, no globo: a cor de destaque,
+       pelo CSS);
      - sem bandeiras e sem mapas com fronteiras;
      - decorativos: aria-hidden, porque o texto ao lado já diz tudo.
 
-   Por enquanto, só o globo (tela "Abrindo o observatório..."). Os outros —
+   Por enquanto, só o globo — UM componente, o mesmo na entrada e na tela
+   "Abrindo o observatório..." (só a entrada liga a linha do meridiano da
+   marca). Os outros —
    mapa em pontos, fachada do instituto, pino, avião, documento, gráfico de
    linha — chegam com as telas que os usam.
    ========================================================================== */
@@ -32,10 +36,14 @@ const THETA_PARADO = 0.3;
  * de estreitar e alargar cada uma (a largura rx = 80 × |cos(θ + defasagem)|),
  * nunca de mover a elipse. Tudo o que está dentro é recortado pelo próprio
  * círculo, então nada escapa do contorno. Para girar, ver animarGlobo().
- * @param {{classe?: string}} [opcoes]
+ *
+ * Com linhaMeridiano, por cima, parada enquanto os outros giram, a linha
+ * vertical na cor de destaque: o meridiano da marca, cruzando o globo de
+ * cima a baixo. Só a entrada a liga; a tela de carregamento, não.
+ * @param {{classe?: string, linhaMeridiano?: boolean}} [opcoes]
  * @returns {string} o SVG, como texto
  */
-export function globo({ classe = '' } = {}) {
+export function globo({ classe = '', linhaMeridiano = false } = {}) {
   contadorDeGlobos += 1;
   const recorte = `globo-recorte-${contadorDeGlobos}`;
   const meridianos = larguras(THETA_PARADO)
@@ -52,6 +60,7 @@ export function globo({ classe = '' } = {}) {
         <g opacity="0.8">${meridianos}</g>
       </g>
       <circle cx="100" cy="100" r="${RAIO}"/>
+      ${linhaMeridiano ? '<path class="globo-meridiano-marca" d="M100 8V192"/>' : ''}
     </svg>`;
 }
 

@@ -30,6 +30,7 @@ import { dicionario } from '../base/dicionario.js';
 import { recursosUsados, normalizarRecurso, compararResultados } from '../../js/conferir.js';
 import { separar, traduzirSQL, sqlEmIngles, tabelasDoSQL } from '../../js/traducao-sql.js';
 import { clausulasNaOrdemDoBanco } from '../../js/passo-a-passo.js';
+import { desafiosDoNivelamento } from '../nivelamento.js';
 
 const TIPOS = ['missao', 'revisao', 'desafio', 'projeto'];
 const LIMITE_DE_PALAVRAS = 80;
@@ -53,8 +54,13 @@ export async function conferirConteudo({ comMotor = false, bd = null } = {}) {
     if (modulo.arquivo) lista.push({ modulo, missoes: await carregarModulo(modulo.id) });
   }
 
-  const avisos = conferirSemMotor(lista);
-  if (comMotor && bd) avisos.push(...(await conferirComMotor(lista, bd)));
+  // O nivelamento (passo 15) passa pelas mesmas conferências que cabem nele:
+  // gabaritos rodando nas duas bases, nomes do dicionário, selos e tabelas.
+  const nivelamento = { id: 'nivelamento', desafios: desafiosDoNivelamento };
+  const avisos = [...conferirSemMotor(lista), ...conferirNivelamento(nivelamento)];
+  if (comMotor && bd) {
+    avisos.push(...(await conferirComMotor([...lista, { modulo: { id: 'nivelamento' }, missoes: [nivelamento] }], bd)));
+  }
 
   relatar(avisos, lista, comMotor);
   return avisos;
@@ -158,6 +164,30 @@ export function conferirSemMotor(lista) {
           avisos.push(`${onde(missao)}: [6] desafios[${i}].tabelas é [${declaradas.join(', ')}], mas o gabarito usa [${doGabarito.join(', ')}].`);
         }
       }
+    }
+  }
+  return avisos;
+}
+
+/** O nivelamento: estrutura, nomes (5), selos (5) e tabelas (6). */
+function conferirNivelamento(nivelamento) {
+  const avisos = [];
+  const temTexto = (valor) => valor && typeof valor.pt === 'string' && typeof valor.en === 'string';
+  if (nivelamento.desafios.length !== 6) avisos.push(`nivelamento: tem ${nivelamento.desafios.length} desafios; são 6.`);
+  for (const [i, desafio] of nivelamento.desafios.entries()) {
+    const onde = `nivelamento desafios[${i}]`;
+    if (!modulos.some((m) => m.id === desafio.libera)) avisos.push(`${onde}: libera "${desafio.libera}", que não é um módulo.`);
+    if (!temTexto(desafio.enunciado)) avisos.push(`${onde}: o enunciado precisa de pt e en.`);
+    for (const nome of nomesDesconhecidos(desafio.gabarito ?? '')) {
+      avisos.push(`${onde}: [5] o gabarito usa "${nome}", que não é tabela nem coluna do dicionário.`);
+    }
+    for (const { idioma, nome } of selosDesconhecidos(desafio.enunciado)) {
+      avisos.push(`${onde}: [5] o selo \`${nome}\` (${idioma}) não é tabela nem coluna do dicionário nesse idioma.`);
+    }
+    const doGabarito = tabelasDoSQL(desafio.gabarito).sort();
+    const declaradas = [...(desafio.tabelas ?? [])].sort();
+    if (doGabarito.join() !== declaradas.join()) {
+      avisos.push(`${onde}: [6] tabelas é [${declaradas.join(', ')}], mas o gabarito usa [${doGabarito.join(', ')}].`);
     }
   }
   return avisos;

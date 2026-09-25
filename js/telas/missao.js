@@ -44,11 +44,9 @@ import { abrirBase, baseAberta, zerarBase, consultar, idiomaDaBase } from '../bd
 import { sqlNoIdioma, nomeNoIdioma, traduzirSQL, tabelasDoSQL } from '../traducao-sql.js';
 import { realcarSQL, escapar, textoComSelos } from '../realce.js';
 import { formatarSQL } from '../formatar-sql.js';
-import { criarEditor, ATALHO_RODAR, ATALHO_FORMATAR } from '../editor.js';
-import { criarTabelasDaBarra } from '../tabelas-da-barra.js';
+import { criarBancadaDeConsulta } from '../bancada-consulta.js';
 import { desenharResultado, desenharErro, MAX_LINHAS } from '../tabela-resultado.js';
 import { traduzirErro } from '../erros-sql.js';
-import { conferirResposta } from '../conferir.js';
 import { criarPassoAPasso } from '../passo-a-passo.js';
 import { definirContexto, definirSair } from '../cabecalho.js';
 import { mostrarAbrindo } from './abrindo.js';
@@ -56,7 +54,6 @@ import { modulos, carregarModulo, TOTAL_DE_MISSOES } from '../../dados/missoes/i
 import { concluirMissao, registrarTropeco, moduloLiberado } from '../progresso.js';
 import { contarAte, pulsarPontoDaMarca } from '../movimento.js';
 import { personagens } from '../../dados/personagens.js';
-import { dicionario } from '../../dados/base/dicionario.js';
 
 /** Quantas linhas a amostra da etapa do pedido mostra. */
 const LINHAS_DA_AMOSTRA = 5;
@@ -118,8 +115,7 @@ export async function mostrarMissao(tela, id) {
   let editor = null;
   let passoAPasso = null;
   let rodarDesafio = null;   // o "rodar" do desafio aberto, para a troca de idioma
-  let tabelasDaBarra = null; // as tabelas na barra da Consulta
-  let atualizarBarra = null; // os títulos dos botões da barra, na troca de idioma
+  let bancada = null;        // a bancada do desafio aberto (bancada-consulta.js)
 
   // A tela da missão ocupa a janela inteira, sem rodapé (ver telas.css).
   document.body.dataset.tela = 'missao';
@@ -210,12 +206,10 @@ export async function mostrarMissao(tela, id) {
   }
 
   function limparBancada() {
-    editor?.destruir();
+    bancada?.destruir();
+    bancada = null;
     editor = null;
     rodarDesafio = null;
-    tabelasDaBarra?.destruir();
-    tabelasDaBarra = null;
-    atualizarBarra = null;
     passoAPasso?.destruir();
     passoAPasso = null;
     el.bancada.className = 'missao-bancada painel';
@@ -439,90 +433,38 @@ export async function mostrarMissao(tela, id) {
 
   function bancadaDesafio(etapa) {
     const i = etapa.desafio;
-    el.bancada.innerHTML = `
-      <div class="painel-barra painel-barra--consulta">
-        <span class="painel-aba" data-i18n="missao.abas.consulta">${escapar(t('missao.abas.consulta'))}</span>
-        <span class="painel-espaco"></span>
-        <span class="missao-tabelas"></span>
-        <button type="button" class="botao-icone botao-icone--pequeno missao-formatar">
-          <svg aria-hidden="true"><use href="#icone-formatar"></use></svg>
-        </button>
-        <button type="button" class="botao botao--pequeno missao-rodar ${estado.resolvido[i] ? '' : 'botao--principal'}"
-          data-i18n="editor.rodar">${escapar(t('editor.rodar'))}</button>
-      </div>
-      <div class="missao-editor"></div>
-      <div class="painel-barra">
-        <span class="painel-aba" data-i18n="missao.abas.resultado">${escapar(t('missao.abas.resultado'))}</span>
-        <span class="painel-espaco"></span>
-        <span class="painel-info missao-resultado-info"></span>
-      </div>
-      <div class="painel-rolagem missao-saida" aria-live="polite">
-        <p class="tabela-aviso" data-i18n="missao.resultadoVazio">${escapar(t('missao.resultadoVazio'))}</p>
-      </div>`;
-
-    const saida = el.bancada.querySelector('.missao-saida');
-    const info = el.bancada.querySelector('.missao-resultado-info');
-    const botaoRodar = el.bancada.querySelector('.missao-rodar');
-    const botaoFormatar = el.bancada.querySelector('.missao-formatar');
-
-    // Os títulos dos botões, com o atalho de cada sistema (e no idioma da tela).
-    atualizarBarra = () => {
-      botaoRodar.title = t('editor.rodarTitulo', { atalho: ATALHO_RODAR });
-      const formatar = t('editor.formatarTitulo', { atalho: ATALHO_FORMATAR });
-      botaoFormatar.title = formatar;
-      botaoFormatar.setAttribute('aria-label', formatar);
-    };
-    atualizarBarra();
-
-    // As tabelas da tarefa, com a lista de colunas e a prévia.
-    tabelasDaBarra = criarTabelasDaBarra(el.bancada.querySelector('.missao-tabelas'), {
-      tabelas: missao.desafios[i].tabelas ?? tabelasDoSQL(missao.desafios[i].gabarito),
-      aoVerLinhas: (tabela) => mostrarPrevia(tabela, saida, info),
-    });
-
-    async function rodar(sql) {
-      estado.sqlDoAluno[i] = sql;
-      estado.rodou[i] = true;
-      try {
-        const resultado = await consultar(sql, { maxLinhas: MAX_LINHAS });
-        info.textContent = desenharResultado(saida, resultado);
-        const veredito = await conferirResposta(resultado, sql, missao.desafios[i]);
-        const linha = document.createElement('p');
-        linha.className = veredito.certo ? 'conferencia-certa' : 'conferencia-errada';
-        linha.innerHTML = veredito.mensagem;   // já com os selos (conferir.js)
-        saida.prepend(linha);
-        if (!veredito.certo && !estado.resolvido[i]) tropecar(i);
-        if (veredito.certo && !estado.resolvido[i]) {
-          estado.resolvido[i] = true;
-          estado.alcancada = Math.max(estado.alcancada, estado.indice + 1);
-          // Resolvido: o botão principal passa a ser o "Continuar", à esquerda.
-          botaoRodar.classList.remove('botao--principal');
-          desenharTopo();
-          desenharTexto();
-          el.texto.querySelector('.missao-avancar')?.focus();
-        }
-      } catch (erro) {
-        info.textContent = '';
-        const traduzido = traduzirErro(erro.message, { sql, idiomaDaBase: idiomaDaBase() });
-        desenharErro(saida, traduzido);
-        if (traduzido.linha) editor?.marcarErro(traduzido.linha);
-      }
-    }
-
     // A consulta guardada pode estar no outro idioma: traduz antes de mostrar.
     if (estado.idiomaDoSql[i] !== idioma()) {
       estado.sqlDoAluno[i] = traduzirSQL(estado.sqlDoAluno[i], estado.idiomaDoSql[i], idioma());
       estado.idiomaDoSql[i] = idioma();
     }
-    editor = criarEditor(el.bancada.querySelector('.missao-editor'), { inicial: estado.sqlDoAluno[i], aoRodar: rodar });
-    rodarDesafio = rodar;
-    botaoRodar.addEventListener('click', () => editor.rodar());
-    botaoFormatar.addEventListener('click', () => {
-      editor.formatar();
-      editor.focar();
+    bancada = criarBancadaDeConsulta(el.bancada, {
+      desafio: missao.desafios[i],
+      inicial: estado.sqlDoAluno[i],
+      principal: !estado.resolvido[i],
+      aoRodar(sql) {
+        estado.sqlDoAluno[i] = sql;
+        estado.rodou[i] = true;
+      },
+      aoVeredito(veredito) {
+        if (estado.resolvido[i]) return;
+        if (!veredito.certo) {
+          tropecar(i);
+          return;
+        }
+        estado.resolvido[i] = true;
+        estado.alcancada = Math.max(estado.alcancada, estado.indice + 1);
+        // Resolvido: o botão principal passa a ser o "Continuar", à esquerda.
+        bancada.rebaixarRodar();
+        desenharTopo();
+        desenharTexto();
+        el.texto.querySelector('.missao-avancar')?.focus();
+      },
     });
+    editor = bancada.editor;
+    rodarDesafio = bancada.rodar;
     // Voltando a um desafio já rodado: o resultado aparece de novo.
-    if (estado.rodou[i]) rodar(estado.sqlDoAluno[i]);
+    if (estado.rodou[i]) bancada.rodar(estado.sqlDoAluno[i]);
   }
 
   /* --- 6. Entrega ------------------------------------------------------------- */
@@ -609,24 +551,6 @@ export async function mostrarMissao(tela, id) {
   }
 
   /* ------------------------------------------------------------------------
-     A prévia de uma tabela ("ver 5 linhas"), na seção Resultado
-     ------------------------------------------------------------------------ */
-
-  async function mostrarPrevia(tabelaEn, alvo, info) {
-    const nome = nomeNoIdioma(tabelaEn, idioma());
-    try {
-      const [amostra, contagem] = await Promise.all([
-        consultar(`SELECT * FROM ${nome} LIMIT ${LINHAS_DA_AMOSTRA}`, { maxLinhas: LINHAS_DA_AMOSTRA }),
-        consultar(`SELECT count(*) FROM ${nome}`),
-      ]);
-      desenharResultado(alvo, amostra);
-      info.textContent = t('missao.previa', { nome, n: amostra.linhas.length, total: Number(contagem.linhas[0][0]) });
-    } catch (erro) {
-      desenharErro(alvo, traduzirErro(erro.message, { sql: nome, idiomaDaBase: idiomaDaBase() }));
-    }
-  }
-
-  /* ------------------------------------------------------------------------
      Uma consulta de leitura (o exemplo), com erro traduzido se houver
      ------------------------------------------------------------------------ */
 
@@ -649,7 +573,6 @@ export async function mostrarMissao(tela, id) {
     // desta tela) já terminou de traduzi-la.
     desenharTopo();
     desenharTexto();
-    atualizarBarra?.();
   }
 
   function aoRecarregarBase() {

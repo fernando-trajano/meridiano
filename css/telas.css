@@ -819,3 +819,150 @@ body:has(.trilha) .conteudo {
     padding-top: 22px;
   }
 }
+
+/* --- Entrada ---------------------------------------------------------------------
+   Duas colunas em tela larga: o texto à esquerda (58%) e o globo à direita
+   (42%), grande e centralizado na altura do texto. Em tela estreita, uma
+   coluna: o globo em cima, menor e centralizado (passo 15, ajustado depois).
+   ----------------------------------------------------------------------- */
+
+.entrada {
+  display: grid;
+  grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+  gap: 48px;
+  align-items: center;
+  max-width: 960px;
+  margin: 0 auto;
+  padding-top: 24px;
+}
+
+.entrada-texto-coluna {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.entrada-globo {
+  width: min(220px, 100%);
+  height: auto;
+  aspect-ratio: 1;
+  justify-self: center;
+  color: var(--cor-texto-secundario);
+}
+
+.entrada-instituto {
+  margin-bottom: 6px;
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+}
+
+.entrada-titulo {
+  margin-bottom: 14px;
+  font-size: clamp(1.6rem, 1.3rem + 1.4vw, 2.2rem);
+  line-height: 1.2;
+}
+
+.entrada-texto {
+  margin-bottom: 20px;
+  color: var(--cor-texto-secundario);
+  font-size: 16px;
+}
+
+.entrada-fatos {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 28px;
+  padding: 0;
+  color: var(--cor-texto-secundario);
+  font-size: 14px;
+  list-style: none;
+}
+
+/* Um ponto discreto antes de cada fato — o mesmo ponto da trilha. */
+.entrada-fatos li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.entrada-fatos li::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--cor-texto-discreto);
+  border-radius: 50%;
+  transform: translateY(-1px);
+}
+
+.entrada-caminhos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.entrada-trilha {
+  margin-top: 18px;
+}
+
+@media (max-width: 44rem) {
+  .entrada {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding-top: 0;
+  }
+
+  /* O globo vem antes do título, no meio. */
+  .entrada-globo {
+    order: -1;
+    width: 120px;
+  }
+}
+
+/* --- Nivelamento -------------------------------------------------------------------
+   A mesma moldura da missão (a linha, o texto, a bancada). Na abertura e no
+   resultado, a bancada lista os 6 desafios e o que cada um libera.
+   ----------------------------------------------------------------------- */
+
+.nivelamento-lista {
+  margin: 0;
+  padding: 6px 14px 10px;
+  list-style: none;
+  font-size: 14px;
+}
+
+.nivelamento-lista li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: var(--borda);
+  color: var(--cor-texto-secundario);
+}
+
+.nivelamento-lista li:last-child {
+  border-bottom: 0;
+}
+
+.nivelamento-numero,
+.nivelamento-marca {
+  flex: 0 0 1.25rem;
+  color: var(--cor-texto-discreto);
+  font-family: var(--fonte-mono);
+  font-size: 11px;
+}
+
+/* Acertou: a marca é progresso (destaque); o texto, na cor do texto. */
+.nivelamento-lista .nivelamento-acertou {
+  color: var(--cor-texto);
+}
+
+.nivelamento-acertou .nivelamento-marca {
+  color: var(--cor-destaque);
+  font-size: 13px;
+}
+
+.nivelamento-trilha {
+  margin-top: 14px;
+}

@@ -32,7 +32,7 @@
    ========================================================================== */
 
 import { t, emIdioma } from '../i18n.js';
-import { missaoFeita, moduloLiberado, sequenciaAtual, conceitosQueMaisEscapam, aoMudarProgresso } from '../progresso.js';
+import { missaoFeita, moduloLiberado, sequenciaAtual, conceitosQueMaisEscapam, aoMudarProgresso, escolherProxima } from '../progresso.js';
 import { escapar, textoComSelos } from '../realce.js';
 import { modulos, carregarModulo, TOTAL_DE_MISSOES } from '../../dados/missoes/indice.js';
 
@@ -52,16 +52,9 @@ export async function mostrarTrilha(tela) {
   function desenhar() {
     const feita = (missao) => missaoFeita(missao.id);
 
-    // A próxima missão: a primeira escrita, e liberada, que ainda não foi feita.
-    let proxima = null;
-    for (const item of conteudo) {
-      if (!moduloLiberado(item.modulo.id)) continue;
-      const achada = item.missoes.find((m) => !feita(m));
-      if (achada) {
-        proxima = { modulo: item.modulo, missao: achada };
-        break;
-      }
-    }
+    // Por onde seguir: a primeira missão não feita do módulo liberado mais
+    // adiantado (progresso.js) — quem fez o nivelamento segue de onde ele abriu.
+    const proxima = escolherProxima(conteudo);
     const moduloAtual = proxima?.modulo ?? [...conteudo].reverse().find((item) => item.missoes.length)?.modulo;
     const indiceAtual = modulos.indexOf(moduloAtual);
     if (primeiraVez && moduloAtual) abertos.add(moduloAtual.id);

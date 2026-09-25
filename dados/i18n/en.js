@@ -107,6 +107,37 @@ export const en = {
     bloqueadaTexto: 'It opens once you complete the final challenge of module {n} — {titulo}.',
   },
 
+  entrada: {
+    titulo: 'Learn SQL with real-world data',
+    fatoMissoes: '{escritas} missions ready today, out of {total} along the whole way.',
+    fatoNavegador: 'Real SQL, running in your browser.',
+    fatoDados: 'World Bank data, from 2000 to 2023.',
+    comecar: 'Start the first mission',
+    jaSei: 'I already know some SQL',
+    verTrilha: 'See the whole track',
+  },
+
+  nivelamento: {
+    titulo: 'Placement',
+    contexto: 'Placement · challenge {n} of {total}',
+    linha: 'Placement challenges',
+    desafio: 'Challenge',
+    explica: 'Six challenges, from the simplest to the hardest. Each one you get right unlocks a module of the track. There are no hints: if you can’t do one, just say so — the placement stops there, and nothing already unlocked closes again.',
+    comecar: 'Start the placement',
+    comoFunciona: 'How it works',
+    libera: 'Unlocks module {n} — {titulo}',
+    naoSei: 'I can’t do this one',
+    proximo: 'Next challenge',
+    verResultado: 'See the result',
+    resultadoTitulo: 'Result',
+    nenhum: 'That’s fine: you start at module 0, the way the track was designed.',
+    alguns: 'You got {n} of {total} right: the track is open up to module {ultimo}.',
+    todos: 'You got all {total} right: the track is open up to module {ultimo}.',
+    seguirPara: 'Start: {titulo}',
+    acertou: 'right',
+    naoRespondido: 'not answered',
+  },
+
   trilha: {
     titulo: 'Track',
     subtitulo: '10 modules, from the first `SELECT` to modern analysis.',
@@ -268,6 +299,6 @@ export const en = {
 
   vitrine: {
     texto:
-      'You join a research institute in Geneva as a data analyst. Every lesson is a mission: a researcher’s request, answered with real SQL on real country data.',
+      'You join a research institute in Geneva as a data analyst. Each lesson is a mission: a researcher’s request, answered with SQL on data from more than 200 countries.',
   },
 };

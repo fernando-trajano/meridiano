@@ -382,6 +382,21 @@ button.painel-aba {
   overflow-wrap: anywhere;
 }
 
+/* --- O globo (ilustracoes.js) -------------------------------------------
+   Um componente só: na entrada e na tela "Abrindo o observatório...". O
+   traço é o da cor de quem o contém; o meridiano da marca (só na entrada), a
+   linha vertical parada enquanto os outros giram, é o destaque. */
+
+.globo {
+  display: block;
+  overflow: visible;
+}
+
+.globo-meridiano-marca {
+  stroke: var(--cor-destaque);
+  stroke-width: 2;
+}
+
 /* --- Selo: código dentro do texto corrido -------------------------------
    `SELECT`, `nome_pais`: mono, um pouco menor que o texto, num fundo de
    código. A palavra-chave vem na cor da cláusula (realce.js). */

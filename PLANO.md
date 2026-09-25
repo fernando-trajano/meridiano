@@ -132,11 +132,13 @@ Meridiano/
 │   ├── tabela-resultado.js    # a tabela do site inteiro (amostra, Passo a passo, resultado)
 │   ├── passo-a-passo.js       # a consulta na ordem do banco, com o efeito na amostra
 │   ├── tabelas-da-barra.js    # as tabelas da tarefa na barra da Consulta + lista de colunas
+│   ├── bancada-consulta.js    # a bancada de um desafio (Consulta + Resultado), da missão e
+│   │                          # do nivelamento
 │   ├── progresso.js           # concluir missão, estrelas, desbloqueio, sequência de dias
 │   ├── telas/
 │   │   ├── abrindo.js         # "Abrindo o observatório..." com o globo girando
-│   │   ├── entrada.js
-│   │   ├── nivelamento.js     # os 6 desafios
+│   │   ├── entrada.js         # a 1ª tela de quem nunca esteve aqui: começar ou nivelar
+│   │   ├── nivelamento.js     # os 6 desafios (abertura, desafios, resultado)
 │   │   ├── inicio.js          # continuar, atalhos, exportar/importar
 │   │   ├── trilha.js          # acordeão dos 10 módulos + linha do meridiano (o visual
 │   │   │                      # chegou antes; a lógica é o passo 14)
@@ -846,7 +848,26 @@ Ajustes finos pedidos pelo Fernando depois do redesenho. Testado no Safari pelo 
       seguinte estiver fechada. (O visual, o progresso e a sequência chegaram antes: no
       redesenho e no passo 13.) Dentro de um módulo liberado, as missões ficam livres,
       em qualquer ordem
-- [ ] **Passo 15** — entrada e nivelamento
+- [x] **Passo 15** — entrada e nivelamento. **Entrada** (`#/entrada`): o globo, quem você
+      é no Observatório, três fatos e dois caminhos — a primeira missão ou "Já sei um
+      pouco de SQL"; sem motor. "#/" mostra a entrada a quem nunca concluiu nada (nem
+      missão, nem nivelamento), e a trilha aos outros. **Nivelamento** (`#/nivelamento`,
+      conteúdo em `dados/nivelamento.js`): 6 desafios, um por módulo (0 a 5); cada acerto
+      libera o módulo seguinte (até o 6), "Não sei fazer este" encerra, sem dicas; a
+      mesma moldura da missão; o resultado diz até onde a trilha abriu e sugere por onde
+      seguir. Guardado em `meridiano:nivelamento`; o que já estava liberado nunca fecha.
+      As conferências automáticas passaram a cobrir o nivelamento (gabaritos nas duas
+      bases, nomes, selos, tabelas). "Por onde seguir" (trilha e nivelamento) passou a
+      ser a primeira missão não feita do módulo liberado **mais adiantado**. A bancada
+      de Consulta virou um módulo só (`bancada-consulta.js`), usado pela missão e pelo
+      nivelamento. **Defeito corrigido** (vinha do passo 9): a conferência comparava só
+      as 200 linhas mostradas na tela — uma resposta certa com mais linhas (a m1-01 tem
+      234 países) parecia "faltar linhas"; agora compara o resultado inteiro.
+      **Ajuste da entrada** (pedido depois do passo): duas colunas em tela larga (texto
+      58% · globo 42%, até 220px); globo em cima em tela estreita (120px); o globo
+      (o mesmo componente da tela "Abrindo o observatório...") ganhou a opção
+      `linhaMeridiano`, ligada só na entrada: o meridiano da marca, uma linha vertical
+      no destaque; título e textos novos
 - [ ] **Passo 16** — início
 - [ ] **Passo 17** — laboratório
 - [ ] **Passo 18** — cola

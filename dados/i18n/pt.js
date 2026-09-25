@@ -120,6 +120,39 @@ export const pt = {
     bloqueadaTexto: 'Ela abre quando você concluir o desafio final do módulo {n} — {titulo}.',
   },
 
+  // A entrada: a primeira tela de quem nunca esteve aqui (passo 15).
+  entrada: {
+    titulo: 'Aprenda SQL com dados do mundo real',
+    fatoMissoes: '{escritas} missões prontas hoje, de {total} no caminho inteiro.',
+    fatoNavegador: 'SQL de verdade rodando no seu navegador.',
+    fatoDados: 'Dados do Banco Mundial, de 2000 a 2023.',
+    comecar: 'Começar a primeira missão',
+    jaSei: 'Já sei um pouco de SQL',
+    verTrilha: 'Ver a trilha inteira',
+  },
+
+  // O nivelamento: 6 desafios que liberam o que a pessoa já sabe (passo 15).
+  nivelamento: {
+    titulo: 'Nivelamento',
+    contexto: 'Nivelamento · desafio {n} de {total}',
+    linha: 'Desafios do nivelamento',
+    desafio: 'Desafio',
+    explica: 'Seis desafios, do mais simples ao mais difícil. Cada acerto libera um módulo da trilha. Não há dicas: se não souber um, é só dizer — o nivelamento para ali, e nada do que já estava liberado volta a fechar.',
+    comecar: 'Começar o nivelamento',
+    comoFunciona: 'Como funciona',
+    libera: 'Libera o módulo {n} — {titulo}',
+    naoSei: 'Não sei fazer este',
+    proximo: 'Próximo desafio',
+    verResultado: 'Ver o resultado',
+    resultadoTitulo: 'Resultado',
+    nenhum: 'Tudo bem: você começa pelo módulo 0, do jeito que a trilha foi pensada.',
+    alguns: 'Você acertou {n} de {total}: a trilha está aberta até o módulo {ultimo}.',
+    todos: 'Você acertou os {total}: a trilha está aberta até o módulo {ultimo}.',
+    seguirPara: 'Começar: {titulo}',
+    acertou: 'acertou',
+    naoRespondido: 'não respondido',
+  },
+
   // A trilha (o visual chegou no redesenho depois do passo 12; o
   // desbloqueio e o resto da lógica são o passo 14).
   trilha: {
@@ -291,6 +324,6 @@ export const pt = {
   // Muda de lugar quando a tela de entrada chegar, no passo 16.
   vitrine: {
     texto:
-      'Você entra como analista de dados de um instituto de pesquisa em Genebra. Cada lição é uma missão: o pedido de um pesquisador, resolvido com SQL de verdade sobre dados reais de países.',
+      'Você entra como analista de dados de um instituto de pesquisa em Genebra. Cada lição é uma missão: o pedido de um pesquisador, resolvido com SQL sobre dados de mais de 200 países.',
   },
 };

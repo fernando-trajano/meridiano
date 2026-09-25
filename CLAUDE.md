@@ -671,9 +671,25 @@ bloqueio, no 14: um módulo abre depois do desafio final do anterior (o 0 sempre
 bloqueado, mostra as missões apagadas e sem link; dentro de um módulo aberto, as missões
 ficam livres.
 
+### Entrada e nivelamento (passo 15)
+
+"#/" mostra a **entrada** a quem nunca concluiu nada (nem missão, nem nivelamento). Em tela
+larga, duas colunas: o texto à esquerda (58%) — "Aprenda SQL com dados do mundo real",
+três fatos e dois caminhos, a primeira missão ou o **nivelamento** — e o globo à direita
+(42%, até 220px, centralizado na altura do texto). Em tela estreita, o globo vai para
+cima, centralizado, com 120px. **O globo é um componente só** (`ilustracoes.js`), o
+mesmo da tela "Abrindo o observatório...": meridianos centrados que giram pela largura,
+recortados pelo círculo, parados com movimento reduzido. **Só na entrada** ele ganha o
+**meridiano da marca** (opção `linhaMeridiano: true`) — uma linha vertical na cor de
+destaque, parada, cruzando o globo de cima a baixo. Na tela de carregamento, sem a linha. O nivelamento tem 6 desafios (um por módulo, do 0 ao 5), sem dicas; cada
+acerto libera o módulo seguinte, "Não sei fazer este" encerra, e o que já estava liberado
+nunca fecha. Na trilha e no fim do nivelamento, **"por onde seguir"** é a primeira missão
+não feita do módulo liberado mais adiantado.
+
 ### As 6 conferências automáticas
 
 As 5 do passo 9 mais a **6ª: as tabelas de cada desafio são exatamente as do gabarito**.
+Os desafios do nivelamento passam pelas que cabem neles (1, 2, 5 e 6).
 As com o motor (1 e 2) rodam com `?conferencia` **na trilha** — dentro de uma missão, a
 base é zerada no meio delas.
 

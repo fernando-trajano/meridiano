@@ -16,6 +16,9 @@ import { config, definirConfig, aoMudarConfig } from './estado.js';
 import { conferirMapa } from './traducao-sql.js';
 import { rota, iniciarRoteador } from './roteador.js';
 import { mostrarTrilha } from './telas/trilha.js';
+import { mostrarEntrada } from './telas/entrada.js';
+import { mostrarNivelamento } from './telas/nivelamento.js';
+import { totalFeitas, nivelamentoFeito } from './progresso.js';
 import { mostrarMissao } from './telas/missao.js';
 import { conferirConteudo } from '../dados/missoes/conferencia.js';
 import * as bd from './bd.js';
@@ -91,11 +94,14 @@ conferirMapa();
 // Idioma salvo, se houver; senão, o do navegador de quem chegou.
 definirIdioma(config().idioma ?? detectarIdioma());
 
-// As telas. O início leva à trilha (o visual chegou no redesenho depois do
-// passo 12; a lógica do desbloqueio é o passo 14, e a tela de entrada, o 16).
+// As telas. "#/" decide: quem nunca concluiu nada (nem missão, nem
+// nivelamento) vê a entrada; os outros vão à trilha (o início de verdade é o
+// passo 16).
 rota(/^\/missao\/(m\d-\d{2})$/, mostrarMissao);
 rota(/^\/trilha$/, mostrarTrilha);
-rota(/^\/$/, mostrarTrilha);
+rota(/^\/entrada$/, mostrarEntrada);
+rota(/^\/nivelamento$/, mostrarNivelamento);
+rota(/^\/$/, (tela) => (totalFeitas() === 0 && !nivelamentoFeito() ? mostrarEntrada(tela) : mostrarTrilha(tela)));
 iniciarRoteador(document.querySelector('#tela'));
 
 // As conferências do conteúdo das missões (ver dados/missoes/conferencia.js).

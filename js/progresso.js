@@ -20,6 +20,12 @@
      Passou um dia inteiro sem missão, a sequência volta a zero (na leitura:
      o que está salvo só muda quando outra missão é concluída).
 
+   meridiano:nivelamento
+     { concluido: '2026-09-25', acertos: [true, true, false], liberou: ['m1', 'm2'] }
+     O resultado do nivelamento (passo 15). Os módulos que ele libera entram
+     em meridiano:progresso.liberados e nunca voltam a fechar — refazer o
+     nivelamento só pode liberar mais.
+
    meridiano:estatisticas
      { conceitos: { DISTINCT: 2, '||': 1 } }
      Quantas vezes cada conceito "escapou": num desafio, a pessoa pediu dica
@@ -29,7 +35,7 @@
    ========================================================================== */
 
 import { CHAVES, ler, gravar } from './armazenamento.js';
-import { modulos } from '../dados/missoes/indice.js';
+import { modulos, carregarModulo } from '../dados/missoes/indice.js';
 
 const VERSAO = 1;
 const PADRAO_PROGRESSO = { versao: VERSAO, missoes: {}, liberados: ['m0'] };
@@ -85,6 +91,32 @@ export function totalFeitas() {
 /** true se o módulo está liberado. */
 export function moduloLiberado(idDoModulo) {
   return lerProgresso().liberados.includes(idDoModulo);
+}
+
+/**
+ * Por onde seguir: a primeira missão não feita do módulo liberado mais
+ * adiantado que ainda tenha alguma por fazer (quem passou pelo nivelamento
+ * segue de onde ele abriu, e não do começo). Módulos ainda não escritos
+ * ficam de fora.
+ * @returns {Promise<{modulo: object, missao: object}|null>} null = tudo feito
+ */
+export async function proximaMissao() {
+  const conteudo = [];
+  for (const modulo of modulos) conteudo.push({ modulo, missoes: await carregarModulo(modulo.id) });
+  return escolherProxima(conteudo);
+}
+
+/**
+ * A mesma regra, com as missões já carregadas (a trilha tem todas à mão).
+ * @param {{modulo: object, missoes: object[]}[]} conteudo  na ordem da trilha
+ */
+export function escolherProxima(conteudo) {
+  for (const { modulo, missoes } of [...conteudo].reverse()) {
+    if (!moduloLiberado(modulo.id)) continue;
+    const missao = missoes.find((m) => !missaoFeita(m.id));
+    if (missao) return { modulo, missao };
+  }
+  return null;
 }
 
 /** A sequência de dias de agora: a salva, ou 0 se ela já se quebrou. */
@@ -170,6 +202,32 @@ function contarDia() {
   else atual = 1;
   gravar(CHAVES.sequencia, { atual, maior: Math.max(atual, Number(salva.maior) || 0), ultimoDia: dia });
   return atual;
+}
+
+/** true se o nivelamento já foi feito alguma vez. */
+export function nivelamentoFeito() {
+  return Boolean(ler(CHAVES.nivelamento, null)?.concluido);
+}
+
+/**
+ * Guarda o resultado do nivelamento e libera os módulos que ele abriu.
+ * @param {boolean[]} acertos  um por desafio respondido, na ordem
+ * @param {string[]} modulosAcertados  o módulo que cada acerto libera
+ * @returns {object[]} os módulos liberados agora (os que já estavam não contam)
+ */
+export function concluirNivelamento(acertos, modulosAcertados) {
+  const progresso = lerProgresso();
+  const novos = [];
+  for (const id of modulosAcertados) {
+    if (!progresso.liberados.includes(id)) {
+      progresso.liberados.push(id);
+      novos.push(modulos.find((m) => m.id === id));
+    }
+  }
+  gravar(CHAVES.progresso, progresso);
+  gravar(CHAVES.nivelamento, { concluido: hoje(), acertos, liberou: modulosAcertados });
+  avisar();
+  return novos.filter(Boolean);
 }
 
 /**
