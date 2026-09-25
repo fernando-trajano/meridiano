@@ -405,6 +405,16 @@ Aprovadas pelo Fernando depois de uma consulta à API do Banco Mundial:
 - **Caracteres:** todo texto dos CSVs cabe no subconjunto latino das fontes (um "ć" que
   apareceu num sobrenome foi trocado).
 
+## Código SQL na tela
+
+- **Realce:** as cores de cláusula do briefing, e `QUALIFY` na cor do `WHERE` (os dois
+  filtram; decisão do passo 7). Um só realce (`realce.js`) para editor, Raio-X, cola e
+  jogos.
+- **Resultado:** valores crus, como um banco mostraria — sem separador de milhar, ponto
+  como separador decimal —, porque é assim que o aluno vai escrevê-los num `WHERE`.
+- **Erros:** nunca a mensagem crua do DuckDB sozinha. Sempre uma frase simples com
+  pista, no idioma da tela, e a original guardada para quem quiser ver.
+
 ## Como testar
 
 Quando o Fernando pedir para testar, **eu** (Claude) subo o servidor e abro o navegador —

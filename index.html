@@ -64,6 +64,7 @@
   <link rel="stylesheet" href="./css/fontes.css">
   <link rel="stylesheet" href="./css/base.css">
   <link rel="stylesheet" href="./css/componentes.css">
+  <link rel="stylesheet" href="./css/editor.css">
   <link rel="stylesheet" href="./css/telas.css">
 </head>
 <body>
@@ -161,16 +162,13 @@
       </div>
     </section>
 
-    <!-- PROVISÓRIO (passo 5): a bancada de teste do motor SQL. Sai no passo 7,
-         quando chega o editor de verdade. -->
+    <!-- PROVISÓRIO (passos 5 e 7): a bancada de teste do motor SQL, agora com o
+         editor, a tabela de resultado e os erros de verdade. Sai quando a tela
+         de missão chegar (passo 12). -->
     <section class="secao bancada" id="bancada">
       <h2 data-i18n="bancada.titulo">Bancada de teste</h2>
-      <p class="discreto" data-i18n="bancada.explicacao">Provisório (passo 5): uma consulta de verdade, rodando no seu navegador. O editor de verdade chega no passo 7.</p>
-      <label class="apenas-leitor-de-tela" for="bancada-sql" data-i18n="bancada.rotulo">Consulta SQL</label>
-      <textarea class="bancada-sql mono" id="bancada-sql" rows="8" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
-      <div class="grupo-botoes">
-        <button type="button" class="botao botao--principal" id="bancada-rodar" data-i18n="bancada.rodar">Rodar</button>
-      </div>
+      <p class="discreto" data-i18n="bancada.explicacao">Provisório: o editor e o motor de verdade, antes de existir a tela de missão.</p>
+      <div id="bancada-editor"></div>
       <div class="bancada-resultado" id="bancada-resultado" aria-live="polite"></div>
     </section>
 

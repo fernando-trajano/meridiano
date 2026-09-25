@@ -1,0 +1,224 @@
+/* ==========================================================================
+   editor.css — o editor de SQL e o painel de resultado.
+   Só usa variáveis do tema.css.
+
+   A REGRA DE OURO do editor: o <textarea> (transparente, onde se digita) e o
+   <pre> (colorido, embaixo) têm de ter EXATAMENTE a mesma fonte, tamanho,
+   altura de linha, recuo e quebra. Qualquer diferença desalinha o cursor do
+   texto que se vê. Por isso as medidas moram nas variáveis logo abaixo e
+   valem para as três camadas (números, realce, texto).
+   ========================================================================== */
+
+.editor {
+  --editor-fonte-tamanho: 0.875rem;
+  --editor-altura-linha: 1.7;
+  --editor-margem: var(--esp-4);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.editor-corpo {
+  display: flex;
+  border-radius: var(--raio-m);
+  background-color: var(--cor-superficie);
+  overflow: hidden;
+}
+
+/* O anel de foco fica no corpo inteiro: o textarea, lá dentro, seria cortado. */
+.editor-corpo:has(.editor-texto:focus-visible) {
+  outline: 2px solid var(--cor-texto);
+  outline-offset: 2px;
+}
+
+.editor-numeros,
+.editor-realce,
+.editor-texto,
+.editor-medida {
+  margin: 0;
+  font-size: var(--editor-fonte-tamanho);
+  line-height: var(--editor-altura-linha);
+  letter-spacing: 0;
+  tab-size: 2;
+  white-space: pre;
+}
+
+/* --- Os números das linhas -------------------------------------------------- */
+
+.editor-numeros {
+  flex: 0 0 auto;
+  min-width: 2.75rem;
+  padding: var(--editor-margem) var(--esp-2) var(--editor-margem) var(--esp-3);
+  border-right: var(--borda);
+  color: var(--cor-texto-discreto);
+  text-align: right;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* A linha que o DuckDB apontou no erro. */
+.editor-numero-erro {
+  color: var(--cor-erro-texto);
+  font-weight: 500;
+}
+
+/* --- As duas camadas: realce embaixo, texto em cima -------------------------- */
+
+.editor-area {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.editor-realce,
+.editor-texto {
+  position: absolute;
+  inset: 0;
+  padding: var(--editor-margem);
+  border: 0;
+}
+
+.editor-realce {
+  overflow: hidden;
+  color: var(--cor-texto);
+  pointer-events: none;
+}
+
+.editor-texto {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  overflow: auto;
+  outline: none;
+  background: transparent;
+  /* O texto de verdade é invisível: quem se vê é o realce, embaixo. */
+  color: transparent;
+  caret-color: var(--cor-texto);
+  -webkit-text-fill-color: transparent;
+}
+
+.editor-texto::selection {
+  background-color: var(--cor-selecao);
+}
+
+/* Só para medir a largura de uma letra (a fonte é mono: todas iguais). */
+.editor-medida {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* --- Sugestões ------------------------------------------------------------ */
+
+.editor-sugestoes {
+  position: absolute;
+  z-index: 5;
+  min-width: 15rem;
+  max-width: min(26rem, 100%);
+  max-height: 16rem;
+  margin: 0;
+  padding: var(--esp-1);
+  overflow-y: auto;
+  list-style: none;
+  border: var(--borda);
+  border-radius: var(--raio-p);
+  background-color: var(--cor-fundo);
+}
+
+.editor-sugestoes li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--esp-4);
+  padding: var(--esp-1) var(--esp-2);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.editor-sugestoes li[aria-selected="true"] {
+  background-color: var(--cor-superficie);
+}
+
+.editor-sugestao-nome {
+  font-size: var(--editor-fonte-tamanho);
+}
+
+.editor-sugestao-tipo {
+  color: var(--cor-texto-discreto);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+/* --- A barra: Rodar, Formatar, atalhos ---------------------------------------- */
+
+.editor-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-3);
+}
+
+.editor-dica {
+  margin-left: auto;
+}
+
+/* --- Resultado ---------------------------------------------------------------- */
+
+.resultado-info {
+  margin-bottom: var(--esp-2);
+}
+
+.resultado-rolagem {
+  max-height: 28rem;
+  overflow: auto;
+}
+
+/* O cabeçalho fica visível ao rolar um resultado comprido. */
+.resultado-rolagem .tabela-resultado thead th {
+  position: sticky;
+  top: 0;
+  background-color: var(--cor-fundo);
+}
+
+.resultado-erro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  padding: var(--esp-3) var(--esp-4);
+  border-radius: var(--raio-p);
+  background-color: var(--cor-erro-fundo);
+  color: var(--cor-erro-texto);
+}
+
+.resultado-erro p {
+  max-width: none;
+}
+
+.resultado-erro-frase {
+  font-weight: 500;
+}
+
+.resultado-erro-linha {
+  font-weight: 400;
+}
+
+.resultado-erro code {
+  font-size: 0.9em;
+}
+
+.resultado-erro-original {
+  margin-top: var(--esp-2);
+  color: var(--cor-texto-discreto);
+  font-size: 0.8rem;
+}
+
+.resultado-erro-original summary {
+  cursor: pointer;
+}
+
+.resultado-erro-original pre {
+  margin-top: var(--esp-2);
+  white-space: pre-wrap;
+  word-break: break-word;
+}

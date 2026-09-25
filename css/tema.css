@@ -61,6 +61,10 @@
      medido ser exatamente o que aparece. */
   --cor-raiox-passa: #E0ECEB;
 
+  /* O fundo do texto selecionado no editor. Translúcido de propósito: o
+     texto colorido do realce, embaixo, continua aparecendo através dele. */
+  --cor-selecao: #18181B24;
+
   /* --- Fontes ---------------------------------------------------------- */
   /* Títulos e marca na serifada; texto e interface na fonte do sistema;
      código, resultados e números na mono. As duas baixadas moram em
@@ -125,6 +129,7 @@
   --cor-with: #B5D98A;
 
   --cor-raiox-passa: #1E313C;
+  --cor-selecao: #E6EBF238;
 }
 
 /* Rede de segurança: se o JavaScript não rodar, quem usa o sistema no escuro
@@ -158,5 +163,6 @@
     --cor-with: #B5D98A;
 
     --cor-raiox-passa: #1E313C;
+    --cor-selecao: #E6EBF238;
   }
 }

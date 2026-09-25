@@ -298,7 +298,7 @@ document.addEventListener('idioma-mudou', async (evento) => {
  * @param {string} sql
  * @param {{maxLinhas?: number}} [opcoes]  quantas linhas converter (todas, por padrão)
  * @returns {Promise<{
- *   colunas: {nome: string, tipo: 'numero'|'texto'|'data'|'logico'|'outro'}[],
+ *   colunas: {nome: string, tipo: 'numero'|'texto'|'data'|'logico'|'outro', escala: number|null}[],
  *   linhas: any[][],
  *   total: number,
  *   ms: number
@@ -313,7 +313,12 @@ export async function consultar(sql, { maxLinhas = Infinity } = {}) {
   const ms = Math.round(performance.now() - inicio);
 
   const campos = tabela.schema.fields;
-  const colunas = campos.map((campo) => ({ nome: campo.name, tipo: tipoSimples(campo.type) }));
+  const colunas = campos.map((campo) => ({
+    nome: campo.name,
+    tipo: tipoSimples(campo.type),
+    // Casas decimais de um DECIMAL, para mostrar 45496.00 e não 45496.
+    escala: campo.type.typeId === TIPO.Decimal ? campo.type.scale : null,
+  }));
   const vetores = campos.map((_, j) => tabela.getChildAt(j));
 
   const quantas = Math.min(tabela.numRows, maxLinhas);

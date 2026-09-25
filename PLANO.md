@@ -126,6 +126,7 @@ Meridiano/
 │   ├── erros-sql.js           # erro do DuckDB → frase simples com pista, PT e EN
 │   ├── conferir.js            # compara o resultado do aluno com o do gabarito e diz COMO errou
 │   ├── realce.js              # colore SQL por cláusula (editor, Raio-X, cola, jogos)
+│   ├── formatar-sql.js        # o botão "Formatar": só espaços, quebras e maiúsculas
 │   ├── editor.js              # editor: realce, autocompletar, atalhos, formatar
 │   ├── tabela-resultado.js    # desenha o resultado de uma consulta
 │   ├── raio-x.js              # a animação etapa por etapa
@@ -529,6 +530,40 @@ inteiro; a segunda abriu da gaveta, sem nenhum pedido à rede e sem nada fora do
 - **Medições locais** (no Mac, sem rede): abertura completa em ~0,6 s; consulta de
   exemplo em 17 ms. As medições de verdade são as do passo 6.
 
+## O editor, o resultado e os erros, como ficaram no passo 7
+
+- **Editor** (`editor.js`): um `<textarea>` de verdade, com o texto transparente, por
+  cima de uma cópia colorida (`<pre>`). Desfazer, colar, acentos compostos e leitores de
+  tela ficam com o navegador. As três camadas (números, realce, texto) dividem as
+  medidas definidas no topo do `editor.css` — mudar uma sem as outras desalinha o cursor.
+  Tudo o que o editor escreve (sugestão, comentário, formatar, tradução) passa por
+  `insertText`, e por isso entra no Cmd+Z.
+- **Atalhos:** Cmd/Ctrl+Enter roda; Cmd/Ctrl+/ comenta (aceita a barra do teclado
+  americano e a do ABNT2, `IntlRo`); Tab/Shift+Tab recuam; Enter mantém o recuo; Esc e
+  depois Tab saem do editor (para quem navega só pelo teclado).
+- **Autocompletar:** a partir de 2 letras; colunas das tabelas que já estão na consulta
+  primeiro, depois tabelas, outras colunas, palavras-chave e funções. Depois de `c.`, só
+  as colunas da tabela que `c` apelida. Nada dentro de texto entre aspas nem de
+  comentário.
+- **Realce:** `QUALIFY` leva a cor do `WHERE` (os dois filtram) — o briefing não diz a
+  cor dele; decisão do passo 7.
+- **Formatar** (`formatar-sql.js`): só mexe em espaços, quebras de linha e maiúsculas.
+  Conferido com 7 consultas (subconsulta, WITH, janela com QUALIFY, FILTER, BETWEEN,
+  dois comandos): o resultado formatado é igual ao original, e formatar de novo não muda
+  nada.
+- **Resultado** (`tabela-resultado.js`): valores crus, como um banco mostraria —
+  1438069596, sem separador de milhar, porque é assim que se escreve num `WHERE`;
+  `DECIMAL` com as casas dele; `NULL` escrito; até 200 linhas na tela, com o total dito.
+- **Erros** (`erros-sql.js`): frase simples + pista, em PT e EN, com a linha marcada na
+  margem do editor e a mensagem original guardada num "ver mais". As mensagens foram
+  colhidas do DuckDB 1.4 de verdade. As pistas usam o dicionário: o nome certo no outro
+  idioma, a tabela onde a coluna mora, a palavra em português que virou SQL (`ONDE` →
+  `WHERE`, `contar` → `COUNT`), o erro de digitação mais provável (`SELEC` → `SELECT`).
+  26 erros típicos de iniciante conferidos; um erro desconhecido cai numa frase genérica
+  com a mensagem original, nunca quebra a tela.
+- **Bancada de teste:** continua, agora com as peças de verdade, até a tela de missão
+  (passo 12).
+
 ## Pontos de atenção do DuckDB-WASM (para o passo 5)
 
 - **Peso.** O `.wasm` do DuckDB tem dezenas de MB sem compressão. O GitHub recusa arquivo
@@ -608,7 +643,11 @@ no painel de navegador do app e conferir, conforme o passo:
       7,8 MB comprimido, ~1,2 s na primeira visita; nenhuma requisição fora do domínio.
       **Decisão do Fernando: fica o DuckDB-WASM**, com o motor guardado no Cache Storage
       — conferido no ar: a segunda visita não baixa nada
-- [ ] **Passo 7** — editor, resultado e erros · 🛑 Safari
+- [x] **Passo 7** — editor (`editor.js`, `realce.js`, `formatar-sql.js`), resultado
+      (`tabela-resultado.js`) e erros traduzidos (`erros-sql.js`) · ✅ **testado no
+      Safari pelo Fernando**: rodar, acentos, autocompletar, atalhos, desfazer, formatar,
+      erro traduzido com a linha marcada e colar. A bancada de teste continua até o
+      passo 12
 - [ ] **Passo 8** — armazenamento e estado
 - [ ] **Passo 9** — `conferir.js`, formato da missão, `conferencia.js` e `MODELO.md`
 - [ ] **Passo 10** — conteúdo dos módulos 0 a 2 · 🛑 revisão antes de escrever

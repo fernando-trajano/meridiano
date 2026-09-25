@@ -136,25 +136,12 @@
   100% { transform: scaleX(1); }
 }
 
-/* --- Bancada de teste (PROVISÓRIO, passo 5) --------------------------------
-   Sai no passo 7, junto com a bancada do index.html.
+/* --- Bancada de teste (PROVISÓRIO) -----------------------------------------
+   Sai no passo 12, junto com a bancada do index.html.
    ----------------------------------------------------------------------- */
-
-.bancada-sql {
-  width: 100%;
-  padding: var(--esp-4);
-  border: 0;
-  border-radius: var(--raio-m);
-  background-color: var(--cor-superficie);
-  color: var(--cor-texto);
-  font-size: 0.875rem;
-  line-height: 1.7;
-  resize: vertical;
-}
 
 .bancada-resultado {
   display: flex;
   flex-direction: column;
-  gap: var(--esp-3);
-  overflow-x: auto;
+  gap: var(--esp-2);
 }
