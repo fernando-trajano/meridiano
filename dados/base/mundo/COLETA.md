@@ -38,4 +38,4 @@ Gerado por `ferramentas/baixar_dados.py`. Não editar à mão.
 | `countries.csv` | 234 |
 | `indicators.csv` | 12 |
 | `country_year.csv` | 5616 |
-| `indicator_values.csv` | 59454 |
+| `indicator_values.csv` | 60478 |

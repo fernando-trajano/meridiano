@@ -22,7 +22,7 @@ export const modulos = [
     titulo: { pt: 'Primeiro dia no observatório', en: 'First day at the observatory' },
     personagem: 'ingrid',
     total: 3,
-    arquivo: null,
+    arquivo: './primeiro-dia.js',
   },
   {
     id: 'm1',
@@ -30,7 +30,7 @@ export const modulos = [
     titulo: { pt: 'Escolher colunas', en: 'Choosing columns' },
     personagem: 'kofi',
     total: 8,
-    arquivo: null,
+    arquivo: './escolher-colunas.js',
   },
   {
     id: 'm2',
@@ -38,7 +38,7 @@ export const modulos = [
     titulo: { pt: 'Filtrar linhas', en: 'Filtering rows' },
     personagem: 'kofi',
     total: 9,
-    arquivo: null,
+    arquivo: './filtrar-linhas.js',
   },
   {
     id: 'm3',

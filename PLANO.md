@@ -435,6 +435,24 @@ construção.
 
 ---
 
+## Passo 10 — como o conteúdo dos módulos 0 a 2 ficou
+
+| Módulo | Missões | Conceitos novos, em ordem |
+|---|---|---|
+| 0 · Ingrid | 3 | `SELECT`/`FROM`/`*` · escolher colunas · desafio (o primeiro pedido da Nadia) |
+| 1 · Kofi | 8 | `AS` · `DISTINCT` · contas · `\|\|` · `--` · `LIMIT` · revisão · desafio (a prévia do relatório de projetos) |
+| 2 · Kofi | 9 | `WHERE` com `=` · comparações · `AND`/`OR`/`NOT` · `IN` · `BETWEEN` · `LIKE` · `IS NULL` · revisão · desafio (o paradoxo da energia) |
+
+- O módulo 1 usa só as tabelas pequenas (ainda não há `WHERE`); o 2 entra em
+  `pais_ano`.
+- Os agregados aparecem de propósito em três entregas (grupo de renda vazio no m1-02,
+  `NAC` no m2-02, `EMU`/`EUU`/`OED`/`HIC` no m2-03), preparando o `JOIN` do módulo 5.
+- Temas reais e neutros: salários e crachás da equipe, emissões de CO₂, expectativa de
+  vida por grupo de renda, a década da internet, estados insulares, o Gini que falta, o
+  paradoxo "muita energia renovável, pouca eletricidade" (a lenha).
+- O comentário do exemplo do m1-05 está nos dois idiomas (`-- All regions · Todas as
+  regiões`): o tradutor não mexe em comentários.
+
 ## Passo 6 — publicação e medição
 
 Claude prepara tudo e guia; **as ações na conta são do Fernando**, pelo GitHub Desktop:
@@ -667,7 +685,8 @@ no painel de navegador do app e conferir, conforme o passo:
 - [x] **Passo 4** — `baixar_dados.py`, `gerar_instituto.py` e `dicionario.js` · ✅
       **indicadores, tabelas, nomes em PT e personagens aprovados pelo Fernando** (17
       agregados, `indicator_values` só com valores, `missions` → `field_trips`/`viagens`).
-      Coleta em 24/09/2026: 234 países, 5.616 linhas país × ano, 59.454 valores; instituto
+      Coleta em 24/09/2026: 234 países, 5.616 linhas país × ano, 60.478 valores (59.454
+      antes da correção dos grupos de renda, no passo 10); instituto
       conferido (nenhuma data incoerente, 20 pagamentos em dobro, 19 projetos em aberto,
       hierarquia de 4 níveis)
 - [x] **Passo 5** — DuckDB-WASM 1.32.0 (variante `eh`) + Apache Arrow 17.0.0 em
@@ -693,7 +712,13 @@ no painel de navegador do app e conferir, conforme o passo:
       `dados/missoes/indice.js` (os 10 módulos), `dados/personagens.js`,
       `conferencia.js` (as 5 conferências) e `MODELO.md`. A bancada ganhou um desafio de
       teste com o veredito embaixo do resultado
-- [ ] **Passo 10** — conteúdo dos módulos 0 a 2 · 🛑 revisão antes de escrever
+- [x] **Passo 10** — conteúdo dos módulos 0 a 2: 20 missões, 39 desafios
+      (`primeiro-dia.js`, `escolher-colunas.js`, `filtrar-linhas.js`). **A pausa de
+      revisão foi dispensada pelo Fernando** ("pode fazer, não precisa me apresentar").
+      As 5 conferências passam sem aviso; todo número citado em entrega e palpite foi
+      conferido na base; os 39 gabaritos dão o mesmo resultado em PT e EN. No caminho:
+      corrigidos os grupos de renda vazios no `baixar_dados.py`, o `=` virou recurso
+      próprio (separado das outras comparações) e as dicas passaram a aceitar SQL
 - [ ] **Passo 11** — `raio-x.js`
 - [ ] **Passo 12** — tela de missão · 🛑 Safari
 - [ ] **Passo 13** — entrega e progresso
@@ -709,9 +734,9 @@ no painel de navegador do app e conferir, conforme o passo:
 
 ## Conteúdo escrito
 
-- [ ] Módulo 0 — Primeiro dia no observatório — 3
-- [ ] Módulo 1 — Escolher colunas — 8
-- [ ] Módulo 2 — Filtrar linhas — 9
+- [x] Módulo 0 — Primeiro dia no observatório — 3 (Ingrid)
+- [x] Módulo 1 — Escolher colunas — 8 (Kofi)
+- [x] Módulo 2 — Filtrar linhas — 9 (Kofi)
 - [ ] Módulo 3 — Ordenar e transformar — 10 *(depois da v1)*
 - [ ] Módulo 4 — Resumir e agrupar — 8 *(depois da v1)*
 - [ ] Módulo 5 — Juntar tabelas — 9 *(depois da v1)*
@@ -720,4 +745,4 @@ no painel de navegador do app e conferir, conforme o passo:
 - [ ] Módulo 8 — Criar e alterar dados — 8 *(depois da v1)*
 - [ ] Módulo 9 — Relatório anual — 4 *(depois da v1)*
 
-**0 de 77 missões.**
+**20 de 77 missões.**

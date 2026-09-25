@@ -70,9 +70,15 @@ export const missoes = [
         conferir: { ordem: false, casas: 2 },   // ordem só se o pedido falar em ordenar
         exige: ['DISTINCT'],     // recursos obrigatórios (opcional)
         dicas: [                 // SEMPRE 3: pista, esqueleto, resposta
+          // a pista: texto nos dois idiomas (se citar nome de tabela ou
+          // coluna, cada idioma com o seu: paises / countries)
           { pt: 'Uma palavra logo depois do SELECT tira as repetições.', en: 'One word right after SELECT removes repeats.' },
-          { pt: 'SELECT ____ region_code FROM countries', en: 'SELECT ____ region_code FROM countries' },
-          { pt: 'SELECT DISTINCT region_code FROM countries', en: 'SELECT DISTINCT region_code FROM countries' },
+          // esqueleto e resposta: SQL em inglês, com ____ nas lacunas —
+          // traduzido na hora, como o gabarito…
+          'SELECT ____ region_code FROM countries',
+          'SELECT DISTINCT region_code FROM countries',
+          // …ou texto {pt, en}, quando a resposta tem apelidos ou comentários
+          // (em português, AS pessoa; em inglês, AS person).
         ],
       },
     ],
@@ -112,7 +118,9 @@ consulta (`recursosUsados`). Maiúsculas ou minúsculas tanto faz.
 | funções | pelo nome: `COUNT`, `ROUND`, `UPPER`, `COALESCE`… (um nome seguido de parêntese) |
 | `*` | `SELECT *` e `COUNT(*)` — todas as colunas / todas as linhas |
 | `CONTAS` | `+ - * /` fazendo conta |
-| `COMPARACOES` | `= <> != < > <= >=` |
+| `=` | igual — ensinado junto com o `WHERE` |
+| `COMPARACOES` | `<> != < > <= >=` — ensinadas depois do `=` |
+| `COLUNAS` | escolher colunas pelo nome (`SELECT a, b`). Não é detectado numa consulta: existe para a missão que o ensina ter o seu conceito novo |
 | `\|\|` | juntar textos |
 | `--` | comentário |
 
@@ -122,6 +130,9 @@ consulta (`recursosUsados`). Maiúsculas ou minúsculas tanto faz.
 - **Pedidos sobre temas reais** — desigualdade, clima, energia, saúde — e **neutros**:
   sobre indicadores, nunca tomando partido entre países. Nenhum personagem pergunta
   sobre "o próprio" país; os textos nunca citam a nacionalidade de ninguém.
+- **SQL dentro de texto** (conceito, pista, palpite): cada idioma com os seus nomes —
+  `SELECT nome_pais FROM paises` no `pt`, `SELECT country_name FROM countries` no `en`.
+  O tradutor não mexe em texto; só nos campos de SQL.
 - **Tudo em inglês no SQL** (exemplo, raioX, inicial, gabarito, amostra): o
   `traducao-sql.js` traduz nomes de tabela e coluna para a base em português. Os valores
   (`'Brazil'`, `'LCN'`) ficam em inglês nos dois idiomas.

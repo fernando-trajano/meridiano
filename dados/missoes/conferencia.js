@@ -186,6 +186,15 @@ function conferirEstrutura(missao) {
     exigir(typeof desafio.gabarito === 'string' && desafio.gabarito.trim(), `desafios[${i}] está sem gabarito.`);
     exigir(typeof desafio.inicial === 'string', `desafios[${i}].inicial deve ser texto (pode ser vazio).`);
     exigir(Array.isArray(desafio.dicas) && desafio.dicas.length === 3, `desafios[${i}] precisa de 3 dicas (pista, esqueleto, resposta).`);
+    if (Array.isArray(desafio.dicas)) {
+      // A pista é texto nos dois idiomas; esqueleto e resposta são SQL em
+      // inglês (traduzido na hora) ou texto {pt, en} (quando há apelidos).
+      exigir(temTexto(desafio.dicas[0]), `desafios[${i}].dicas[0] (a pista) precisa de pt e en.`);
+      for (const j of [1, 2]) {
+        const dica = desafio.dicas[j];
+        exigir(typeof dica === 'string' || temTexto(dica), `desafios[${i}].dicas[${j}] deve ser SQL em inglês ou {pt, en}.`);
+      }
+    }
   }
   return avisos;
 }
@@ -199,6 +208,10 @@ function consultasDaMissao(missao) {
   for (const [i, desafio] of (missao.desafios ?? []).entries()) {
     if (desafio.inicial) consultas.push({ rotulo: `desafios[${i}].inicial`, sql: desafio.inicial });
     consultas.push({ rotulo: `desafios[${i}].gabarito`, sql: desafio.gabarito ?? '' });
+    // Esqueleto e resposta escritos como SQL em inglês também são conferidos.
+    for (const [j, dica] of (desafio.dicas ?? []).entries()) {
+      if (typeof dica === 'string') consultas.push({ rotulo: `desafios[${i}].dicas[${j}]`, sql: dica });
+    }
   }
   return consultas;
 }
@@ -266,6 +279,7 @@ function nomesDesconhecidos(sql) {
     if (p.tipo !== 'nome' && p.tipo !== 'nome-entre-aspas') return;
     const nome = (p.tipo === 'nome-entre-aspas' ? p.texto.slice(1, -1) : p.texto).toLowerCase();
     if (p.tipo === 'nome' && (PALAVRAS_SQL.has(nome) || sig[i + 1]?.texto === '(')) return;   // palavra ou função
+    if (/^_+$/.test(nome)) return;   // a lacuna de um esqueleto de dica: ____
     if (TABELAS.has(nome) || COLUNAS.has(nome) || apelidos.has(nome)) return;
     desconhecidos.add(p.texto);
   });

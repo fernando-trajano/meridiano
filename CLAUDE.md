@@ -202,7 +202,7 @@ Regras:
 | `countries` | 234 | 217 países, **mais 17 agregados** como *World* e *Euro area* — armadilha de propósito |
 | `indicators` | 12 | os indicadores usados |
 | `country_year` | 5.616 | país × ano: população, PIB, PIB per capita, expectativa de vida, CO₂ per capita, % renovável, % internet... |
-| `indicator_values` | 59.454 | os mesmos dados em formato longo, só os valores que existem |
+| `indicator_values` | 60.478 | os mesmos dados em formato longo, só os valores que existem |
 
 **INSTITUTO** — inventado, com **semente fixa**:
 
@@ -389,6 +389,11 @@ Aprovadas pelo Fernando depois de uma consulta à API do Banco Mundial:
   Afghanistan & Pakistan". A API devolve dois nomes de região com espaço sobrando no fim;
   o script limpa.
 - **`indicator_values`** só com os valores que existem (formato longo de verdade).
+- **Correção no passo 10:** os 4 grupos de renda (`HIC`, `LIC`, `LMC`, `UMC`) tinham
+  ficado inteiros vazios. Nos dados, a API os marca só com o código de 2 letras (`XD`,
+  `XM`…) e deixa o de 3 vazio; o `baixar_dados.py` agora faz a ponte. Refeito do cache, sem
+  baixar de novo: `indicator_values` foi de 59.454 para 60.478 linhas, e o instituto saiu
+  idêntico.
 - **Números:** população e PIB inteiros; o resto com 2 casas, arredondado meio para cima.
 - **Nomes em português** sem acento e sem ç, porque são para digitar. A lista completa
   está em `dados/base/dicionario.js`, a fonte da verdade dos nomes.

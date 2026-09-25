@@ -246,7 +246,8 @@ function casarColunas(linhasAluno, linhasEsperado, n) {
 
      '*'            SELECT * e COUNT(*) (todas as colunas / todas as linhas)
      'CONTAS'       + - * / fazendo conta
-     'COMPARACOES'  = <> != < > <= >=
+     '='            igual (ensinado junto com o WHERE)
+     'COMPARACOES'  <> != < > <= >= (ensinadas depois do =)
      '||'           juntar textos
      '--'           comentário
 */
@@ -331,7 +332,8 @@ export function recursosUsados(sql) {
 
       if (duplo === '||') { usados.add('||'); i += 1; continue; }
       if (['<>', '!=', '<=', '>='].includes(duplo)) { usados.add('COMPARACOES'); i += 1; continue; }
-      if (['=', '<', '>'].includes(texto)) { usados.add('COMPARACOES'); continue; }
+      if (texto === '=') { usados.add('='); continue; }
+      if (['<', '>'].includes(texto)) { usados.add('COMPARACOES'); continue; }
 
       if (texto === '*') {
         // Asterisco depois de SELECT, de "(" (COUNT(*)), de vírgula ou de "t." é

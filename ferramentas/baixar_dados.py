@@ -220,6 +220,16 @@ def main():
     codigos_paises = [linha[0] for linha in linhas_paises]
     conjunto_paises = set(codigos_paises)
 
+    # Nos DADOS dos indicadores, a API deixa o código de 3 letras vazio para
+    # alguns agregados (os grupos de renda: High income vem só como "XD") e
+    # põe o de 2 letras em country.id. Esta ponte 2 → 3 letras recupera esses
+    # registros — sem ela, HIC, LIC, LMC e UMC ficavam inteiros vazios
+    # (achado no passo 10).
+    tres_letras = {limpar(p.get("iso2Code")): p["id"] for p in lista if p.get("iso2Code")}
+
+    def codigo_do_registro(registro):
+        return registro["countryiso3code"] or tres_letras.get(registro["country"]["id"], "")
+
     # --- Indicadores ------------------------------------------------------
     print("Indicadores")
     valores = {}          # (país, ano, coluna) -> texto já arredondado
@@ -236,7 +246,7 @@ def main():
         linhas_indicadores.append([codigo, coluna, limpar(meta[0]["name"]), unidade, tema])
 
         for registro in dados:
-            pais = registro["countryiso3code"]
+            pais = codigo_do_registro(registro)
             if pais not in conjunto_paises or registro["value"] is None:
                 continue
             valores[(pais, int(registro["date"]), coluna)] = arredondar(registro["value"], casas)
