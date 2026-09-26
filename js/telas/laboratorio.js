@@ -15,8 +15,9 @@
    é recriado sozinho quando a base volta zerada (troca de idioma, missão).
 
    O link com a consulta ("#/laboratorio?sql=…") leva a consulta em inglês,
-   para abrir certo em qualquer idioma; uma consulta de leitura (SELECT,
-   WITH) que chega por link já roda.
+   para abrir certo em qualquer idioma (ou, com "&de=pt", em português — é
+   o que a cola usa); uma consulta de leitura (SELECT, WITH) que chega por
+   link já roda.
    ========================================================================== */
 
 import { t, idioma } from '../i18n.js';
@@ -452,9 +453,13 @@ export async function mostrarLaboratorio(tela, consultaDoEndereco = '') {
   await desenharLista();
 
   // Uma consulta que chegou pelo link: entra no editor (e roda, se for de leitura).
-  const sqlDoLink = new URLSearchParams(consultaDoEndereco).get('sql');
+  // O link diz em que idioma ela está ("de"; sem ele, inglês): a cola manda
+  // a consulta no idioma da tela, com os apelidos já traduzidos.
+  const parametros = new URLSearchParams(consultaDoEndereco);
+  const sqlDoLink = parametros.get('sql');
+  const idiomaDoLink = parametros.get('de') === 'pt' ? 'pt' : 'en';
   if (sqlDoLink) {
-    editor.definirValor(paraTela(sqlDoLink));
+    editor.definirValor(idiomaDoLink === idioma() ? sqlDoLink : traduzirSQL(sqlDoLink, idiomaDoLink, idioma()));
     history.replaceState(null, '', '#/laboratorio');
     if (soLeitura(sqlDoLink)) await rodar(editor.valor());
   } else if (!editor.valor().trim()) {

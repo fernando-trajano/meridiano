@@ -23,7 +23,7 @@ navegador, sobre dados reais de países.
   ordem em que o banco a lê: quais linhas ficam, quais colunas saem.
 - **A resposta é conferida pelo resultado**, não pelo texto: escrever de outro jeito
   vale, e quando algo dá errado o site diz *como* errou.
-- **Laboratório** para consultas livres, **cola** com a sintaxe e três **jogos** curtos.
+- **Laboratório** para consultas livres, **Dicas** com a sintaxe e três **jogos** curtos.
 - Em português e em inglês — inclusive os nomes das tabelas.
 
 ## Estado do projeto

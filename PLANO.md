@@ -80,6 +80,7 @@ O Fernando cria o repositório no **GitHub Desktop**:
 Meridiano/
 ├── CLAUDE.md                  # briefing + convenções (memória do projeto)
 ├── PLANO.md                   # este arquivo: estrutura, ordem dos passos, regras
+├── ESTADO.md                  # onde paramos: pronto, pendente (arquivo e linha), próximos
 ├── LICENSE                    # MIT
 ├── README.md                  # em português: o que é, como rodar, fonte dos dados
 ├── README.en.md               # o mesmo em inglês, com link cruzado entre os dois
@@ -120,7 +121,10 @@ Meridiano/
 │   ├── exportacao.js          # backup do progresso em JSON com versão (do digita)
 │   ├── som.js                 # Web Audio API, só nos jogos (do digita)
 │   ├── movimento.js           # reduced-motion, números que contam, pulso do ponto da marca
-│   ├── ilustracoes.js         # os SVGs de traço (globo, mapa em pontos, fachada, pino…)
+│   ├── linha-com-painel.js    # a linha com painel flutuante embaixo (Dicas: funções e
+│   │                          # indicadores)
+│   ├── ilustracoes.js         # os SVGs de traço: o globo (entrada e carregamento) e os
+│   │                          # desenhos do passo 16, hoje sem uso (ver ESTADO.md)
 │   ├── bd.js                  # abre o DuckDB, carrega a base no idioma da tela, zera, roda
 │   ├── traducao-sql.js        # troca nomes de tabela/coluna EN↔PT, nunca o que está entre aspas
 │   ├── erros-sql.js           # erro do DuckDB → frase simples com pista, PT e EN
@@ -144,14 +148,15 @@ Meridiano/
 │   │   ├── abrindo.js         # "Abrindo o observatório..." com o globo girando
 │   │   ├── entrada.js         # a 1ª tela de quem nunca esteve aqui: começar ou nivelar
 │   │   ├── nivelamento.js     # os 6 desafios (abertura, desafios, resultado)
-│   │   ├── inicio.js          # continuar, atalhos com desenho (o exportar/importar é do
-│   │   │                      # passo 21)
+│   │   ├── inicio.js          # continuar e os cartões "Ir para" (o exportar/importar é
+│   │   │                      # do passo 21)
 │   │   ├── trilha.js          # acordeão dos 10 módulos + linha do meridiano (o visual
 │   │   │                      # chegou antes; a lógica é o passo 14)
 │   │   ├── missao.js          # as 6 etapas da missão, com a bancada — e a entrega:
 │   │   │                      # resposta do personagem, estrelas, números que contam
 │   │   ├── laboratorio.js     # a base inteira: tabelas, histórico, favoritas, CSV
-│   │   ├── cola.js
+│   │   ├── cola.js            # as Dicas (a antiga cola): sintaxe, funções, tabelas, indicadores, outros
+│   │   │                      # bancos, glossário, atalhos
 │   │   └── jogos.js           # o menu de jogos
 │   └── jogos/
 │       ├── comum.js           # tela do nível, tela do fim, relógio, pausa (do digita)
@@ -177,7 +182,7 @@ Meridiano/
 │   │   └── …                  # módulos 3 a 9, depois da v1
 │   ├── personagens.js         # os 7 personagens: nome, monograma, cargo PT/EN, id na base
 │   ├── nivelamento.js         # os 6 desafios do nivelamento
-│   ├── cola.js                # sintaxe, funções, outros bancos, glossário
+│   ├── cola.js                # as Dicas: sintaxe, funções, indicadores por tema, outros bancos, glossário
 │   └── jogos/
 │       ├── palpite.js
 │       ├── telegrama.js
@@ -188,6 +193,10 @@ Meridiano/
     ├── gerar_instituto.py     # semente fixa; roda DEPOIS do baixar_dados.py
     └── cache/                 # respostas brutas da API (fora do Git)
 ```
+
+Ainda **não existem** (passos 19 a 21): `css/jogos.css`, `js/exportacao.js`, `js/som.js`,
+`js/telas/jogos.js`, `js/jogos/` e `dados/jogos/`. O estado de cada pendência está no
+`ESTADO.md`.
 
 Os ícones ficam num bloco `<svg>` de símbolos no topo do `index.html`, reusados com
 `<use href="#icone-x">`, como no digita.
@@ -209,9 +218,11 @@ da bancada no tema claro — ver `CLAUDE.md`); conteúdo centralizado até
 |---|---|
 | **Início** e **Trilha** | Duas: conteúdo no centro · painel de progresso à direita (sequência de dias, missões de 77, conceitos que mais escapam). Sem menu lateral, como no digita. Na trilha, a linha do meridiano corre ao lado do acordeão. |
 | **Missão** | Em cima, a linha do meridiano com as 6 etapas. Embaixo, duas: texto à esquerda (210–260px, no fundo da página) · **bancada** à direita, num painel (seções com barra e aba). Cabe em 1280×800 sem rolar a página; a bancada rola por dentro |
-| **Laboratório** | Editor e resultado ocupando a largura; tabelas e histórico acessíveis sem sair da tela |
+| **Laboratório** | A moldura de tela cheia da missão: Tabelas, Histórico e Favoritas à esquerda · bancada (Consulta + Resultado) à direita |
 | **Cola** | Uma coluna de leitura, com índice das seções |
-| **Entrada**, **Nivelamento**, **Jogos** | Uma coluna centralizada, laterais vazias |
+| **Entrada** | Duas: texto (58%) · globo (42%); em tela estreita, o globo em cima |
+| **Nivelamento** | A moldura da missão: texto à esquerda · bancada à direita |
+| **Jogos** | Uma coluna centralizada, laterais vazias |
 
 **Telas estreitas:** tudo vira uma coluna. Leitura, cola e Palpite funcionam; na missão e
 no laboratório, um aviso discreto recomenda o computador, sem bloquear.
@@ -375,7 +386,7 @@ Todas com o prefixo `meridiano:`:
 | `meridiano:progresso` | `{ versao: 1, missoes: { 'm0-01': { estrelas, dicas, viuResposta, concluida, vezes } }, liberados: ['m0', …] }` — `estrelas` é a **melhor** nota; `m0` sempre liberado (passo 13) |
 | `meridiano:sequencia` | `{ atual, maior, ultimoDia }` — dias seguidos com missão concluída, no fuso de quem usa; na leitura, vira 0 se passou um dia inteiro sem missão |
 | `meridiano:estatisticas` | `{ conceitos: { DISTINCT: 2, … } }` — quantas vezes cada conceito escapou (dica pedida ou conferência errada, uma vez por desafio); alimenta "conceitos que mais escapam" |
-| `meridiano:nivelamento` | as respostas dos 6 desafios e o que foi liberado |
+| `meridiano:nivelamento` | `{ concluido: 'AAAA-MM-DD', acertos: [true, …], liberou: ['m1', …] }` — a data (local), um acerto por desafio respondido e os módulos que ele abriu (passo 15) |
 | `meridiano:laboratorio` | `{ versao: 1, historico: [{ sql, em }], favoritas: [{ sql, em }], ultima }` — as 50 últimas consultas, as favoritas e a que estava no editor, **sempre em inglês** (traduzidas na hora de mostrar) |
 | `meridiano:jogos` | o último jogo e nível escolhidos no menu |
 
@@ -916,7 +927,39 @@ Ajustes finos pedidos pelo Fernando depois do redesenho. Testado no Safari pelo 
       e "ver 5 linhas" virou **"Prévia"**, com a dica "Ver as 5 primeiras linhas da
       tabela" no `title` (as duas prévias precisam de clique); chaves renomeadas
       (`laboratorio.usarTabela`, `missao.botaoPrevia`, `missao.dicaPrevia`)
-- [ ] **Passo 18** — cola
+- [x] **Passo 18** — cola (`#/cola`, `telas/cola.js`; conteúdo em `dados/cola.js` e no
+      dicionário): uma coluna de leitura com o índice das seções no topo (botões que
+      rolam até a seção — o "#" é do roteador). **Sintaxe** cláusula por cláusula, em 8
+      grupos (da escolha de colunas a criar e alterar dados), cada item com uma frase,
+      o exemplo formatado e "Abrir no laboratório" (o link leva a consulta no idioma da
+      tela, com `&de=`, e os apelidos chegam traduzidos). **Funções** por grupo, com um
+      exemplo curto. **O mapa das 11 tabelas**, nos dois idiomas: um clique mostra as
+      colunas (português, inglês, tipo, o que é, chave e ligação) e acende as tabelas
+      ligadas. **Os 12 indicadores**, com o código do Banco Mundial e os cuidados.
+      **Em outros bancos** (Oracle, com a sintaxe antiga à parte, e BigQuery),
+      **glossário** PT ↔ EN e **atalhos de teclado**. Sem motor: é só leitura. As
+      conferências automáticas passaram a cobrir a cola (os exemplos de leitura rodam
+      nas duas bases; nomes e selos conferidos); a checagem de nomes passou a aceitar
+      apelidos entre aspas duplas. O atalho do início passou a abrir a cola.
+      **Redesenho** (a partir de um rascunho aprovado pelo Fernando): o nome na tela
+      virou **"Dicas" / "Tips"** (rota, arquivos, classes e chaves continuam "cola");
+      índice fixo que acompanha a rolagem; sanfonas na sintaxe e nas funções (fechadas)
+      e nos indicadores (abertos, por tema); o frasco no canto da consulta abre no
+      laboratório; funções e indicadores em linhas com painel (`linha-com-painel.js`);
+      as tabelas com filtro de origem, lista e colunas ao lado (até 420px, cabeçalho
+      fixo, ligação acesa na coluna que liga); glossário na ordem do idioma da tela;
+      saíram o segundo idioma do mapa e os atalhos de teclado. O cuidado dos
+      indicadores saiu das descrições do dicionário (vive só em `dados/cola.js`). A 5ª
+      conferência passou a checar os indicadores por tema. **Defeito corrigido:** a
+      tela prendia ouvintes no `<main>` compartilhado, e eles se somavam a cada visita
+      (um clique numa tabela abria e fechava); agora ela desenha numa raiz própria.
+      Depois: saiu o ponto dos grupos da Sintaxe, e "Em outros bancos" virou uma
+      tabela de comparação de quatro colunas (Pedido 220px · DuckDB · Oracle ·
+      BigQuery), uma linha por pedido, o código em blocos com selo e a sintaxe antiga
+      do Oracle embaixo do bloco dele; o `CASE WHEN` quebrado no `ELSE` no conteúdo;
+      um bloco por pedido abaixo de 1024px. Por fim, a seção voltou ao rascunho: três
+      cards com a mesma consulta nos três dialetos e o "Exibir mais", um painel
+      flutuante fixável (`painel-fixavel.js`) com as outras seis diferenças
 - [ ] **Passo 19** — menu de jogos e Palpite
 - [ ] **Passo 20** — Telegrama e Infiltrado
 - [ ] **Passo 21** — sons, backup, transições, telas estreitas, rodapé com a fonte,

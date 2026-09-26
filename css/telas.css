@@ -1237,3 +1237,897 @@ a.cartao:focus-visible {
     max-height: 24rem;
   }
 }
+
+/* --- Dicas (a antiga cola) ---------------------------------------------------------
+   Uma coluna de leitura, com o índice fixo no topo (passo 18; redesenhada a
+   partir do rascunho aprovado). As classes continuam .cola-*.
+
+   Cor: só os tokens do tema.css. O âmbar é o único acento — marca do índice,
+   barra da tabela escolhida, selo de chave primária e selo de cuidado — e as cores de cláusula só vivem dentro do código e no título dos
+   itens da sintaxe. Os tons "fraco" e "mais forte" saem de color-mix() sobre
+   os tokens (nada de cor nova), e por isso valem nos dois temas.
+   ----------------------------------------------------------------------- */
+
+.cola p {
+  max-width: none;
+}
+
+.cola-titulo {
+  font-size: clamp(1.875rem, 1.5rem + 1.2vw, 2.25rem);
+  line-height: 1.15;
+}
+
+.cola-subtitulo {
+  margin-top: 6px;
+  color: var(--cor-texto-secundario);
+}
+
+/* O índice: fixo no topo ao rolar, com o fundo da página. Numa linha só; no
+   celular, rola de lado dentro dele (a página não). */
+.cola-indice {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  gap: 26px;
+  margin-top: 22px;
+  padding-top: 13px;
+  border-bottom: var(--borda);
+  background-color: var(--cor-fundo);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cola-indice::-webkit-scrollbar {
+  display: none;
+}
+
+.cola-indice button {
+  flex-shrink: 0;
+  padding: 0 0 9px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--cor-texto-secundario);
+  font: inherit;
+  font-size: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: inset 0 -2px 0 transparent;
+  transition: color var(--transicao), box-shadow var(--transicao);
+}
+
+.cola-indice button:hover {
+  color: var(--cor-texto);
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--cor-texto) 26%, transparent);
+}
+
+.cola-indice button[aria-current="true"] {
+  color: var(--cor-texto);
+  font-weight: 500;
+  box-shadow: inset 0 -2px 0 var(--cor-destaque);
+}
+
+.cola-indice button:focus-visible {
+  outline-offset: -2px;
+}
+
+.cola-secao {
+  padding: 46px 0 8px;
+  scroll-margin-top: 64px;   /* a altura do índice fixo, com folga */
+}
+
+.cola-secao-titulo {
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+/* A introdução de cada seção volta a ter medida de leitura. */
+.cola .cola-intro {
+  max-width: 55rem;
+  margin-bottom: 4px;
+  color: var(--cor-texto-secundario);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.cola-ajuda {
+  color: var(--cor-texto-discreto);
+  font-size: 13.5px;
+}
+
+.cola-sanfonas {
+  margin-top: 22px;
+}
+
+.cola-codigo {
+  font-family: var(--fonte-mono);
+  font-size: 12.5px;
+  font-variant-ligatures: none;
+}
+
+/* --- A sanfona: o rótulo do grupo é o gatilho ---------------------------- */
+
+.cola-sanfona {
+  border-top: var(--borda);
+}
+
+.cola-sanfona:last-child {
+  border-bottom: var(--borda);
+}
+
+/* Nos indicadores (abertos), sem as linhas entre os grupos: a hairline do
+   rótulo basta. */
+[data-secao="indicadores"] .cola-sanfona {
+  border: 0;
+}
+
+.cola-grupo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 18px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cola-grupo-seta {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--cor-texto-discreto);
+  transition: transform var(--transicao), color var(--transicao);
+}
+
+.cola-grupo[aria-expanded="true"] .cola-grupo-seta {
+  transform: rotate(90deg);
+  color: var(--cor-texto);
+}
+
+.cola-grupo-rotulo {
+  color: var(--cor-texto-secundario);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  transition: color var(--transicao);
+}
+
+.cola-grupo:hover .cola-grupo-rotulo,
+.cola-grupo[aria-expanded="true"] .cola-grupo-rotulo {
+  color: var(--cor-texto);
+}
+
+.cola-grupo-linha {
+  flex: 1;
+  min-width: 12px;
+  height: 1px;
+  background-color: var(--cor-borda);
+}
+
+.cola-grupo-quantos {
+  color: var(--cor-texto-discreto);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cola-sanfona-corpo {
+  padding: 4px 0 30px;
+}
+
+@media (min-width: 40rem) {
+  .cola-grupo-rotulo {
+    white-space: nowrap;
+  }
+}
+
+/* --- Sintaxe: o título é código puro; o bloco da consulta é o "selo" ----- */
+
+.cola-itens {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px 40px;
+}
+
+@media (min-width: 1000px) {
+  .cola-itens {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.cola-nome {
+  margin-bottom: 10px;
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.cola-nome .cola-codigo {
+  color: var(--cor-texto);
+  font-size: 14.5px;
+}
+
+/* No título, só as cláusulas têm cor; o resto (funções, operadores, o "--"
+   do comentário) na cor do texto. */
+.cola-nome .sql-funcao,
+.cola-nome .sql-comentario {
+  color: var(--cor-texto);
+  font-style: normal;
+}
+
+.cola-texto {
+  margin-bottom: 12px;
+  color: var(--cor-texto-secundario);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.cola-consulta {
+  position: relative;
+}
+
+.cola-consulta .bloco-codigo,
+.cola-card .bloco-codigo,
+.cola-bancos .bloco-codigo {
+  margin: 0;
+  border: var(--borda);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.62;
+}
+
+.cola-consulta .bloco-codigo {
+  padding: 13px 48px 13px 15px;
+}
+
+/* Abrir no laboratório: só o frasco, sempre visível (no celular não há hover). */
+.cola-abrir {
+  width: 30px;
+  height: 30px;
+  color: var(--cor-texto-discreto);
+  transition: color var(--transicao), background-color var(--transicao);
+}
+
+.cola-abrir:hover {
+  background-color: var(--cor-borda);
+  color: var(--cor-texto);
+}
+
+.cola-consulta .cola-abrir {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+}
+
+/* --- Funções e indicadores: linhas em grade, com painel ------------------ */
+
+.cola-cabeca,
+.cola-linha {
+  display: grid;
+  align-items: start;
+  column-gap: 20px;
+}
+
+/* Os cabeçalhos de coluna (aqui e nas tabelas das Dicas). */
+.cola-cabeca,
+.cola-rotulo,
+.cola-colunas-tabela th {
+  color: var(--cor-texto-secundario);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.cola-cabeca {
+  margin-top: 22px;
+  padding-bottom: 10px;
+  border-bottom: var(--borda);
+}
+
+.cola-cabeca + .cola-sanfonas {
+  margin-top: 0;
+}
+
+/* A linha: o fundo suave passa 8px das pontas, e o texto fica alinhado com
+   o cabeçalho. */
+.cola-linha {
+  margin-inline: -8px;
+  padding: 11px 8px;
+  border-top: var(--borda);
+  border-radius: var(--raio-p);
+  color: var(--cor-texto-secundario);
+  font-size: 14px;
+  line-height: 1.5;
+  cursor: default;
+}
+
+.cola-linha:first-child {
+  border-top-color: transparent;
+}
+
+.cola-linha .cola-celula:first-child .cola-codigo {
+  color: var(--cor-texto);
+  font-size: 13px;
+}
+
+.cola-grade-funcoes {
+  grid-template-columns: minmax(0, 22.5rem) minmax(0, 1fr);
+}
+
+.cola-grade-indicadores {
+  grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+}
+
+@media (max-width: 47.5rem) {
+  .cola-grade-funcoes,
+  .cola-grade-indicadores {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 6px;
+  }
+
+  .cola-cabeca {
+    display: none;
+  }
+
+  .cola-cabeca + .cola-sanfonas {
+    margin-top: 22px;
+  }
+}
+
+/* O cuidado de um indicador ("até 2021") e a chave primária: selo em âmbar
+   fraco. O fundo é opaco (o âmbar misturado ao fundo da página), para o
+   contraste não cair quando a linha embaixo acende: 4,65:1 no claro. */
+.cola-cuidado,
+.cola-selo-chave {
+  display: inline-block;
+  border: 1px solid color-mix(in srgb, var(--cor-destaque) 30%, var(--cor-fundo));
+  background-color: color-mix(in srgb, var(--cor-destaque) 8%, var(--cor-fundo));
+  color: var(--cor-destaque-texto);
+  font-size: 11.5px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.cola-cuidado {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  vertical-align: 1px;
+}
+
+/* --- As tabelas: filtro, lista e, ao lado, as colunas -------------------- */
+
+.cola-tabelas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  margin-top: 22px;
+}
+
+@media (min-width: 1000px) {
+  .cola-tabelas {
+    grid-template-columns: 300px minmax(0, 1fr);
+  }
+}
+
+.cola-rotulo {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.cola-origem {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--cor-texto) 14%, transparent);
+  border-radius: 8px;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cola-mapa {
+  display: flex;
+  flex-direction: column;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cola-mapa li {
+  border-top: var(--borda);
+}
+
+.cola-mapa li:last-child {
+  border-bottom: var(--borda);
+}
+
+.cola-mapa-tabela {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 4px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--cor-texto-secundario);
+  font-family: var(--fonte-mono);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--transicao);
+}
+
+.cola-mapa-tabela:hover {
+  color: var(--cor-texto);
+}
+
+.cola-mapa-tabela[aria-pressed="true"] {
+  color: var(--cor-destaque-texto);
+}
+
+.cola-mapa-marca {
+  flex-shrink: 0;
+  width: 2px;
+  height: 16px;
+  border-radius: 2px;
+}
+
+.cola-mapa-tabela[aria-pressed="true"] .cola-mapa-marca {
+  background-color: var(--cor-destaque);
+}
+
+.cola-mapa-tabela:focus-visible {
+  outline-offset: -2px;
+}
+
+.cola-vazio {
+  padding: 8px 0;
+  color: var(--cor-texto-discreto);
+  font-size: 13.5px;
+}
+
+/* O painel das colunas: o mesmo .flutuante da barra da Consulta (vidro no
+   claro), aqui parado no lugar. */
+.cola-colunas {
+  padding: 18px 20px;
+}
+
+.cola-colunas-nome .cola-codigo {
+  color: var(--cor-texto);
+  font-size: 15px;
+}
+
+.cola-colunas-texto {
+  margin-top: 4px;
+  color: var(--cor-texto-discreto);
+  font-size: 13px;
+}
+
+/* A lista de colunas rola a partir de 420px, com o cabeçalho parado. */
+.cola-colunas-rolagem {
+  max-height: 420px;
+  margin-top: 16px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cor-borda) transparent;
+}
+
+.cola-colunas-tabela {
+  width: 100%;
+  border-collapse: separate;   /* com "collapse", a linha do cabeçalho fixo não acompanha */
+  border-spacing: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.cola-colunas-tabela th,
+.cola-colunas-tabela td {
+  padding: 10px 16px 10px 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.cola-colunas-tabela th:last-child,
+.cola-colunas-tabela td:last-child {
+  padding-right: 0;
+}
+
+/* O fundo do cabeçalho fixo é opaco: no escuro, o do painel (o fundo de
+   código); no claro, o branco sólido. */
+.cola-colunas-tabela th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding-top: 0;
+  border-bottom: var(--borda);
+  background-color: var(--cor-codigo);
+}
+
+:root[data-tema="claro"] .cola-colunas-tabela th {
+  background-color: var(--cor-painel-solido);
+}
+
+.cola-colunas-tabela td {
+  border-top: var(--borda);
+  color: var(--cor-texto-secundario);
+}
+
+.cola-colunas-tabela tbody tr:first-child td {
+  border-top: 0;
+}
+
+.cola-colunas-tabela td:first-child {
+  white-space: nowrap;
+}
+
+.cola-colunas-tabela td:first-child .cola-codigo {
+  color: var(--cor-texto);
+  font-size: 13px;
+}
+
+.cola-tipo {
+  color: var(--cor-texto-discreto);
+  font-family: var(--fonte-mono);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* A ligação: a tabela ligada acende na lateral da coluna que liga; a chave
+   primária, no mesmo lugar, em âmbar fraco. */
+/* Chave e ligação na mesma célula: lado a lado, ou uma embaixo da outra
+   quando não cabem — assim a coluna fica estreita e "O que é" respira. */
+.cola-selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+
+.cola-selo-chave,
+.cola-selo-ligacao {
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.cola-selo-ligacao {
+  display: inline-block;
+  border: 1px solid color-mix(in srgb, var(--cor-texto) 26%, transparent);
+  background-color: var(--cor-codigo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-mono);
+  line-height: 1.5;
+}
+
+.cola-colunas-pe {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+/* No celular, cada coluna vira um bloco: nome, tipo, o que é, ligação. */
+@media (max-width: 47.5rem) {
+  .cola-colunas-tabela thead {
+    display: none;
+  }
+
+  .cola-colunas-tabela,
+  .cola-colunas-tabela tbody,
+  .cola-colunas-tabela tr,
+  .cola-colunas-tabela td {
+    display: block;
+  }
+
+  .cola-colunas-tabela tr {
+    padding: 10px 0;
+    border-top: var(--borda);
+  }
+
+  .cola-colunas-tabela tbody tr:first-child {
+    border-top: 0;
+  }
+
+  .cola-colunas-tabela td {
+    padding: 0;
+    border-top: 0;
+  }
+
+  .cola-colunas-tabela td + td {
+    margin-top: 4px;
+  }
+
+  .cola-ligacao:empty {
+    display: none;
+  }
+}
+
+/* --- Em outros bancos: três cards e o "Exibir mais" ------------------------------
+   Em destaque, a MESMA consulta nos três bancos, em cards lado a lado (o
+   nome do banco em cima, no estilo dos cabeçalhos da aba). As outras
+   diferenças ficam no painel do "Exibir mais" (painel-fixavel.js), numa
+   tabela Pedido | DuckDB | Oracle | BigQuery. */
+
+.cola-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+  margin-top: 22px;
+}
+
+.cola-card-banco {
+  margin-bottom: 8px;
+  color: var(--cor-texto-secundario);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* O código nunca quebra sozinho: só as quebras escritas no conteúdo. */
+.cola-card .bloco-codigo,
+.cola-bancos .bloco-codigo {
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.cola-card .bloco-codigo {
+  padding: 13px 15px;
+}
+
+.cola-bancos .bloco-codigo {
+  padding: 9px 10px;
+}
+
+.cola-banco-antigo {
+  margin-top: 6px;
+  color: var(--cor-texto-discreto);
+  font-size: 12.5px;
+}
+
+/* Os cards viram uma coluna quando a linha mais longa (o FROM do BigQuery,
+   273px em inglês) deixa de caber com folga. Ponto medido. */
+@media (max-width: 1059.98px) {
+  .cola-cards {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 18px;
+  }
+}
+
+/* O "Exibir mais": um link discreto, à direita, embaixo do card do BigQuery.
+   A âncora prende o painel à direita dele. */
+.cola-mais-ancora {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+/* O painel: preso à direita do "Exibir mais", embaixo (ou em cima, se
+   embaixo não couber). Padding igual ao do painel de colunas das tabelas. */
+.cola-mais-ancora .cola-mais {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  padding: 18px 20px;
+}
+
+.cola-mais-ancora .cola-mais.painel-fixavel--acima {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+/* O X: sempre à vista no canto (fora da rolagem). */
+.cola-mais-fechar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+/* A tabela das outras diferenças. O layout fixo dá às quatro colunas as
+   mesmas bordas em todas as linhas; tudo alinha pelo topo. */
+.cola-bancos {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.cola-bancos-pedido {
+  width: 140px;   /* medido: com 160, a 1ª linha do CASE WHEN cabia com folga zero */
+}
+
+.cola-bancos th,
+.cola-bancos td {
+  padding: 12px 16px 12px 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.cola-bancos th:last-child,
+.cola-bancos td:last-child {
+  padding-right: 0;
+}
+
+/* O cabeçalho: como os outros da aba, com a hairline embaixo; parado no
+   topo da rolagem, com fundo opaco (no escuro, o do painel; no claro, o
+   branco sólido). */
+.cola-bancos thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding-top: 0;
+  padding-bottom: 10px;
+  border-bottom: var(--borda);
+  background-color: var(--cor-codigo);
+  color: var(--cor-texto-secundario);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+:root[data-tema="claro"] .cola-bancos thead th {
+  background-color: var(--cor-painel-solido);
+}
+
+.cola-bancos tbody tr + tr > * {
+  border-top: var(--borda);
+}
+
+/* O pedido: texto normal, na cor do texto. Desce 10px (a borda e o padding
+   do bloco de código), para ficar na mesma linha de leitura do código ao
+   lado; os dois têm 21px de altura de linha. */
+.cola-bancos tbody th {
+  padding-top: 22px;
+  color: var(--cor-texto);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* O nome do banco acima de cada código: só na folha do celular (em tela
+   larga, o cabeçalho diz; o leitor de tela lê o cabeçalho da coluna). */
+.cola-banco-nome {
+  display: none;
+  margin-bottom: 6px;
+  color: var(--cor-texto-discreto);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* Onde os 900px do painel não cabem, ele vira uma folha de tela cheia: o X
+   no topo, a tabela rolando dentro, cada pedido num bloco com o nome do
+   banco acima de cada código. (Os seletores repetem as classes para passar
+   na frente do vidro do claro, que vem do tema.css.) */
+@media (max-width: 959.98px) {
+  .cola-mais-ancora .cola-mais.flutuante--largo {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    width: auto;
+    max-height: none;
+    padding: 56px 16px 16px;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .cola-mais-fechar {
+    top: 12px;
+    right: 12px;
+  }
+
+  .cola-bancos,
+  .cola-bancos tbody,
+  .cola-bancos tr,
+  .cola-bancos th,
+  .cola-bancos td {
+    display: block;
+  }
+
+  .cola-bancos thead,
+  .cola-bancos colgroup {
+    display: none;
+  }
+
+  .cola-bancos tbody tr {
+    padding: 14px 0;
+  }
+
+  .cola-bancos tbody tr:first-child {
+    padding-top: 0;
+  }
+
+  .cola-bancos tbody tr + tr {
+    border-top: var(--borda);
+  }
+
+  .cola-bancos tbody tr + tr > * {
+    border-top: 0;
+  }
+
+  .cola-bancos th,
+  .cola-bancos td,
+  .cola-bancos tbody th {
+    padding: 0;
+  }
+
+  .cola-bancos tbody th {
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .cola-bancos td + td {
+    margin-top: 12px;
+  }
+
+  .cola-banco-nome {
+    display: block;
+  }
+}
+
+/* --- Glossário: o par lado a lado, o termo do idioma da tela primeiro ---- */
+
+.cola-glossario {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px 48px;
+  margin: 18px 0 0;
+}
+
+@media (min-width: 620px) {
+  .cola-glossario {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1000px) {
+  .cola-glossario {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cola-par {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 9px;
+}
+
+.cola-par dt {
+  color: var(--cor-texto);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.cola-par dd {
+  margin: 0;
+  color: var(--cor-texto-secundario);
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+/* O ponto do meio é só desenho: o leitor de tela não o lê (a segunda forma
+   do content; quem não a entende fica com a primeira). */
+.cola-par dd::before {
+  content: '·';
+  content: '·' / '';
+  margin-right: 9px;
+  color: var(--cor-texto-discreto);
+}

@@ -20,6 +20,7 @@ import { mostrarEntrada } from './telas/entrada.js';
 import { mostrarNivelamento } from './telas/nivelamento.js';
 import { mostrarInicio } from './telas/inicio.js';
 import { mostrarLaboratorio } from './telas/laboratorio.js';
+import { mostrarCola } from './telas/cola.js';
 import { totalFeitas, nivelamentoFeito } from './progresso.js';
 import { mostrarMissao } from './telas/missao.js';
 import { conferirConteudo } from '../dados/missoes/conferencia.js';
@@ -104,6 +105,7 @@ rota(/^\/entrada$/, mostrarEntrada);
 rota(/^\/nivelamento$/, mostrarNivelamento);
 rota(/^\/inicio$/, mostrarInicio);
 rota(/^\/laboratorio(?:\?(.*))?$/, mostrarLaboratorio);
+rota(/^\/cola$/, mostrarCola);
 rota(/^\/$/, (tela) => (totalFeitas() === 0 && !nivelamentoFeito() ? mostrarEntrada(tela) : mostrarInicio(tela)));
 iniciarRoteador(document.querySelector('#tela'));
 

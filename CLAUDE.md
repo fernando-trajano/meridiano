@@ -16,6 +16,12 @@ A **Parte 3** lista o que **não** deve ser construído na versão 1.
 > construção, atualizar o `PLANO.md` — ele não pode ficar desatualizado em relação ao
 > código.
 >
+> **Onde paramos:** o [ESTADO.md](ESTADO.md) diz o que está pronto e aprovado, o que ficou
+> pendente (com arquivo e linha) e os próximos passos. Ler antes de retomar o trabalho.
+>
+> **Duas regras que nunca mudam:** o Claude **nunca roda Git** (nenhum comando) e **para
+> em todo 🛑** do `PLANO.md` até o Fernando aprovar ou testar.
+>
 > **Projeto de referência:** o digita. (`/Users/fernando/Documents/ClaudeCode/Digita`),
 > já publicado. O meridiano. segue as mesmas convenções e o mesmo ritmo de trabalho, com
 > **uma diferença importante: aqui o Claude não roda nenhum comando de Git** (ver Parte 2).
@@ -260,11 +266,11 @@ aspas**). Valores (nomes de países) ficam em inglês.
 |---|---|
 | **Entrada** | |
 | **Nivelamento** | 6 desafios |
-| **Início** | continuar, atalhos com hover e ilustração, exportar/importar |
+| **Início** | continuar, atalhos com hover e ilustração, exportar/importar *(hoje: cartões "Ir para", sem ilustração — ver "Início (passo 16)"; o exportar/importar é do passo 21)* |
 | **Trilha** | acordeão + linha do meridiano |
 | **Missão** | história à esquerda (40%); editor em cima e resultado embaixo à direita (60%) *(hoje: texto à esquerda e bancada à direita — ver "Design depois do passo 12")* |
 | **Laboratório** | |
-| **Cola** | |
+| **Cola** *(hoje: "Dicas" — ver "Dicas — a antiga cola", na Parte 2)* | |
 | **Jogos** | |
 
 **Painel à direita** no início e na trilha: sequência de dias, missões de 77, conceitos
@@ -583,7 +589,8 @@ Duas rodadas aprovadas pelo Fernando antes do passo 13 (detalhes e caixas marcad
 | `ORDER BY`/`LIMIT` · `WITH`/`OVER` | `#A33A5B` · `#4D7A1F` |
 
 **O vidro — a ÚNICA exceção a "sem sombras e sem desfoque":** só no tema claro, só na
-bancada (`.painel`) e nos painéis flutuantes (`.flutuante`, a lista de colunas). Bancada:
+bancada (`.painel`) e nos painéis flutuantes (`.flutuante`: a lista de colunas da barra da
+Consulta e, nas Dicas, os painéis das linhas e o das colunas). Bancada:
 fundo `rgba(255,255,255,.7)`, `backdrop-filter: blur(24px) saturate(160%)`, borda
 `rgba(14,23,38,.08)`, raio 12px, sombra `inset 0 1px 0 rgba(255,255,255,.9), 0 10px 30px
 rgba(14,23,38,.06)`. Flutuante: fundo `rgba(255,255,255,.85)`, `blur(20px)`, raio 10px,
@@ -739,10 +746,67 @@ zerada ao entrar (há "Zerar a base"). O link `#/laboratorio?sql=…` leva a con
 inglês; histórico, favoritas e a última consulta também são guardados em inglês e
 traduzidos na hora de mostrar.
 
+### Dicas — a antiga cola (passo 18, redesenhada depois dele)
+
+**O nome na tela é "Dicas" / "Tips"** (título, cabeçalho, aba do navegador, cartão "Ir
+para" e a dica de erro das missões). A rota `#/cola`, os arquivos, as classes `.cola-*`
+e as chaves do i18n continuam "cola": renomear identificadores seria um passo à parte.
+O redesenho segue um rascunho aprovado pelo Fernando (hierarquia, tamanhos, sanfona,
+painéis, filtro das tabelas); os dados vêm sempre do `dicionario.js` e do
+`dados/cola.js`.
+
+- **Índice** fixo no topo ao rolar (`sticky`, fundo da página), acompanhando a seção
+  visível: só o item atual tem sublinhado de 2px no âmbar e a cor do texto; os outros na
+  secundária, com sublinhado só no hover. Seções: sintaxe, funções, as tabelas, os
+  indicadores, em outros bancos e glossário. **Os atalhos de teclado saíram** (as chaves
+  `cola.atalhosLista` ficam, para o laboratório num passo futuro).
+- **Sanfona** (sintaxe, funções e indicadores): o rótulo do grupo é um `<button>`
+  (`aria-expanded`, `aria-controls`) com seta, rótulo
+  (13px, maiúsculas, `.07em`, 600, secundária), hairline e a contagem. Fechada na sintaxe
+  e nas funções, aberta nos indicadores; nada guardado (volta ao inicial a cada visita;
+  a troca de idioma mantém o que estava aberto).
+- **Sintaxe:** o título do item é código puro (mono, 14,5px, sem fundo; só as cláusulas
+  com cor); quem ganha o tratamento de selo é o **bloco da consulta** (fundo de código,
+  borda de 1px, raio 8px), com o **frasco** no canto (abre no laboratório; a dica no
+  `title`/`aria-label`). Itens em 2 colunas a partir de 1000px.
+- **Funções e indicadores:** linhas em grade, com um só cabeçalho de colunas no topo da
+  seção. O alvo é a **linha inteira**: mouse, foco pelo teclado ou toque abrem um painel
+  logo abaixo (o exemplo da função; o que o indicador mede) — o componente
+  `js/linha-com-painel.js`, com a classe `.flutuante` de sempre. Os indicadores vêm por
+  tema (`dados/cola.js`), e o cuidado ("até 2021", "muitos vazios") vira selo ao lado do
+  nome — **só** ali: as descrições do dicionário ficam só com a definição.
+- **As tabelas:** um filtro de origem (`<select>`: Banco Mundial / Instituto), a lista
+  das tabelas em botões (a escolhida com barra âmbar de 2px e texto âmbar) e, ao lado,
+  as colunas num `.flutuante`: Coluna · Tipo · O que é · Ligação, até 420px com o
+  cabeçalho fixo. Na ligação, a tabela ligada acende num selo (borda mais forte); a chave
+  primária, no mesmo lugar, em âmbar fraco. Um idioma só (o da tela).
+- **Em outros bancos:** três **cards** (DuckDB · Oracle · BigQuery, o nome em cima) com
+  a MESMA consulta inteira em cada dialeto (`destaqueOutrosBancos`, em `dados/cola.js`;
+  a do DuckDB roda nas conferências). No BigQuery, a tabela vai com projeto e base entre
+  crases, num par `{ pt, en }` (`projeto.base.pais_ano` / `project.dataset.country_year`).
+  O "antigo:" do Oracle fica fora do card, embaixo. As outras seis diferenças ficam
+  atrás do **"Exibir mais"**, num painel flutuante (`js/painel-fixavel.js` +
+  `.flutuante--largo`, até 900px e 60vh, rolando por dentro): o hover abre com 200ms e
+  fecha com 300ms; o clique fixa; o X, o Esc e o clique fora fecham, e o foco volta ao
+  botão; não é modal. Dentro, só o X e a tabela Pedido (140px) · DuckDB · Oracle ·
+  BigQuery, o `CASE WHEN` quebrado no `ELSE` no conteúdo. Pontos de quebra medidos:
+  cards em coluna abaixo de 1060px; painel vira folha de tela cheia abaixo de 960px.
+- **Glossário:** pares lado a lado, o termo do idioma da tela primeiro e na ordem dele
+  (em EN, "alias · apelido"); 3 colunas, 2, 1.
+- **Cor:** só tokens do `tema.css`. Os tons "fraco" e "mais forte" saem de
+  `color-mix()` sobre os tokens (nenhuma cor nova). O selo âmbar tem fundo opaco (âmbar a
+  8% sobre o fundo da página) para ficar em 4,65:1 no claro mesmo com a linha acesa. O
+  escuro não mudou de cor.
+- **A tela desenha numa raiz própria** (`<div>` dentro do `<main>`): o `<main>` é o mesmo
+  para todas as telas, e ouvintes presos nele se somavam a cada visita — na cola antiga,
+  depois de voltar à tela, um clique numa tabela abria e fechava ao mesmo tempo.
+
 ### As 6 conferências automáticas
 
 As 5 do passo 9 mais a **6ª: as tabelas de cada desafio são exatamente as do gabarito**.
-Os desafios do nivelamento passam pelas que cabem neles (1, 2, 5 e 6).
+Os desafios do nivelamento passam pelas que cabem neles (1, 2, 5 e 6); os exemplos de
+leitura das Dicas, pelas 1, 2 e 5, e os indicadores agrupados por tema cobrem as 12
+colunas de `country_year`, uma vez cada.
 As com o motor (1 e 2) rodam com `?conferencia` **na trilha** — dentro de uma missão, a
 base é zerada no meio delas.
 

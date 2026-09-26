@@ -19,11 +19,11 @@ browser, on real country data.
 
 - **Real SQL from the very first mission**, on a full database engine (DuckDB) that runs
   inside the page — nothing to install.
-- **One new concept per mission**, with an **X-ray** that shows the query happening step
-  by step: which rows stay, which go, how groups form.
+- **One new concept per mission**, with a **Step by step** view that shows the query in
+  the order the database reads it: which rows stay, which columns go.
 - **Answers are checked by their result**, not their text: a different way of writing it
   still counts, and when something is off the site tells you *how*.
-- A **lab** for free-form queries, a **cheat sheet** with the syntax, and three short
+- A **lab** for free-form queries, **Tips** with the syntax, and three short
   **games**.
 - In Portuguese and English — table names included.
 
@@ -66,7 +66,7 @@ cache anything, so a code change shows up as soon as the page reloads.
 
 ```
 css/          styles — tema.css holds every color as a CSS variable
-js/           logic — screens, SQL engine, editor, X-ray, answer checking
+js/           logic — screens, SQL engine, editor, step by step, answer checking
 dados/        content — missions, database, games and translations (PT/EN)
 fontes/       JetBrains Mono, with its OFL license
 vendor/       DuckDB-WASM, pinned version

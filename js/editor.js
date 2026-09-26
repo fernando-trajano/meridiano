@@ -37,6 +37,7 @@ const EH_MAC = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)
 /** Os atalhos de rodar e de formatar, escritos para este sistema. */
 export const ATALHO_RODAR = EH_MAC ? '⌘ Enter' : 'Ctrl + Enter';
 export const ATALHO_FORMATAR = EH_MAC ? '⇧⌥F' : 'Shift + Alt + F';
+export const ATALHO_COMENTAR = EH_MAC ? '⌘ /' : 'Ctrl + /';
 const RECUO = '  ';
 const MAX_SUGESTOES = 8;
 

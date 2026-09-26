@@ -57,12 +57,12 @@ export const missoes = [
     // próprio exemplo; aqui vão só as frases.
     passoAPasso: {
       FROM: {
-        pt: 'Primeiro, o banco pega a tabela paises inteira.',
-        en: 'First, the database takes the whole countries table.',
+        pt: 'Primeiro, o banco pega a tabela `paises` inteira.',
+        en: 'First, the database takes the whole `countries` table.',
       },
       SELECT: {
-        pt: 'Depois, fica só com grupo_renda, e o DISTINCT tira os repetidos.',
-        en: 'Then it keeps only income_group, and DISTINCT removes the repeats.',
+        pt: 'Depois, fica só com `grupo_renda`, e o `DISTINCT` tira os repetidos.',
+        en: 'Then it keeps only `income_group`, and `DISTINCT` removes the repeats.',
       },
     },
 
@@ -88,9 +88,9 @@ export const missoes = [
         conferir: { ordem: false, casas: 2 },   // ordem só se o pedido falar em ordenar
         exige: ['DISTINCT'],     // recursos obrigatórios (opcional)
         dicas: [                 // SEMPRE 3: pista, esqueleto, resposta
-          // a pista: texto nos dois idiomas (se citar nome de tabela ou
-          // coluna, cada idioma com o seu: paises / countries)
-          { pt: 'Uma palavra logo depois do SELECT tira as repetições.', en: 'One word right after SELECT removes repeats.' },
+          // a pista: texto nos dois idiomas, com selos (se citar nome de
+          // tabela ou coluna, cada idioma com o seu: `paises` / `countries`)
+          { pt: 'Uma palavra logo depois do `SELECT` tira as repetições.', en: 'One word right after `SELECT` removes repeats.' },
           // esqueleto e resposta: SQL em inglês, com ____ nas lacunas —
           // traduzido na hora, como o gabarito…
           'SELECT ____ region_code FROM countries',

@@ -333,6 +333,86 @@ button.painel-aba {
   font-variant-ligatures: none;
 }
 
+/* A variante LARGA do painel flutuante (o "Exibir mais" das Dicas): só a
+   largura e a altura mudam; fundo, borda, raio e vidro são os do .flutuante.
+   Passando de 60vh, rola por dentro (.flutuante-rolagem), e o que fica fora
+   da rolagem (o X) continua parado. */
+.flutuante--largo {
+  display: flex;
+  flex-direction: column;
+  width: min(900px, calc(100vw - 32px));
+  max-height: 60vh;
+  overflow: hidden;
+}
+
+.flutuante--largo[hidden] {
+  display: none;
+}
+
+.flutuante-rolagem {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cor-borda) transparent;
+}
+
+/* --- A linha com painel (linha-com-painel.js) ------------------------------
+   O alvo é a linha inteira: o mouse em qualquer ponto dela, o foco pelo
+   teclado ou um toque abrem o painel logo abaixo, alinhado à esquerda. O
+   painel é o mesmo .flutuante da lista de colunas (vidro no claro). */
+
+.linha-com-painel {
+  position: relative;
+}
+
+.linha-painel {
+  position: absolute;
+  top: calc(100% - 4px);
+  left: 0;
+  z-index: 30;
+  width: max-content;
+  max-width: min(28.75rem, 100%);
+  padding: 8px 11px;
+  color: var(--cor-texto);
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: normal;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transicao), visibility var(--transicao);
+}
+
+/* O hover só onde existe mouse: no toque, quem manda é o clique. */
+@media (hover: hover) {
+  .linha-com-painel:hover:not([data-fechado]) > .linha-painel {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .linha-com-painel:hover {
+    background-color: var(--cor-codigo);
+  }
+}
+
+.linha-com-painel:focus-visible:not([data-fechado]) > .linha-painel,
+.linha-com-painel[data-aberto] > .linha-painel {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.linha-com-painel:focus-visible,
+.linha-com-painel[data-aberto] {
+  background-color: var(--cor-codigo);
+}
+
+.linha-com-painel:focus-visible {
+  outline-offset: 0;
+}
+
 /* A parte que rola por dentro, quando o painel tem altura fixa. */
 .painel-rolagem {
   flex: 1 1 auto;

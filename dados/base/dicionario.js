@@ -6,7 +6,9 @@
        idioma da tela (paises.nome_pais em PT, countries.country_name em EN);
      - traducao-sql.js (passo 5): troca nomes de tabela e coluna de um idioma
        para o outro;
-     - a cola (passo 18): o mapa clicável das tabelas;
+     - as Dicas (a antiga cola, passo 18): as tabelas, as colunas e os
+       indicadores. As descrições só com a definição: os cuidados de um
+       indicador ("até 2021") moram em dados/cola.js;
      - conferencia.js (passo 9): toda tabela e coluna usada numa missão tem
        de estar aqui.
 
@@ -194,8 +196,8 @@ export const dicionario = {
         pt: 'renovavel_pct',
         tipo: 'DOUBLE',
         descricao: {
-          pt: 'Parte renovável do consumo final de energia, em %. Os dados param em 2021.',
-          en: 'Renewable share of final energy consumption, in %. Data stops in 2021.',
+          pt: 'Parte renovável do consumo final de energia, em %.',
+          en: 'Renewable share of final energy consumption, in %.',
         },
       },
       internet_pct: {
@@ -207,8 +209,8 @@ export const dicionario = {
         pt: 'gini',
         tipo: 'DOUBLE',
         descricao: {
-          pt: 'Índice de Gini, de 0 (renda igual para todos) a 100 (desigualdade máxima). Medido só em alguns anos: a maior parte é vazia.',
-          en: 'Gini index, from 0 (equal income for all) to 100 (maximum inequality). Only measured in some years: most of it is empty.',
+          pt: 'Índice de Gini, de 0 (renda igual para todos) a 100 (desigualdade máxima).',
+          en: 'Gini index, from 0 (equal income for all) to 100 (maximum inequality).',
         },
       },
       urban_pct: {

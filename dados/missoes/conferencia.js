@@ -31,6 +31,7 @@ import { recursosUsados, normalizarRecurso, compararResultados } from '../../js/
 import { separar, traduzirSQL, sqlEmIngles, tabelasDoSQL } from '../../js/traducao-sql.js';
 import { clausulasNaOrdemDoBanco } from '../../js/passo-a-passo.js';
 import { desafiosDoNivelamento } from '../nivelamento.js';
+import { sintaxe as sintaxeDaCola, funcoes as funcoesDaCola, indicadores as indicadoresDaCola, destaqueOutrosBancos } from '../cola.js';
 
 const TIPOS = ['missao', 'revisao', 'desafio', 'projeto'];
 const LIMITE_DE_PALAVRAS = 80;
@@ -57,9 +58,20 @@ export async function conferirConteudo({ comMotor = false, bd = null } = {}) {
   // O nivelamento (passo 15) passa pelas mesmas conferências que cabem nele:
   // gabaritos rodando nas duas bases, nomes do dicionário, selos e tabelas.
   const nivelamento = { id: 'nivelamento', desafios: desafiosDoNivelamento };
-  const avisos = [...conferirSemMotor(lista), ...conferirNivelamento(nivelamento)];
+  // A cola (passo 18): cada exemplo de leitura vira um "gabarito" de mentira,
+  // e roda nas duas bases como os de verdade.
+  const exemplosDaCola = exemplosDeLeituraDaCola().map(({ nome, sql }) => ({
+    id: `cola: ${nome}`,
+    exemplo: sql,
+    desafios: [{ gabarito: sqlEmIngles(sql) }],
+  }));
+  const avisos = [...conferirSemMotor(lista), ...conferirNivelamento(nivelamento), ...conferirCola()];
   if (comMotor && bd) {
-    avisos.push(...(await conferirComMotor([...lista, { modulo: { id: 'nivelamento' }, missoes: [nivelamento] }], bd)));
+    avisos.push(...(await conferirComMotor([
+      ...lista,
+      { modulo: { id: 'nivelamento' }, missoes: [nivelamento] },
+      { modulo: { id: 'cola' }, missoes: exemplosDaCola },
+    ], bd)));
   }
 
   relatar(avisos, lista, comMotor);
@@ -165,6 +177,60 @@ export function conferirSemMotor(lista) {
         }
       }
     }
+  }
+  return avisos;
+}
+
+/**
+ * Os exemplos da cola que só leem a base (o grupo "Criar e alterar dados"
+ * fica de fora: ele cria uma tabela nova, e um exemplo depende do outro).
+ */
+function exemplosDeLeituraDaCola() {
+  // A consulta do DuckDB em destaque em "Em outros bancos" roda aqui também (a
+  // do Oracle e a do BigQuery são de outros bancos: não rodam no DuckDB).
+  const destaque = { nome: 'Em outros bancos (DuckDB)', sql: destaqueOutrosBancos.duckdb };
+  return [...sintaxeDaCola.flatMap(({ itens }) => itens), destaque]
+    .filter(({ sql }) => /^\s*(--[^\n]*\n\s*)*(select|with)\b/i.test(sqlEmIngles(sql)))
+    .map(({ nome, sql }) => ({ nome: typeof nome === 'string' ? nome : nome.pt, sql }));
+}
+
+/** A cola: dois idiomas (5), nomes do dicionário nos exemplos (5) e nos selos (5). */
+function conferirCola() {
+  const avisos = [];
+  for (const caminho of textosIncompletos({ sintaxe: sintaxeDaCola, funcoes: funcoesDaCola, indicadores: indicadoresDaCola, destaque: destaqueOutrosBancos })) {
+    avisos.push(`cola: [5] texto sem pt ou en em ${caminho}.`);
+  }
+  for (const { nome, sql } of exemplosDeLeituraDaCola()) {
+    const versoes = [sqlEmIngles(sql)];
+    if (sql && typeof sql === 'object' && sql.pt) versoes.push(traduzirSQL(sql.pt, 'pt', 'en'));
+    for (const versao of versoes) {
+      for (const desconhecido of nomesDesconhecidos(versao)) {
+        avisos.push(`cola: ${nome}: [5] o exemplo usa "${desconhecido}", que não é tabela nem coluna do dicionário.`);
+      }
+    }
+  }
+  for (const { itens } of funcoesDaCola) {
+    for (const { nome, exemplo } of itens) {
+      for (const desconhecido of nomesDesconhecidos(exemplo)) {
+        avisos.push(`cola: ${nome}: [5] o exemplo usa "${desconhecido}", que não é tabela nem coluna do dicionário.`);
+      }
+    }
+  }
+  for (const item of sintaxeDaCola.flatMap(({ itens }) => itens)) {
+    for (const { idioma, nome } of selosDesconhecidos(item.texto)) {
+      avisos.push(`cola: [5] o selo \`${nome}\` (${idioma}) não é tabela nem coluna do dicionário nesse idioma.`);
+    }
+  }
+  // Os indicadores, agrupados por tema: cada coluna de indicador de
+  // country_year aparece uma vez, e só elas.
+  const colunasDeIndicador = Object.keys(dicionario.country_year.colunas).filter((c) => c !== 'country_code' && c !== 'year');
+  const listados = indicadoresDaCola.flatMap(({ itens }) => itens.map(({ coluna }) => coluna));
+  for (const coluna of colunasDeIndicador) {
+    const vezes = listados.filter((c) => c === coluna).length;
+    if (vezes !== 1) avisos.push(`cola: o indicador ${coluna} aparece ${vezes} vezes nos temas; deve aparecer uma.`);
+  }
+  for (const coluna of listados) {
+    if (!colunasDeIndicador.includes(coluna)) avisos.push(`cola: ${coluna} está nos indicadores, mas não é coluna de indicador de country_year.`);
   }
   return avisos;
 }
@@ -367,6 +433,11 @@ function nomesDesconhecidos(sql) {
 
   sig.forEach((p, i) => {
     const anterior = sig[i - 1];
+    // … AS "apelido com espaço": entre aspas duplas também é apelido.
+    if (p.tipo === 'nome-entre-aspas' && anterior?.texto.toLowerCase() === 'as') {
+      apelidos.add(p.texto.slice(1, -1).toLowerCase());
+      return;
+    }
     const nome = p.texto.toLowerCase();
     if (p.tipo !== 'nome') return;
     // … AS apelido
